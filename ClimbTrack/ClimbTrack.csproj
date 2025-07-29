@@ -63,18 +63,9 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	
 	<ItemGroup>
-	  <None Remove="test1-7f758-firebase-adminsdk-fbsvc-7f6afb52e6.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiAsset Include="test1-7f758-firebase-adminsdk-fbsvc-7f6afb52e6.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </MauiAsset>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="FirebaseAdmin" Version="2.4.0" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
 		<PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
@@ -85,11 +76,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<MauiAsset Include="test1-7f758-firebase-adminsdk-fbsvc-7f6afb52e6.json" LogicalName="test1-7f758-firebase-adminsdk-fbsvc-7f6afb52e6.json" />
+		<MauiAsset Include="test1-7f758-firebase-adminsdk-fbsvc-2a4ef7270a.json" LogicalName="test1-7f758-firebase-adminsdk-fbsvc-2a4ef7270a.json" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-	  <MauiXaml Update="Views\LoginPage.xaml">
+ <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPage.xaml">

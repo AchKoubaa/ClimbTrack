@@ -10,6 +10,11 @@
 *.userosscache
 *.sln.docstates
 
+# Firebase credentials
+*firebase-adminsdk*.json
+*.json.key
+serviceAccount*.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
