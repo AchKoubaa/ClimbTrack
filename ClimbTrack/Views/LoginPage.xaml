@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:ClimbTrack.ViewModels"
+             x:Class="ClimbTrack.Views.LoginPage"
+             x:DataType="viewmodel:LoginViewModel"
+             Title="{Binding Title}">
+    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto,*" 
+          ColumnDefinitions="*,*"
+          Padding="20"
+          RowSpacing="15">
+
+        <!-- App Logo -->
+        <Image Grid.Row="0" 
+               Grid.ColumnSpan="2"
+               Source="climbing_logo.png"
+               HeightRequest="120"
+               WidthRequest="120"
+               HorizontalOptions="Center"
+               VerticalOptions="End"/>
+
+        <!-- Title -->
+        <Label Grid.Row="1" 
+               Grid.ColumnSpan="2"
+               Text="ClimbTrack"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+        <Button Grid.Row="2"
+        Grid.ColumnSpan="2"
+        Text="Sign in with Google"
+        Command="{Binding GoogleSignInCommand}"
+        BackgroundColor="#4285F4"
+        TextColor="White"
+        CornerRadius="10"
+        HeightRequest="50"
+        Margin="0,0,0,0"/>
+
+        <Label 
+            Grid.Row="3"
+             Grid.ColumnSpan="2"
+            Text="OR" 
+            HorizontalOptions="Center"
+            VerticalOptions="End"/>
+        
+        <!-- Email Entry -->
+        <Border Grid.Row="4"
+                Grid.ColumnSpan="2"
+                Stroke="#E0E0E0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10,10,10,10">
+            <Entry Text="{Binding Email}" 
+                   Placeholder="Email"
+                   Keyboard="Email"
+                   Margin="10,0"/>
+        </Border>
+
+        <!-- Password Entry -->
+        <Border Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Stroke="#E0E0E0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10,10,10,10">
+            <Entry Text="{Binding Password}" 
+                   Placeholder="Password"
+                   IsPassword="True"
+                   Margin="10,0"/>
+        </Border>
+
+        <!-- Error Message -->
+        <Label Grid.Row="6"
+               Grid.ColumnSpan="2"
+               Text="{Binding ErrorMessage}"
+               TextColor="Red"
+               FontSize="14"
+               HorizontalOptions="Center"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"/>
+
+        <!-- Login Button -->
+        <Button Grid.Row="7"
+                Grid.ColumnSpan="2"
+                Text="Login"
+                Command="{Binding LoginCommand}"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="50"/>
+
+        <!-- Register Button -->
+        <Button Grid.Row="8"
+                Grid.Column="0"
+                Text="Register"
+                Command="{Binding RegisterCommand}"
+                BackgroundColor="Transparent"
+                TextColor="#4CAF50"/>
+
+        <!-- Forgot Password Button -->
+        <Button Grid.Row="9"
+                Grid.Column="1"
+                Text="Forgot Password?"
+                Command="{Binding ForgotPasswordCommand}"
+                BackgroundColor="Transparent"
+                TextColor="#4CAF50"/>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="10"
+                           Grid.ColumnSpan="2"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center"/>
+    </Grid>
+</ContentPage>
