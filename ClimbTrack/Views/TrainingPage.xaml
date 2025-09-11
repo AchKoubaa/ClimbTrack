@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ClimbTrack.ViewModels"
+             xmlns:converters="clr-namespace:ClimbTrack.Converters"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             x:Class="ClimbTrack.Views.TrainingPage"
+             x:DataType="viewmodels:TrainingViewModel"
+             >
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Converters -->
+            <converters:BoolToStyleConverter x:Key="BoolToStyleConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:DifficultyToColorConverter x:Key="DifficultyToColorConverter" />
+
+            <Style x:Key="TimerStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="32" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="#333333" />
+            </Style>
+
+            <Style x:Key="PanelLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#333333" />
+            </Style>
+
+            <Style x:Key="RouteItemStyle" TargetType="Frame">
+                <Setter Property="Padding" Value="12" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Margin" Value="0,0,0,8" />
+            </Style>
+
+            <Style x:Key="SelectedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
+                <Setter Property="BorderColor" Value="#0000FF" />
+                
+            </Style>
+
+            <Style x:Key="CompletedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
+                <Setter Property="BackgroundColor" Value="#E8F5E9" />
+            </Style>
+            
+            <Style x:Key="CompletedSelectedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource CompletedRouteItemStyle}">
+                <Setter Property="BorderColor" Value="#0000FF" />
+                
+            </Style>
+            
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#2196F3" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="Padding" Value="24,12" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+            </Style>
+
+            <Style x:Key="EndButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+                <Setter Property="BackgroundColor" Value="#F44336" />
+            </Style>
+
+            <Style x:Key="CounterButtonStyle" TargetType="Button">
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Opacity" Value="{Binding Source={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToOpacityConverter}}" />
+            </Style>
+
+            <Style x:Key="DifficultyIndicatorStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="HeightRequest" Value="24" />
+                <Setter Property="WidthRequest" Value="24" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="{Binding Source={x:Static system:DateTime.Now}, Converter={StaticResource ItalianDateConverter}}"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
+        <!-- Timer Display -->
+        <StackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="5">
+            <!--<Label Text="Tempo" 
+                   FontSize="16" 
+                   TextColor="#666666" 
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="Etichetta tempo" />
+            <Label Text="{Binding ElapsedTimeDisplay}" 
+                   Style="{StaticResource TimerStyle}"
+                   AutomationProperties.Name="Timer allenamento"
+                   AutomationProperties.HelpText="Tempo trascorso dall'inizio dell'allenamento" />-->
+        </StackLayout>
+
+        <!-- Panel Info -->
+        <StackLayout Grid.Row="1" Spacing="5">
+            <!--<Label Text="Pannello" 
+                   FontSize="14" 
+                   TextColor="#666666"
+                   AutomationProperties.Name="Etichetta pannello" />-->
+            <Label Text="{Binding Panel}" 
+                   Style="{StaticResource PanelLabelStyle}"
+                   AutomationProperties.Name="{Binding Panel, StringFormat='Pannello {0}'}" />
+        </StackLayout>
+
+        <!-- Routes List -->
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding TrainingRoutes}" 
+                        SelectionMode="None"
+                        AutomationProperties.Name="Lista percorsi">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:TrainingRouteItem">
+                    <Frame Style="{Binding Converter={StaticResource RouteStyleConverter}}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=SelectRouteCommand}"
+    CommandParameter="{Binding}" />
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="15" RowSpacing="10">
+                            <!-- Color indicator and route name -->
+                            <BoxView 
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Color="{Binding Route.ColorHex}"
+                                WidthRequest="24"
+                                HeightRequest="24"
+                                CornerRadius="12"
+                                 BackgroundColor="Transparent"
+                                VerticalOptions="Center"
+                                AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+
+                            <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
+                                <!--<Label 
+                                    Text="{Binding Route.Name}" 
+                                    FontSize="16"
+                                    TextColor="#333333"
+                                    AutomationProperties.Name="{Binding Route.Name, StringFormat='Nome percorso: {0}'}" />-->
+                                <Label 
+                                    Text="{Binding Route.Color}" 
+                                    FontSize="18"
+                                    TextColor="#666666"
+                                    FontAttributes="Bold"
+                                    AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+                            </StackLayout>
+
+                            <!-- Indicatore di difficoltà migliorato -->
+                            <!--<Frame Grid.Column="2"
+                                   Grid.Row="0"
+                                   Style="{StaticResource DifficultyIndicatorStyle}"
+                                   BackgroundColor="{Binding Route.Difficulty, Converter={StaticResource DifficultyToColorConverter}}">
+                                <Label Text="{Binding Route.Difficulty}"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       AutomationProperties.Name="{Binding Route.Difficulty, StringFormat='Difficoltà: {0}'}" />
+                            </Frame>-->
+
+                            <CheckBox Grid.Column="2"
+                                      IsChecked="{Binding IsCompleted, Mode=TwoWay}" 
+                                       IsEnabled="{Binding 
+                                                    Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, 
+                                                    Path=IsTrainingActive}"
+                                      IsVisible="{Binding IsSelected}"
+                                      Color="#0000FF"
+                                      BackgroundColor="Transparent"
+                                      AutomationProperties.Name="Percorso completato"
+                                      AutomationProperties.HelpText="Segna il percorso come completato" />
+
+                            <!-- Attempts counter and completion checkbox -->
+                            <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" ColumnDefinitions="Auto,*,Auto" IsVisible="{Binding IsSelected}">
+                                <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                    <Label Text="Presa" 
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"
+                                           AutomationProperties.Name="Etichetta tentativi" />
+                                    <Button Text="-" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=DecrementAttemptsCommand}" 
+                                            CommandParameter="{Binding}"
+                                             IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IsTrainingActive}"
+                                            Style="{StaticResource CounterButtonStyle}"
+                                            AutomationProperties.Name="Diminuisci tentativi"
+                                            AutomationProperties.HelpText="Diminuisci il numero di tentativi" />
+                                    <Label Text="{Binding AttemptsDisplay}" 
+                                           VerticalOptions="Center" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold" 
+                                           Margin="10,0"
+                                           AutomationProperties.Name="{Binding Attempts, StringFormat='Numero tentativi: {0}'}" />
+                                    <Button Text="+" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IncrementAttemptsCommand}" 
+                                            CommandParameter="{Binding}"
+                                             IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IsTrainingActive}"
+                                            Style="{StaticResource CounterButtonStyle}"
+                                            AutomationProperties.Name="Aumenta tentativi"
+                                            AutomationProperties.HelpText="Aumenta il numero di tentativi" />
+                                </StackLayout>
+
+                            </Grid>
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="Nessun percorso disponibile" 
+                           FontSize="18" 
+                           TextColor="#666666"
+                           HorizontalOptions="Center"
+                           AutomationProperties.Name="Nessun percorso disponibile" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- Action Buttons -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
+            <!--<Button 
+                Grid.Column="0"
+                Text="Inizia" 
+                Command="{Binding StartTrainingCommand}"
+                Style="{StaticResource ActionButtonStyle}"
+                IsVisible="{Binding IsTrainingActive, Converter={StaticResource InverseBoolConverter}}"
+                AutomationProperties.Name="Inizia allenamento"
+                AutomationProperties.HelpText="Premi per iniziare l'allenamento" />-->
+
+            <Button 
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="Termina Allenamento" 
+                Command="{Binding EndTrainingCommand}"
+                Style="{StaticResource EndButtonStyle}"
+                IsVisible="{Binding IsTrainingActive}"
+                HorizontalOptions="Fill"
+                AutomationProperties.Name="Termina allenamento"
+                AutomationProperties.HelpText="Premi per terminare l'allenamento e salvare i risultati" />
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ClimbTrack.ViewModels"
+             xmlns:models="clr-namespace:ClimbTrack.Models"
+             x:Class="ClimbTrack.Views.HistoricalPage"
+             x:DataType="viewmodels:HistoricalViewModel"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SessionCardStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+
+            <Style x:Key="FilterButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="BorderColor" Value="{StaticResource Primary}" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Padding" Value="15,8" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Filters Section -->
+        <StackLayout Grid.Row="0" Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" Margin="0,0,0,15">
+            <Button Text="Filtri" 
+                    Style="{StaticResource FilterButtonStyle}"
+                    Clicked="OnFilterButtonClicked" />
+
+            <Button Text="Cancella Filtri" 
+                    Command="{Binding ClearFiltersCommand}"
+                    Style="{StaticResource FilterButtonStyle}"
+                    IsVisible="{Binding FilterPanel, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}" />
+        </StackLayout>
+
+        <!-- Sessions List -->
+        <RefreshView Grid.Row="1" 
+                     IsRefreshing="{Binding IsRefreshing}" 
+                     Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Sessions}" 
+                           SelectionMode="Single"
+                           SelectionChanged="OnSessionSelected"
+                           EmptyView="Nessuna sessione di allenamento trovata">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TrainingSession">
+                        <Frame Style="{StaticResource SessionCardStyle}">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                <!-- Date -->
+                                <Label 
+                                    Grid.Row="0" 
+                                    Grid.Column="0"
+                                    Text="{Binding FormattedDate}" 
+                                    FontSize="16" 
+                                    FontAttributes="Bold"
+                                    TextColor="{StaticResource TextPrimaryColor}" />
+
+                                <!-- Duration -->
+                                <Label 
+                                    Grid.Row="0" 
+                                    Grid.Column="1"
+                                    Text="{Binding FormattedDuration}" 
+                                    FontSize="16" 
+                                    TextColor="{StaticResource TextSecondaryColor}" />
+
+                                <!-- Panel Type -->
+                                <Label 
+                                    Grid.Row="1" 
+                                    Grid.Column="0"
+                                    Text="{Binding PanelType, StringFormat='Pannello: {0}'}" 
+                                    FontSize="14" 
+                                    TextColor="{StaticResource TextSecondaryColor}"
+                                    Margin="0,5,0,0" />
+
+                                <!-- Routes Completed -->
+                                <Label 
+                                    Grid.Row="2" 
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    FontSize="14" 
+                                    TextColor="{StaticResource TextSecondaryColor}"
+                                    Margin="0,5,0,0">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="Percorsi completati: {0}/{1}">
+                                            <Binding Path="CompletedRoutesCount" />
+                                            <Binding Path="TotalRoutes" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

@@ -5,92 +5,146 @@
              x:Class="ClimbTrack.Views.RegisterPage"
              x:DataType="viewmodel:RegisterViewModel"
              Title="{Binding Title}">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" 
-          Padding="20"
-          RowSpacing="15">
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" 
+              Padding="20"
+              RowSpacing="15">
 
-        <!-- Title -->
-        <Label Grid.Row="0" 
-               Text="Create Account"
-               FontSize="28"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               Margin="0,20,0,10"/>
+            <!-- Title -->
+            <Label Grid.Row="0" 
+                   Text="Create Account"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimaryColor}"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,10"
+                   AutomationProperties.Name="Create Account Title"/>
 
-        <!-- Name Entry -->
-        <Border Grid.Row="1"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding Name}" 
-                   Placeholder="Full Name"
-                   Margin="10,0"/>
-        </Border>
+            <!-- Name Entry -->
+            <Border Grid.Row="1"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Text="{Binding Name}" 
+                       Placeholder="Full Name"
+                       TextColor="{StaticResource TextPrimaryColor}"
+                       PlaceholderColor="{StaticResource TextSecondaryColor}"
+                       Margin="10,0"
+                       AutomationProperties.Name="Full Name"
+                       AutomationProperties.HelpText="Enter your full name"/>
+            </Border>
 
-        <!-- Email Entry -->
-        <Border Grid.Row="2"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding Email}" 
-                   Placeholder="Email"
-                   Keyboard="Email"
-                   Margin="10,0"/>
-        </Border>
+            <!-- Email Entry -->
+            <Border Grid.Row="2"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Text="{Binding Email}" 
+                       Placeholder="Email"
+                       Keyboard="Email"
+                       TextColor="{StaticResource TextPrimaryColor}"
+                       PlaceholderColor="{StaticResource TextSecondaryColor}"
+                       Margin="10,0"
+                       AutomationProperties.Name="Email"
+                       AutomationProperties.HelpText="Enter your email address"/>
+            </Border>
 
-        <!-- Password Entry -->
-        <Border Grid.Row="3"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding Password}" 
-                   Placeholder="Password"
-                   IsPassword="True"
-                   Margin="10,0"/>
-        </Border>
+            <!-- Password Entry -->
+            <Border Grid.Row="3"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Text="{Binding Password}" 
+                       Placeholder="Password"
+                       IsPassword="True"
+                       TextColor="{StaticResource TextPrimaryColor}"
+                       PlaceholderColor="{StaticResource TextSecondaryColor}"
+                       Margin="10,0"
+                       AutomationProperties.Name="Password"
+                       AutomationProperties.HelpText="Enter your password"/>
+            </Border>
 
-        <!-- Confirm Password Entry -->
-        <Border Grid.Row="4"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding ConfirmPassword}" 
-                   Placeholder="Confirm Password"
-                   IsPassword="True"
-                   Margin="10,0"/>
-        </Border>
+            <!-- Confirm Password Entry -->
+            <Border Grid.Row="4"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                <Entry Text="{Binding ConfirmPassword}" 
+                       Placeholder="Confirm Password"
+                       IsPassword="True"
+                       TextColor="{StaticResource TextPrimaryColor}"
+                       PlaceholderColor="{StaticResource TextSecondaryColor}"
+                       Margin="10,0"
+                       AutomationProperties.Name="Confirm Password"
+                       AutomationProperties.HelpText="Confirm your password"/>
+            </Border>
 
-        <!-- Error Message -->
-        <Label Grid.Row="5"
-               Text="{Binding ErrorMessage}"
-               TextColor="Red"
-               FontSize="14"
-               HorizontalOptions="Center"
-               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"/>
+            <!-- Password Requirements -->
+            <Label Grid.Row="5"
+                   Text="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character"
+                   TextColor="{StaticResource TextSecondaryColor}"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   AutomationProperties.Name="Password requirements"
+                   AutomationProperties.HelpText="Password requirements information"/>
 
-        <!-- Register Button -->
-        <Button Grid.Row="6"
-                Text="Register"
-                Command="{Binding RegisterCommand}"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                CornerRadius="10"
-                HeightRequest="50"/>
+            <!-- Error Message -->
+            <Label Grid.Row="6"
+                   Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource DangerColor}"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"
+                   AutomationProperties.Name="Error message"
+                   AutomationProperties.IsInAccessibleTree="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"/>
 
-        <!-- Back to Login Button -->
-        <Button Grid.Row="7"
-                Text="Already have an account? Login"
-                Command="{Binding BackToLoginCommand}"
-                BackgroundColor="Transparent"
-                TextColor="#4CAF50"
-                VerticalOptions="Start"/>
+            <!-- Register Button -->
+            <Button Grid.Row="7"
+                    Text="Register"
+                    Command="{Binding RegisterCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    BackgroundColor="{StaticResource AccentColor}"
+                    HeightRequest="50"
+                    AutomationProperties.Name="Register"
+                    AutomationProperties.HelpText="Create a new account with email and password"/>
 
-        <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="7"
-                           IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           Margin="0,20,0,0"/>
-    </Grid>
+            <!-- Register with Email Verification Button -->
+            <Button Grid.Row="8"
+                    Text="Register with Email Verification"
+                    Command="{Binding RegisterWithVerificationCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    HeightRequest="50"
+                    AutomationProperties.Name="Register with Email Verification"
+                    AutomationProperties.HelpText="Create a new account with email verification"/>
+
+            <!-- Back to Login Button -->
+            <Button Grid.Row="9"
+                    Text="Already have an account? Login"
+                    Command="{Binding BackToLoginCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource AccentColor}"
+                    VerticalOptions="Start"
+                    AutomationProperties.Name="Back to Login"
+                    AutomationProperties.HelpText="Return to the login page"/>
+
+            <!-- Loading Overlay -->
+            <Grid Grid.RowSpan="10"
+                  BackgroundColor="#80000000"
+                  IsVisible="{Binding IsBusy}"
+                  InputTransparent="False">
+                <VerticalStackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       Color="White"/>
+                    <Label Text="{Binding BusyText}"
+                           TextColor="White"
+                           Margin="0,10,0,0"
+                           AutomationProperties.Name="Loading status"
+                           AutomationProperties.IsInAccessibleTree="{Binding IsBusy}"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </ScrollView>
 </ContentPage>

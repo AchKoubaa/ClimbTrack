@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using Firebase.Database;
 
 namespace ClimbTrack.Services
 {
@@ -10,5 +11,14 @@ namespace ClimbTrack.Services
         Task<string> GetUserEmail();
         Task<bool> IsAuthenticated();
         Task Logout();
+        User GetCurrentUser();
+        Task<FirebaseClient> GetAuthenticatedClientAsync();
+
+        Task<bool> IsTokenValid();
+        Task HandleAuthenticationFailure();
+        // Add this event
+        event EventHandler AuthStateChanged;
+
+
     }
 }

@@ -1,8 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true"></application>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
+
+		<activity android:name=".WebAuthenticationCallbackActivity" android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="http" android:host="localhost:3000" />
+			</intent-filter>
+		</activity>
+		
+	</application>
 
 	<!-- For browser integration -->
 	<queries>
@@ -14,5 +23,11 @@
 			<action android:name="android.intent.action.VIEW" />
 			<data android:scheme="https" />
 		</intent>
+
+		
 	</queries>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	
 </manifest>

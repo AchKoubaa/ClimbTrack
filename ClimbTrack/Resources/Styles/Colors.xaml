@@ -13,6 +13,11 @@
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
 
+    <Color x:Key="PrimaryColor">#512BD4</Color>
+    <Color x:Key="SecondaryColor">#DFD8F7</Color>
+    <Color x:Key="TertiaryColor">#2B0B98</Color>
+    <Color x:Key="AccentColor">#FF4081</Color>
+    
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
     <Color x:Key="Magenta">#D600AA</Color>
@@ -42,4 +47,32 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <!-- Add your missing colors here -->
+    <Color x:Key="BackgroundColor">#f2f2f2</Color>
+    <Color x:Key="TextPrimaryColor">#333333</Color>
+    <Color x:Key="TextSecondaryColor">#666666</Color>
+    <Color x:Key="BorderColor">#DDDDDD</Color>
+
+    <!-- Dark theme colors -->
+    <Color x:Key="BackgroundColorDark">#333333</Color>
+    <Color x:Key="TextPrimaryColorDark">#FFFFFF</Color>
+    <Color x:Key="TextSecondaryColorDark">#CCCCCC</Color>
+    <Color x:Key="BorderColorDark">#444444</Color>
+
+    <!-- App-specific colors -->
+    <Color x:Key="SuccessColor">#4CAF50</Color>
+    <Color x:Key="WarningColor">#FFC107</Color>
+    <Color x:Key="ErrorColor">#F44336</Color>
+    <Color x:Key="InfoColor">#2196F3</Color>
+
+    <!-- Climbing route difficulty colors -->
+    <Color x:Key="DifficultyLevel1">#4CAF50</Color>
+    <!-- Easy -->
+    <Color x:Key="DifficultyLevel2">#8BC34A</Color>
+    <Color x:Key="DifficultyLevel3">#FFEB3B</Color>
+    <!-- Medium -->
+    <Color x:Key="DifficultyLevel4">#FF9800</Color>
+    <Color x:Key="DifficultyLevel5">#F44336</Color>
+    <!-- Hard -->
 </ResourceDictionary>

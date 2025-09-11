@@ -1,0 +1,264 @@
+{
+  "userSessions": [
+    {
+      "userId": "demo-user-1",
+      "sessions": [
+        {
+          "id": "session-1",
+          "panelType": "Verticale",
+          "timestamp": "2023-05-15T14:30:00Z",
+          "duration": "PT45M",
+          "completedRoutes": [
+            {
+              "routeId": "route-1",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-2",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-3",
+              "completed": false,
+              "attempts": 3
+            }
+          ]
+        },
+        {
+          "id": "session-2",
+          "panelType": "30°",
+          "timestamp": "2023-05-20T16:00:00Z",
+          "duration": "PT60M",
+          "completedRoutes": [
+            {
+              "routeId": "route-4",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-5",
+              "completed": false,
+              "attempts": 4
+            },
+            {
+              "routeId": "route-6",
+              "completed": true,
+              "attempts": 2
+            }
+          ]
+        },
+        {
+          "id": "session-3",
+          "panelType": "35°",
+          "timestamp": "2023-05-25T18:00:00Z",
+          "duration": "PT75M",
+          "completedRoutes": [
+            {
+              "routeId": "route-7",
+              "completed": true,
+              "attempts": 3
+            },
+            {
+              "routeId": "route-8",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-9",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-10",
+              "completed": false,
+              "attempts": 5
+            }
+          ]
+        },
+        {
+          "id": "session-4",
+          "panelType": "Verticale",
+          "timestamp": "2023-06-01T10:00:00Z",
+          "duration": "PT90M",
+          "completedRoutes": [
+            {
+              "routeId": "route-1",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-2",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-3",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-11",
+              "completed": true,
+              "attempts": 3
+            },
+            {
+              "routeId": "route-12",
+              "completed": false,
+              "attempts": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "demo-user-2",
+      "sessions": [
+        {
+          "id": "session-5",
+          "panelType": "35°",
+          "timestamp": "2023-05-18T10:00:00Z",
+          "duration": "PT90M",
+          "completedRoutes": [
+            {
+              "routeId": "route-7",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-8",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-9",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-13",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-14",
+              "completed": true,
+              "attempts": 2
+            }
+          ]
+        },
+        {
+          "id": "session-6",
+          "panelType": "40°",
+          "timestamp": "2023-05-22T17:00:00Z",
+          "duration": "PT60M",
+          "completedRoutes": [
+            {
+              "routeId": "route-15",
+              "completed": true,
+              "attempts": 1
+            },
+            {
+              "routeId": "route-16",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-17",
+              "completed": false,
+              "attempts": 5
+            }
+          ]
+        },
+        {
+          "id": "session-7",
+          "panelType": "45°",
+          "timestamp": "2023-05-29T15:30:00Z",
+          "duration": "PT75M",
+          "completedRoutes": [
+            {
+              "routeId": "route-18",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-19",
+              "completed": true,
+              "attempts": 3
+            },
+            {
+              "routeId": "route-20",
+              "completed": false,
+              "attempts": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "demo-user-3",
+      "sessions": [
+        {
+          "id": "session-8",
+          "panelType": "Verticale",
+          "timestamp": "2023-05-19T18:00:00Z",
+          "duration": "PT45M",
+          "completedRoutes": [
+            {
+              "routeId": "route-1",
+              "completed": true,
+              "attempts": 3
+            },
+            {
+              "routeId": "route-2",
+              "completed": false,
+              "attempts": 5
+            }
+          ]
+        },
+        {
+          "id": "session-9",
+          "panelType": "Verticale",
+          "timestamp": "2023-05-26T19:00:00Z",
+          "duration": "PT60M",
+          "completedRoutes": [
+            {
+              "routeId": "route-1",
+              "completed": true,
+              "attempts": 2
+            },
+            {
+              "routeId": "route-2",
+              "completed": true,
+              "attempts": 4
+            },
+            {
+              "routeId": "route-3",
+              "completed": false,
+              "attempts": 6
+            }
+          ]
+        },
+        {
+          "id": "session-10",
+          "panelType": "30°",
+          "timestamp": "2023-06-02T17:30:00Z",
+          "duration": "PT45M",
+          "completedRoutes": [
+            {
+              "routeId": "route-4",
+              "completed": true,
+              "attempts": 3
+            },
+            {
+              "routeId": "route-5",
+              "completed": false,
+              "attempts": 5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

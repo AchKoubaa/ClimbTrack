@@ -1,4 +1,6 @@
 ﻿using Firebase.Auth;
+using System.Diagnostics;
+using System.Net;
 using System.Web;
 
 namespace ClimbTrack.Services
@@ -8,19 +10,33 @@ namespace ClimbTrack.Services
     {
         private readonly string GoogleClientId;
         private readonly string GoogleRedirectUri;
+        private readonly ILocalHttpServer _httpServer;
         private readonly IFirebaseService _firebaseService;
+        private TaskCompletionSource<string> _authCompletionSource;
 
-        public GoogleAuthService(IFirebaseService firebaseService)
+        public GoogleAuthService(ILocalHttpServer httpServer, 
+            IFirebaseService firebaseService
+                                )
         {
+            _httpServer = httpServer;
             _firebaseService = firebaseService;
 
             // Use your actual client ID from Google Cloud Console
-            GoogleClientId = "905782286968-9t66s04engso3jvjpstj1slvaaecprdr.apps.googleusercontent.com";
+            GoogleClientId = "703559950083-kbfeqqi9evvmmgbn482ff65iaq5tchud.apps.googleusercontent.com";
 
-            // Use the Firebase redirect URI for all platforms
-            GoogleRedirectUri = "https://test1-7f758.firebaseapp.com/__/auth/handler";
+            // For Android, use the Android client ID specifically
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                // Replace with your Android client ID (ends with .apps.googleusercontent.com)
+                GoogleClientId = "703559950083-android-specific-id.apps.googleusercontent.com";
+            }
+            else if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                // Replace with your iOS client ID
+                GoogleClientId = "703559950083-ios-specific-id.apps.googleusercontent.com";
+            }
 
-            Console.WriteLine($"Initialized GoogleAuthService with redirect URI: {GoogleRedirectUri}");
+            Console.WriteLine($"Initialized GoogleAuthService with client ID: {GoogleClientId}");
         }
 
         public async Task<UserCredential> SignInWithGoogleAsync()
@@ -32,10 +48,15 @@ namespace ClimbTrack.Services
                 Console.WriteLine($"Package name: {AppInfo.PackageName}");
                 Console.WriteLine($"Google Client ID: {GoogleClientId.Substring(0, 10)}...");
                 Console.WriteLine($"Redirect URI: {GoogleRedirectUri}");
-
+              
                 // For mobile platforms, we'll use a different approach
-                if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
+                if (DeviceInfo.Platform == DevicePlatform.Android )
                 {
+                    return await SignInWithGoogleOnMobile();
+                }
+                else if (DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    //return await SignInWithGoogleOnIOS();
                     return await SignInWithGoogleOnMobile();
                 }
                 else
@@ -54,78 +75,179 @@ namespace ClimbTrack.Services
 
         private async Task<UserCredential> SignInWithGoogleOnMobile()
         {
-            // Build the OAuth URL with code response type instead of token
-            var authUrl = new Uri(
-                "https://accounts.google.com/o/oauth2/auth" +
-                $"?client_id={GoogleClientId}" +
-                $"&redirect_uri={HttpUtility.UrlEncode(GoogleRedirectUri)}" +
-                "&response_type=code" +  // Changed from token to code
-                "&access_type=offline" +  // Request a refresh token
-                "&prompt=consent" +  // Force consent screen
-                "&scope=email%20profile");
+            Console.WriteLine("Using mobile authentication flow with WebAuthenticator");
 
+            // Define a callback URL that matches the intent filter in WebAuthenticatorCallbackActivity
+            var callbackUrl = "http://localhost:3000";
 
-            Console.WriteLine($"Auth URL: {authUrl}");
-
-            // Open the URL in the browser
-            await Browser.Default.OpenAsync(authUrl, BrowserLaunchMode.SystemPreferred);
-
-            // Show detailed instructions for extracting the token
-            await Application.Current.MainPage.DisplayAlert(
-                "Extract Access Token",
-                "After signing in, you'll be redirected to a page.\n\n" +
-                "To get the access token:\n" +
-                "1. Look at the URL in the browser\n" +
-                "2. Find the part that starts with 'access_token='\n" +
-                "3. Copy everything after 'access_token=' until the next '&' or the end of the URL\n" +
-                "4. Return to this app and paste the token when prompted",
-                "OK");
-
-            // Since we can't capture the redirect in a mobile app when using the Firebase redirect URI,
-            // we'll need to prompt the user to enter the token manually
-            string accessToken = await Application.Current.MainPage.DisplayPromptAsync(
-                "Google Sign-In",
-                "Please copy the access token from the browser and paste it here:",
-                maxLength: 2000);
-
-            if (string.IsNullOrEmpty(accessToken))
+            var authOptions = new WebAuthenticatorOptions
             {
-                throw new Exception("No access token provided");
+                Url = new Uri($"https://accounts.google.com/o/oauth2/v2/auth?" +
+               $"client_id={GoogleClientId}&" +
+               $"redirect_uri={Uri.EscapeDataString(GoogleRedirectUri)}&" +
+               $"response_type=token&" +
+               $"scope={Uri.EscapeDataString("openid profile email")}"
+           ),
+                CallbackUrl = new Uri(callbackUrl),
+                PrefersEphemeralWebBrowserSession = false
+            };
+
+            try
+            {
+                var result = await WebAuthenticator.AuthenticateAsync(authOptions);
+
+                if (result.Properties.TryGetValue("access_token", out var accessToken))
+                {
+                    Console.WriteLine("Access token obtained. Signing in with Firebase...");
+                    return await _firebaseService.SignInWithGoogleAccessTokenAsync(accessToken);
+                }
+                else
+                {
+                    throw new Exception("No access token found in authentication result");
+                }
             }
-
-            Console.WriteLine($"Received access token: {accessToken.Substring(0, Math.Min(10, accessToken.Length))}...");
-
-            // Use the access token to sign in with Firebase
-            return await _firebaseService.SignInWithGoogleAccessTokenAsync(accessToken);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"WebAuthenticator error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
-        private async Task<UserCredential> SignInWithGoogleOnDesktop()
+        public async Task<UserCredential> SignInWithGoogleOnDesktop()
         {
-            // For desktop platforms, we can use a similar approach
-            // but with different UI guidance
-            var authUrl = new Uri(
-                "https://accounts.google.com/o/oauth2/auth" +
-                $"?client_id={GoogleClientId}" +
-                $"&redirect_uri={HttpUtility.UrlEncode(GoogleRedirectUri)}" +
-                "&response_type=token" +
-                "&scope=email%20profile");
+            Console.WriteLine("Using Windows-specific authentication flow");
 
-            // Open the URL in the browser
-            await Browser.Default.OpenAsync(authUrl, BrowserLaunchMode.SystemPreferred);
+            // Implementazione alternativa per Windows
+            // Opzione 1: Usa un server locale per gestire il callback
+            return await SignInWithGoogleUsingLocalServerAsync();
 
-            // Prompt for the token
-            string accessToken = await Application.Current.MainPage.DisplayPromptAsync(
-                "Google Sign-In",
-                "Please sign in with Google in the browser, then copy the access token and paste it here:",
-                maxLength: 2000);
+            // Opzione 2: Usa un approccio di autenticazione simulata per lo sviluppo
+            // return await SignInWithGoogleMockAsync();
+        }
 
-            if (string.IsNullOrEmpty(accessToken))
+        private async Task<UserCredential> SignInWithGoogleUsingLocalServerAsync()
+        {
+            _authCompletionSource = new TaskCompletionSource<string>();
+
+            // Subscribe to the RequestReceived event
+            _httpServer.RequestReceived += OnHttpRequestReceived;
+
+            try
             {
-                throw new Exception("No access token provided");
+                // Start the HTTP server
+                await _httpServer.StartAsync();
+
+                Console.WriteLine($"Started local HTTP server on {_httpServer.BaseUrl}");
+
+                // Generate Google authentication URL
+                var state = Guid.NewGuid().ToString("N");
+                var authUrl = $"https://accounts.google.com/o/oauth2/v2/auth?" +
+                    $"client_id={GoogleClientId}&" +
+                    $"redirect_uri={_httpServer.BaseUrl}&" +
+                    $"response_type=token&" +
+                    $"state={state}&" +
+                    $"scope={Uri.EscapeDataString("openid profile email")}";
+
+                // Open browser with authentication URL
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = authUrl,
+                    UseShellExecute = true
+                });
+
+                Console.WriteLine($"Opened browser with auth URL: {authUrl}");
+
+                // Wait for the authentication to complete
+                var accessToken = await _authCompletionSource.Task;
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    Console.WriteLine("Access token obtained. Signing in with Firebase...");
+                    return await _firebaseService.SignInWithGoogleAccessTokenAsync(accessToken);
+                }
+                else
+                {
+                    throw new Exception("No access token found in authentication result");
+                }
+            }
+            finally
+            {
+                // Clean up
+                _httpServer.RequestReceived -= OnHttpRequestReceived;
+                _httpServer.Stop();
+            }
+        }
+        private void SendAuthCompletedResponse(HttpListenerContext context)
+        {
+            var response = context.Response;
+            // This JavaScript extracts the token from the URL fragment and sends it back to the server
+            var responseString = @"
+    <html>
+    <body>
+        <h1>Authentication completed</h1>
+        <p>Processing authentication response...</p>
+        <script>
+            // Extract the token from the URL fragment
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const accessToken = params.get('access_token');
+            
+            // Send the token back to the server via a new request
+            if (accessToken) {
+                fetch('/token?access_token=' + accessToken)
+                    .then(() => {
+                        document.body.innerHTML += '<p>You can close this window now.</p>';
+                    })
+                    .catch(err => {
+                        document.body.innerHTML += '<p>Error: ' + err.message + '</p>';
+                    });
+            } else {
+                document.body.innerHTML += '<p>Error: No access token found</p>';
+            }
+        </script>
+    </body>
+    </html>";
+
+            var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            response.ContentLength64 = buffer.Length;
+            response.ContentType = "text/html";
+            var responseOutput = response.OutputStream;
+            responseOutput.Write(buffer, 0, buffer.Length);
+            responseOutput.Close();
+        }
+
+        private void OnHttpRequestReceived(object sender, HttpListenerContext context)
+        {
+            Console.WriteLine($"Received request: {context.Request.Url}");
+
+            if (context.Request.Url.AbsolutePath == "/token")
+            {
+                // Handle the token endpoint
+                var accessToken = context.Request.QueryString["access_token"];
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    _authCompletionSource.TrySetResult(accessToken);
+                }
+
+                // Send a simple response
+                SendSimpleResponse(context, "Token received");
+                return;
             }
 
-            // Use the access token to sign in with Firebase
-            return await _firebaseService.SignInWithGoogleAccessTokenAsync(accessToken);
+            // Handle the initial redirect from Google
+            SendAuthCompletedResponse(context);
+        }
+
+        private void SendSimpleResponse(HttpListenerContext context, string message)
+        {
+            var response = context.Response;
+            var buffer = System.Text.Encoding.UTF8.GetBytes(message);
+            response.ContentLength64 = buffer.Length;
+            response.ContentType = "text/plain";
+            var responseOutput = response.OutputStream;
+            responseOutput.Write(buffer, 0, buffer.Length);
+            responseOutput.Close();
         }
     }
 

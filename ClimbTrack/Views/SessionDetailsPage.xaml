@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ClimbTrack.ViewModels"
+             xmlns:converters="clr-namespace:ClimbTrack.Converters"
+             x:Class="ClimbTrack.Views.SessionDetailsPage"
+             x:DataType="viewmodels:SessionDetailsViewModel"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="HeaderFrameStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="HasShadow" Value="False" />
+            </Style>
+
+            <Style x:Key="HeaderLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="SubHeaderLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="Margin" Value="0,5,0,0" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+                <Setter Property="Margin" Value="0,15,0,10" />
+            </Style>
+
+            <Style x:Key="RouteItemStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
+
+            <Style x:Key="CompletedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
+                <Setter Property="BackgroundColor" Value="{StaticResource CompletedBackgroundColor}" />
+            </Style>
+
+            <Style x:Key="DeleteButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource DangerColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="Padding" Value="24,12" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="Margin" Value="0,20,0,20" />
+            </Style>
+
+            <Style x:Key="DifficultyIndicatorStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="HeightRequest" Value="24" />
+                <Setter Property="WidthRequest" Value="24" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Frame Grid.Row="0" Style="{StaticResource HeaderFrameStyle}">
+            <StackLayout Spacing="5">
+                <Label Text="{Binding DateDisplay}" 
+                       Style="{StaticResource HeaderLabelStyle}"
+                       AutomationProperties.Name="Data sessione"
+                       AutomationProperties.HelpText="{Binding DateDisplay}" />
+                <Label Text="{Binding PanelTypeDisplay}" 
+                       Style="{StaticResource SubHeaderLabelStyle}"
+                       AutomationProperties.Name="Tipo pannello"
+                       AutomationProperties.HelpText="{Binding PanelTypeDisplay}" />
+                <Label Text="{Binding DurationDisplay}" 
+                       Style="{StaticResource SubHeaderLabelStyle}"
+                       AutomationProperties.Name="Durata"
+                       AutomationProperties.HelpText="{Binding DurationDisplay}" />
+                <Label Text="{Binding CompletionRateDisplay}" 
+                       Style="{StaticResource SubHeaderLabelStyle}"
+                       AutomationProperties.Name="Tasso di completamento"
+                       AutomationProperties.HelpText="{Binding CompletionRateDisplay}" />
+            </StackLayout>
+        </Frame>
+
+        <!-- Routes List -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="20">
+                <Label Text="Percorsi" 
+                       Style="{StaticResource SectionTitleStyle}"
+                       AutomationProperties.Name="Sezione percorsi" />
+
+                <CollectionView ItemsSource="{Binding CompletedRoutes}" 
+                                SelectionMode="None"
+                                AutomationProperties.Name="Lista percorsi completati">
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20">
+                            <Label 
+                                Text="Nessun percorso trovato" 
+                                FontSize="16" 
+                                TextColor="#666666"
+                                HorizontalOptions="Center"
+                                AutomationProperties.Name="Nessun percorso trovato" />
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:CompletedRouteViewModel">
+                            <Frame Style="{Binding Completed, Converter={StaticResource BoolToStyleConverter}, ConverterParameter={StaticResource CompletedRouteItemStyle}, FallbackValue={StaticResource RouteItemStyle}}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                    <!-- Color indicator and route name -->
+                                    <BoxView 
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Color="{Binding Route.ColorHex}"
+                                        WidthRequest="24"
+                                        HeightRequest="24"
+                                        CornerRadius="12"
+                                        VerticalOptions="Center"
+                                        AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+
+                                    <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
+                                        <Label 
+                                            Text="{Binding Route.Name}" 
+                                            FontSize="16"
+                                            TextColor="{StaticResource TextPrimaryColor}"
+                                            AutomationProperties.Name="{Binding Route.Name, StringFormat='Nome percorso: {0}'}" />
+                                        <Label 
+                                            Text="{Binding Route.Color}" 
+                                            FontSize="14"
+                                            TextColor="{StaticResource TextSecondaryColor}"
+                                            AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+                                    </StackLayout>
+
+                                    <!-- Indicatore di difficoltà migliorato -->
+                                    <Frame Grid.Column="2"
+                                           Grid.Row="0"
+                                           Style="{StaticResource DifficultyIndicatorStyle}"
+                                           BackgroundColor="{Binding Route.Difficulty, Converter={StaticResource DifficultyToColorConverter}}">
+                                        <Label Text="{Binding Route.Difficulty}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               AutomationProperties.Name="{Binding Route.Difficulty, StringFormat='Difficoltà: {0}'}" />
+                                    </Frame>
+
+                                    <!-- Status and attempts -->
+                                    <StackLayout Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+                                        <Label Text="Stato:" 
+                                               VerticalOptions="Center"
+                                               AutomationProperties.Name="Etichetta stato" />
+                                        <Label 
+                                            Text="{Binding Completed, Converter={StaticResource BoolToTextConverter}, ConverterParameter='Completato|Non completato'}" 
+                                            FontAttributes="Bold"
+                                            TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}"
+                                            VerticalOptions="Center"
+                                            Margin="5,0,0,0"
+                                            AutomationProperties.Name="{Binding Completed, Converter={StaticResource BoolToTextConverter}, ConverterParameter='Stato: Completato|Stato: Non completato'}" />
+
+                                        <Label Text="Tentativi:" 
+                                               VerticalOptions="Center" 
+                                               Margin="15,0,0,0"
+                                               AutomationProperties.Name="Etichetta tentativi" />
+                                        <Label 
+                                            Text="{Binding Attempts}" 
+                                            FontAttributes="Bold"
+                                            TextColor="{StaticResource TextPrimaryColor}"
+                                            VerticalOptions="Center"
+                                            Margin="5,0,0,0"
+                                            AutomationProperties.Name="{Binding Attempts, StringFormat='Numero tentativi: {0}'}" />
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Delete Button -->
+                <Button 
+                    Text="Elimina Sessione" 
+                    Command="{Binding DeleteSessionCommand}"
+                    Style="{StaticResource DeleteButtonStyle}"
+                    AutomationProperties.Name="Elimina sessione"
+                    AutomationProperties.HelpText="Premi per eliminare questa sessione di allenamento" />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

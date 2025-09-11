@@ -1,0 +1,40 @@
+{
+  "gyms": [
+    {
+      "id": "gym-1",
+      "name": "Boulder Gym Milano",
+      "address": "Via Milano, 123, Milano",
+      "location": {
+        "latitude": 45.4642,
+        "longitude": 9.1900
+      },
+      "hasVerticalWall": true,
+      "hasOverhangWall": true,
+      "website": "https://www.bouldergym-milano.it"
+    },
+    {
+      "id": "gym-2",
+      "name": "Climbing Paradise Roma",
+      "address": "Via Roma, 456, Roma",
+      "location": {
+        "latitude": 41.9028,
+        "longitude": 12.4964
+      },
+      "hasVerticalWall": true,
+      "hasOverhangWall": true,
+      "website": "https://www.climbingparadise-roma.it"
+    },
+    {
+      "id": "gym-3",
+      "name": "Vertical Dreams Torino",
+      "address": "Via Torino, 789, Torino",
+      "location": {
+        "latitude": 45.0703,
+        "longitude": 7.6869
+      },
+      "hasVerticalWall": true,
+      "hasOverhangWall": false,
+      "website": "https://www.verticaldreams-torino.it"
+    }
+  ]
+}

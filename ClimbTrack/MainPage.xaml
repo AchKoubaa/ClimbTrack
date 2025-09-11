@@ -11,10 +11,14 @@
             <Label Text="Welcome to ClimbTrack!" 
                    FontSize="30" 
                    FontAttributes="Bold" 
-                   HorizontalOptions="Center"/>
+                   TextColor="{StaticResource TextPrimaryColor}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="Welcome title"/>
             <Label Text="{Binding WelcomeMessage}" 
                    FontSize="26" 
-                   HorizontalOptions="Center"/>
+                   TextColor="{StaticResource TextPrimaryColor}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="Welcome message"/>
         </VerticalStackLayout>
 
         <!-- Content Area -->
@@ -24,30 +28,72 @@
                              Spacing="20">
             <Label Text="You are now logged in with Firebase!" 
                    FontSize="22" 
-                   HorizontalOptions="Center"/>
+                   TextColor="{StaticResource TextPrimaryColor}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="Login confirmation message"/>
+            <Button Text="My Profile" 
+            Command="{Binding NavigateToProfileCommand}"
+            Style="{StaticResource SecondaryButtonStyle}"
+            Margin="0,10"
+            AutomationProperties.Name="Go to profile"
+            AutomationProperties.HelpText="View and edit your profile"/>
+
+            <Button Text="Start Training" 
+            Command="{Binding NavigateToTrainingCommand}"
+            Style="{StaticResource SecondaryButtonStyle}"
+            Margin="0,10"
+            AutomationProperties.Name="Start training"
+            AutomationProperties.HelpText="Begin a new training session"/>
+
+            <Button Text="View History" 
+            Command="{Binding NavigateToHistoryCommand}"
+            Style="{StaticResource SecondaryButtonStyle}"
+            Margin="0,10"
+            AutomationProperties.Name="View history"
+            AutomationProperties.HelpText="See your training history"/>
             <Label Text="Your user ID:" 
                    FontSize="18" 
-                   HorizontalOptions="Center"/>
+                   TextColor="{StaticResource TextSecondaryColor}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="User ID label"/>
             <Label Text="{Binding UserId}" 
                    FontSize="14" 
-                   HorizontalOptions="Center"/>
+                   TextColor="{StaticResource TextSecondaryColor}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="User ID value"
+                   AutomationProperties.HelpText="This is your unique user identifier"/>
         </VerticalStackLayout>
 
         <!-- Logout Button -->
         <Button Grid.Row="2" 
                 Text="Logout" 
                 Command="{Binding LogoutCommand}"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                CornerRadius="10"
+                Style="{StaticResource PrimaryButtonStyle}"
+                BackgroundColor="{StaticResource AccentColor}"
                 HeightRequest="50"
-                Margin="0,20"/>
+                Margin="0,20"
+                AutomationProperties.Name="Logout button"
+                AutomationProperties.HelpText="Press to log out from your account"/>
 
         <!-- Loading Indicator -->
-        <ActivityIndicator Grid.RowSpan="3"
-                           IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
+        <Grid Grid.RowSpan="3" 
+              BackgroundColor="#80000000"
+              IsVisible="{Binding IsBusy}">
+            <VerticalStackLayout HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 Spacing="10">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   AutomationProperties.Name="Loading indicator"
+                                   AutomationProperties.IsInAccessibleTree="{Binding IsBusy}"/>
+                <Label Text="Loading..."
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       AutomationProperties.Name="Loading text"
+                       AutomationProperties.IsInAccessibleTree="{Binding IsBusy}"/>
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

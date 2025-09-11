@@ -10,7 +10,7 @@ namespace ClimbTrack.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IFirebaseService _firebaseService;
+        private readonly IDatabaseService _databaseService;
         private readonly IAuthService _authService;
         private readonly INavigationService _navigationService;
 
@@ -37,15 +37,24 @@ namespace ClimbTrack.ViewModels
         }
 
         public ICommand LogoutCommand { get; }
+        public ICommand NavigateToProfileCommand { get; }
+        public ICommand NavigateToTrainingCommand { get; }
+        public ICommand NavigateToHistoryCommand { get; }
 
-        public MainViewModel(IFirebaseService firebaseService, IAuthService authService, INavigationService navigationService)
+        public MainViewModel(
+            IDatabaseService databaseService,
+            IAuthService authService,
+            INavigationService navigationService)
         {
             Title = "Home";
-            _firebaseService = firebaseService;
+            _databaseService = databaseService;
             _authService = authService;
             _navigationService = navigationService;
 
             LogoutCommand = new Command(async () => await ExecuteLogoutCommand());
+            NavigateToProfileCommand = new Command(async () => await _navigationService.NavigateToAsync("//profile"));
+            NavigateToTrainingCommand = new Command(async () => await _navigationService.NavigateToAsync("//training"));
+            NavigateToHistoryCommand = new Command(async () => await _navigationService.NavigateToAsync("//history"));
         }
 
         public async Task Initialize()
@@ -54,11 +63,19 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
+                    // Verifica se l'utente è ancora autenticato
+                    bool isAuthenticated = await _authService.IsAuthenticated();
+                    if (!isAuthenticated)
+                    {
+                        await _navigationService.NavigateToAsync("///LoginPage");
+                        return;
+                    }
+
                     UserId = await _authService.GetUserId();
                     UserEmail = await _authService.GetUserEmail();
 
-                    // Get user data from Firebase
-                    var userData = await _firebaseService.GetItem<Dictionary<string, object>>("users", UserId);
+                    // Get user data from database
+                    var userData = await _databaseService.GetItem<Dictionary<string, object>>("users", UserId);
 
                     if (userData != null && userData.ContainsKey("Name"))
                     {
@@ -79,22 +96,23 @@ namespace ClimbTrack.ViewModels
 
         private async Task ExecuteLogoutCommand()
         {
-            await ExecuteWithBusy(async () =>
-            {
-                bool confirm = await _navigationService.DisplayAlertAsync(
-                    "Logout",
-                    "Are you sure you want to logout?",
-                    "Yes",
-                    "No");
+            bool confirm = await Application.Current.MainPage.DisplayAlert(
+                "Logout",
+                "Sei sicuro di voler effettuare il logout?",
+                "Sì", "No");
 
-                if (confirm)
+            if (confirm)
+            {
+                try
                 {
                     await _authService.Logout();
-
-                    // Navigate back to login page
-                    await _navigationService.NavigateToAsync("///LoginPage");
+                    await _navigationService.NavigateToAsync("//login");
                 }
-            });
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile effettuare il logout: {ex.Message}", "OK");
+                }
+            }
         }
     }
 }

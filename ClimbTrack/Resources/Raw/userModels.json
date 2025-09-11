@@ -1,0 +1,28 @@
+{
+  "userModels": [
+    {
+      "id": "demo-user-1",
+      "name": "Mario Rossi",
+      "email": "mario.rossi@example.com",
+      "climbsCompleted": 15,
+      "skillLevel": "Intermedio",
+      "joinDate": "2023-01-01T00:00:00Z"
+    },
+    {
+      "id": "demo-user-2",
+      "name": "Giulia Bianchi",
+      "email": "giulia.bianchi@example.com",
+      "climbsCompleted": 25,
+      "skillLevel": "Avanzato",
+      "joinDate": "2023-02-01T00:00:00Z"
+    },
+    {
+      "id": "demo-user-3",
+      "name": "Luca Verdi",
+      "email": "luca.verdi@example.com",
+      "climbsCompleted": 7,
+      "skillLevel": "Principiante",
+      "joinDate": "2023-03-01T00:00:00Z"
+    }
+  ]
+}

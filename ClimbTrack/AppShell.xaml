@@ -5,16 +5,101 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ClimbTrack"
     xmlns:views="clr-namespace:ClimbTrack.Views"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Disabled"
+    BackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
+    ForegroundColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
+    TitleColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
+    TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
+    TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}">
 
+    <!-- Add this to show the logout button in the toolbar -->
+    <!--<Shell.ToolbarItems>
+        <ToolbarItem x:Name="LogoutButton"
+                 Text="Logout" 
+                 IconImageSource="boxarrowright.svg"
+                 Command="{Binding LogoutCommand}" />
+    </Shell.ToolbarItems>-->
+
+    <!-- TabBar per la navigazione principale (visibile dopo il login) -->
+    <TabBar x:Name="MainTabs" Route="main" >
+        <Tab Title="Home" 
+             Icon="house.svg"
+             x:Name="HomeTab"
+             AutomationProperties.Name="Home Tab"
+             AutomationProperties.HelpText="Navigate to the home page">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:HomePage}"
+                Route="home" />
+        </Tab>
+
+        <Tab Title="Dashboard" 
+             Icon="speedometer.svg"
+             x:Name="DashboardTab"
+             AutomationProperties.Name="Dashboard Tab"
+             AutomationProperties.HelpText="Navigate to the dashboard">
+            <ShellContent
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="dashboard" />
+        </Tab>
+
+        <Tab Title="Training" 
+             Icon="activity.svg"
+             x:Name="TrainingTab"
+             AutomationProperties.Name="Training Tab"
+             AutomationProperties.HelpText="Navigate to the training page">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:TrainingPage}"
+                Route="training" />
+        </Tab>
+
+        <Tab Title="Profilo" 
+             Icon="person.svg"
+              x:Name="ProfileTab"
+             AutomationProperties.Name="Profile Tab"
+             AutomationProperties.HelpText="Navigate to your profile">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:ProfilePage}"
+                Route="profile" />
+        </Tab>
+        <Tab Title="Storico" 
+     Icon="clock.svg"
+     x:Name="StoricoTab"
+     AutomationProperties.Name="Storico Tab"
+     AutomationProperties.HelpText="Visualizza lo storico degli allenamenti">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoricalPage}" Route="historical" />
+        </Tab>
+    </TabBar>
+
+    <!-- Pagine di autenticazione (non nella TabBar) -->
     <ShellContent
-        Title="LogIn"
+        Shell.NavBarIsVisible="False"
+        Title="Login"
         ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage" />
+        Route="login" />
+
+    <!-- Registrazione -->
+    <ShellContent
+        Shell.NavBarIsVisible="True"
+        Title="Registrazione"
+        ContentTemplate="{DataTemplate views:RegisterPage}"
+        Route="register" />
+
+    <!-- Pagine di dettaglio (non nella TabBar) -->
+    <ShellContent
+        Shell.NavBarIsVisible="True"
+        Title="Dettagli Sessione"
+        ContentTemplate="{DataTemplate views:SessionDetailsPage}"
+        Route="sessionDetails" />
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Shell.NavBarIsVisible="True"
+        Title="Modifica Profilo"
+        ContentTemplate="{DataTemplate views:EditProfilePage}"
+        Route="editProfile" />
 
+    <ShellContent
+        Shell.NavBarIsVisible="True"
+        Title="Amministrazione"
+        ContentTemplate="{DataTemplate views:AdminPage}"
+        Route="admin" />
 </Shell>

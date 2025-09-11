@@ -4,110 +4,127 @@
              xmlns:viewmodel="clr-namespace:ClimbTrack.ViewModels"
              x:Class="ClimbTrack.Views.LoginPage"
              x:DataType="viewmodel:LoginViewModel"
-             Title="{Binding Title}">
-    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto,*" 
-          ColumnDefinitions="*,*"
-          Padding="20"
-          RowSpacing="15">
+             BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+            <!-- Title -->
+            <Label Text="Indoor Climbing Workouts" 
+                   FontSize="24" 
+                   TextColor="#333333" 
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,20"/>
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}"
+        TextColor="Red"
+        FontSize="14"
+        HorizontalOptions="Center"
+        IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"
+        Margin="0,5,0,0"/>
+            
+            <!-- Google Sign In Button -->
+            <Frame CornerRadius="25" 
+                   HasShadow="False" 
+                   BorderColor="#E0E0E0" 
+                   Padding="10" 
+                   HeightRequest="50"
+                   Margin="0,0,0,20">
+                <Grid>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                        <Image Source="google_g.png" HeightRequest="240" WidthRequest="240"/>
 
-        <!-- App Logo -->
-        <Image Grid.Row="0" 
-               Grid.ColumnSpan="2"
-               Source="climbing_logo.png"
-               HeightRequest="120"
-               WidthRequest="120"
-               HorizontalOptions="Center"
-               VerticalOptions="End"/>
+                    </HorizontalStackLayout>
+                    <Button Command="{Binding GoogleSignInCommand}"
+                            BackgroundColor="Transparent"
+                            AutomationProperties.Name="Sign in with Google"/>
+                </Grid>
+            </Frame>
 
-        <!-- Title -->
-        <Label Grid.Row="1" 
-               Grid.ColumnSpan="2"
-               Text="ClimbTrack"
-               FontSize="32"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"/>
+            <!-- Separator Line -->
+            <BoxView HeightRequest="1" 
+                     BackgroundColor="#E0E0E0" 
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10,0,20"/>
 
-        <Button Grid.Row="2"
-        Grid.ColumnSpan="2"
-        Text="Sign in with Google"
-        Command="{Binding GoogleSignInCommand}"
-        BackgroundColor="#4285F4"
-        TextColor="White"
-        CornerRadius="10"
-        HeightRequest="50"
-        Margin="0,0,0,0"/>
+            <!-- Email Entry -->
+            <Label Text="Email" TextColor="#888888" Margin="5,0,0,5"/>
+            <Frame CornerRadius="5" 
+                   HasShadow="False" 
+                   BorderColor="#E0E0E0" 
+                   Padding="10,0" 
+                   HeightRequest="50">
+                <Entry Text="{Binding Email}" 
+                       Placeholder="Enter your email" 
+                       PlaceholderColor="#CCCCCC"
+                       TextColor="#333333"
+                       Keyboard="Email"
+                       VerticalOptions="Center"
+                       AutomationProperties.Name="Email"
+                       AutomationProperties.HelpText="Enter your email address"/>
+            </Frame>
 
-        <Label 
-            Grid.Row="3"
-             Grid.ColumnSpan="2"
-            Text="OR" 
-            HorizontalOptions="Center"
-            VerticalOptions="End"/>
-        
-        <!-- Email Entry -->
-        <Border Grid.Row="4"
-                Grid.ColumnSpan="2"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding Email}" 
-                   Placeholder="Email"
-                   Keyboard="Email"
-                   Margin="10,0"/>
-        </Border>
+            <!-- Password Entry -->
+            <Label Text="Password" TextColor="#888888" Margin="5,0,0,5"/>
+            <Frame CornerRadius="5" 
+                   HasShadow="False" 
+                   BorderColor="#E0E0E0" 
+                   Padding="10,0" 
+                   HeightRequest="50">
+                <Grid>
+                    <Entry Text="{Binding Password}" 
+                           Placeholder="Enter your password" 
+                           PlaceholderColor="#CCCCCC"
+                           IsPassword="True"
+                           TextColor="#333333"
+                           VerticalOptions="Center"
+                           AutomationProperties.Name="Password"
+                           AutomationProperties.HelpText="Enter your password"/>
+                    <Image Source="eye_icon.png" 
+                           HeightRequest="24" 
+                           WidthRequest="24"
+                           HorizontalOptions="End"
+                           VerticalOptions="Center"/>
+                </Grid>
+            </Frame>
 
-        <!-- Password Entry -->
-        <Border Grid.Row="5"
-                Grid.ColumnSpan="2"
-                Stroke="#E0E0E0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10,10,10,10">
-            <Entry Text="{Binding Password}" 
-                   Placeholder="Password"
-                   IsPassword="True"
-                   Margin="10,0"/>
-        </Border>
+           
 
-        <!-- Error Message -->
-        <Label Grid.Row="6"
-               Grid.ColumnSpan="2"
-               Text="{Binding ErrorMessage}"
-               TextColor="Red"
-               FontSize="14"
-               HorizontalOptions="Center"
-               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"/>
+            <!-- Login Button -->
+            <Button Text="Login" 
+                    Command="{Binding LoginCommand}"
+                    BackgroundColor="#E08D69" 
+                    TextColor="White" 
+                    CornerRadius="25"
+                    HeightRequest="50"
+                    FontSize="16"
+                    Margin="0,15,0,15"
+                    AutomationProperties.Name="Login"/>
 
-        <!-- Login Button -->
-        <Button Grid.Row="7"
-                Grid.ColumnSpan="2"
-                Text="Login"
-                Command="{Binding LoginCommand}"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                CornerRadius="10"
-                HeightRequest="50"/>
+            <!-- Register Link -->
+            <Label Text="Register" 
+                   TextColor="#E08D69" 
+                   HorizontalOptions="Center"
+                   FontSize="16">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
 
-        <!-- Register Button -->
-        <Button Grid.Row="8"
-                Grid.Column="0"
-                Text="Register"
-                Command="{Binding RegisterCommand}"
-                BackgroundColor="Transparent"
-                TextColor="#4CAF50"/>
-
-        <!-- Forgot Password Button -->
-        <Button Grid.Row="9"
-                Grid.Column="1"
-                Text="Forgot Password?"
-                Command="{Binding ForgotPasswordCommand}"
-                BackgroundColor="Transparent"
-                TextColor="#4CAF50"/>
-
-        <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="10"
-                           Grid.ColumnSpan="2"
-                           IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"
-                           HorizontalOptions="Center"/>
-    </Grid>
+            <!-- Loading Overlay -->
+            <Grid VerticalOptions="FillAndExpand" 
+                  HorizontalOptions="FillAndExpand"
+                  BackgroundColor="#80000000"
+                  IsVisible="{Binding IsBusy}"
+                  InputTransparent="False">
+                <VerticalStackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       Color="White"/>
+                    <Label Text="{Binding BusyText}"
+                           TextColor="White"
+                           Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

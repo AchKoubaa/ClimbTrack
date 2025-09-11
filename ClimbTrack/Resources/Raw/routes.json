@@ -1,0 +1,237 @@
+{
+  "panels": [
+    {
+      "name": "Verticale",
+      "routes": [
+        {
+          "name": "Percorso Rosa 1",
+          "color": "Rosa",
+          "colorHex": "#FFC0CB",
+          "difficulty": 1,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Bianco 1",
+          "color": "Bianco",
+          "colorHex": "#FFFFFF",
+          "difficulty": 2,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Verde 1",
+          "color": "Verde",
+          "colorHex": "#00FF00",
+          "difficulty": 3,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Azzurro 1",
+          "color": "Azzurro",
+          "colorHex": "#87CEEB",
+          "difficulty": 4,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Blu 1",
+          "color": "Blu",
+          "colorHex": "#0000FF",
+          "difficulty": 5,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Grigio 1",
+          "color": "Grigio",
+          "colorHex": "#808080",
+          "difficulty": 6,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Marrone 1",
+          "color": "Marrone",
+          "colorHex": "#A52A2A",
+          "difficulty": 7,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Giallo 1",
+          "color": "Giallo",
+          "colorHex": "#FFFF00",
+          "difficulty": 8,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Arancione 1",
+          "color": "Arancione",
+          "colorHex": "#FFA500",
+          "difficulty": 9,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "30°",
+      "routes": [
+        {
+          "name": "Percorso Rosa 2",
+          "color": "Rosa",
+          "colorHex": "#FFC0CB",
+          "difficulty": 2,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Bianco 2",
+          "color": "Bianco",
+          "colorHex": "#FFFFFF",
+          "difficulty": 3,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Verde 2",
+          "color": "Verde",
+          "colorHex": "#00FF00",
+          "difficulty": 4,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Azzurro 2",
+          "color": "Azzurro",
+          "colorHex": "#87CEEB",
+          "difficulty": 5,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Blu 2",
+          "color": "Blu",
+          "colorHex": "#0000FF",
+          "difficulty": 6,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "35°",
+      "routes": [
+        {
+          "name": "Percorso Rosa 3",
+          "color": "Rosa",
+          "colorHex": "#FFC0CB",
+          "difficulty": 3,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Bianco 3",
+          "color": "Bianco",
+          "colorHex": "#FFFFFF",
+          "difficulty": 4,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Verde 3",
+          "color": "Verde",
+          "colorHex": "#00FF00",
+          "difficulty": 5,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Azzurro 3",
+          "color": "Azzurro",
+          "colorHex": "#87CEEB",
+          "difficulty": 6,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Blu 3",
+          "color": "Blu",
+          "colorHex": "#0000FF",
+          "difficulty": 7,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "40°",
+      "routes": [
+        {
+          "name": "Percorso Verde 4",
+          "color": "Verde",
+          "colorHex": "#00FF00",
+          "difficulty": 5,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Azzurro 4",
+          "color": "Azzurro",
+          "colorHex": "#87CEEB",
+          "difficulty": 6,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Blu 4",
+          "color": "Blu",
+          "colorHex": "#0000FF",
+          "difficulty": 7,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Grigio 4",
+          "color": "Grigio",
+          "colorHex": "#808080",
+          "difficulty": 8,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "45°",
+      "routes": [
+        {
+          "name": "Percorso Blu 5",
+          "color": "Blu",
+          "colorHex": "#0000FF",
+          "difficulty": 7,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Grigio 5",
+          "color": "Grigio",
+          "colorHex": "#808080",
+          "difficulty": 8,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        },
+        {
+          "name": "Percorso Marrone 5",
+          "color": "Marrone",
+          "colorHex": "#A52A2A",
+          "difficulty": 9,
+          "isActive": true,
+          "createdDate": "2023-06-01T00:00:00Z"
+        }
+      ]
+    }
+  ]
+}

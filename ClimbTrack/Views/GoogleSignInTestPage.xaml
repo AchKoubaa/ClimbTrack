@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ClimbTrack.Views.GoogleSignInTestPage"
+             Title="Google Sign-In Test">
+    <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+        <Image Source="google_logo.png"
+               HeightRequest="100"
+               HorizontalOptions="Center" />
+
+        <Label Text="Google Sign-In Test"
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+        <Button Text="Sign in with Google"
+                Clicked="OnGoogleSignInClicked"
+                BackgroundColor="#4285F4"
+                TextColor="White"
+                HeightRequest="50"
+                CornerRadius="10" />
+
+        <Label x:Name="ResultLabel"
+               FontSize="16"
+               HorizontalOptions="Center" />
+
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           IsRunning="False"
+                           IsVisible="False"
+                           HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
