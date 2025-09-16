@@ -1,4 +1,5 @@
 ﻿using ClimbTrack.Config;
+using ClimbTrack.Exceptions;
 using ClimbTrack.Models;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
@@ -21,12 +22,15 @@ namespace ClimbTrack.Services
         private readonly IAuthService _authService;
         private readonly FirebaseAuthClient _authClient;
         private readonly HttpClient _httpClient;
+        private readonly IErrorHandlingService _errorHandlingService;
 
         public FirebaseService(
-            IAuthService authService)
+            IAuthService authService,
+    IErrorHandlingService errorHandlingService)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-            
+            _errorHandlingService = errorHandlingService ?? throw new ArgumentNullException(nameof(errorHandlingService));
+
 
             // Configure Firebase Auth
             var config = new FirebaseAuthConfig
@@ -63,7 +67,8 @@ namespace ClimbTrack.Services
             }
             catch (Firebase.Auth.FirebaseAuthException ex)
             {
-                Console.WriteLine($"Firebase signup error: {ex.Message}");
+                await _errorHandlingService.HandleExceptionAsync(ex, "SignUpWithEmailAndPassword", true);
+                
                 throw;
             }
         }
@@ -78,14 +83,60 @@ namespace ClimbTrack.Services
                 {
                     throw new InvalidOperationException("Failed to sign in: No user credentials returned.");
                 }
-                    await _authService.SaveAuthData(userCredential);
+                await _authService.SaveAuthData(userCredential);
                 return userCredential;
+            }
+            catch (Firebase.Auth.FirebaseAuthHttpException ex)
+            {
+                // Handle specific HTTP errors from Firebase Auth
+                string errorMessage = ParseFirebaseAuthError(ex);
+
+                // Log the error with your error handling service
+                await _errorHandlingService.LogErrorAsync(errorMessage, "SignInWithEmailAndPassword", false);
+
+                // Throw a more user-friendly exception
+                throw new AuthenticationException(errorMessage, ex);
             }
             catch (Firebase.Auth.FirebaseAuthException ex)
             {
-                Console.WriteLine($"Firebase signin error: {ex.Message}");
+                // Handle other Firebase Auth errors
+                await _errorHandlingService.HandleAuthenticationExceptionAsync(ex, "SignInWithEmailAndPassword");
                 throw;
             }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                await _errorHandlingService.HandleExceptionAsync(ex, "SignInWithEmailAndPassword", true);
+                throw;
+            }
+        }
+
+        private string ParseFirebaseAuthError(Firebase.Auth.FirebaseAuthHttpException ex)
+        {
+            // Extract the error message from the response
+            if (ex.ResponseData != null && ex.ResponseData.Contains("INVALID_LOGIN_CREDENTIALS"))
+            {
+                return "Invalid email or password. Please try again.";
+            }
+            else if (ex.ResponseData != null && ex.ResponseData.Contains("EMAIL_NOT_FOUND"))
+            {
+                return "Email not found. Please check your email or register.";
+            }
+            else if (ex.ResponseData != null && ex.ResponseData.Contains("INVALID_PASSWORD"))
+            {
+                return "Incorrect password. Please try again.";
+            }
+            else if (ex.ResponseData != null && ex.ResponseData.Contains("USER_DISABLED"))
+            {
+                return "This account has been disabled. Please contact support.";
+            }
+            else if (ex.ResponseData != null && ex.ResponseData.Contains("TOO_MANY_ATTEMPTS_TRY_LATER"))
+            {
+                return "Too many failed login attempts. Please try again later or reset your password.";
+            }
+
+            // Default message for other errors
+            return "Authentication failed. Please try again.";
         }
 
         public async Task ResetPassword(string email)
@@ -241,8 +292,9 @@ namespace ClimbTrack.Services
                 var token = await _authClient.User.GetIdTokenAsync(true);
                 return !string.IsNullOrEmpty(token);
             }
-            catch (FirebaseAuthException)
+            catch (FirebaseAuthException ex)
             {
+                await _errorHandlingService.HandleAuthenticationExceptionAsync(ex, "EnsureAuthenticatedAsync");
                 return false;
             }
         }
@@ -252,7 +304,8 @@ namespace ClimbTrack.Services
             var user = GetCurrentUser();
             if (user == null)
             {
-                Debug.WriteLine("No authenticated user for database access");
+                await _errorHandlingService.LogErrorAsync("No authenticated user for database access", "GetAuthenticatedClientAsync");
+                
                 return null;
             }
 
@@ -271,7 +324,8 @@ namespace ClimbTrack.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error creating authenticated database client: {ex.Message}");
+                await _errorHandlingService.HandleExceptionAsync(ex, "GetAuthenticatedClientAsync", false);
+                
                 return null;
             }
         }

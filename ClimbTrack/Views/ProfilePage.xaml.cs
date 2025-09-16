@@ -20,6 +20,11 @@ namespace ClimbTrack.Views
             await _viewModel.Initialize();
         }
 
-      
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            // Puoi eseguire operazioni di pulizia qui se necessario
+        }
+
     }
 }

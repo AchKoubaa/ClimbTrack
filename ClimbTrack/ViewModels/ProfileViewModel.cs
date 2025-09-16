@@ -62,6 +62,7 @@ namespace ClimbTrack.ViewModels
         public ICommand ViewSessionDetailsCommand { get; }
         public ICommand GoToAdminCommand { get; }
         public ICommand ViewHistoryCommand { get; }
+       
 
         public ProfileViewModel(
             IAuthService authService,

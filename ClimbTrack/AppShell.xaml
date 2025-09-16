@@ -8,19 +8,10 @@
     Shell.FlyoutBehavior="Disabled"
     BackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     ForegroundColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
-    TitleColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
     TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}">
 
-    <!-- Add this to show the logout button in the toolbar -->
-    <!--<Shell.ToolbarItems>
-        <ToolbarItem x:Name="LogoutButton"
-                 Text="Logout" 
-                 IconImageSource="boxarrowright.svg"
-                 Command="{Binding LogoutCommand}" />
-    </Shell.ToolbarItems>-->
-
-    <!-- TabBar per la navigazione principale (visibile dopo il login) -->
+    
     <TabBar x:Name="MainTabs" Route="main" >
         <Tab Title="Home" 
              Icon="house.svg"
@@ -38,7 +29,7 @@
              AutomationProperties.Name="Dashboard Tab"
              AutomationProperties.HelpText="Navigate to the dashboard">
             <ShellContent
-                ContentTemplate="{DataTemplate local:MainPage}"
+                ContentTemplate="{DataTemplate views:DashboardPage}"
                 Route="dashboard" />
         </Tab>
 

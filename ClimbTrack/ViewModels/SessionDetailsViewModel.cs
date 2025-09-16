@@ -143,12 +143,20 @@ namespace ClimbTrack.ViewModels
                         UpdateSessionDisplayProperties();
                         LoadCompletedRoutes();
                     }
+                    else
+                    {
+                        // Handle the case when session is not found
+                        await Application.Current.MainPage.DisplayAlert("Error",
+                            "Session not found", "OK");
+                        await _navigationService.GoBackAsync();
+                    }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error loading session by ID: {ex.Message}");
                     await Application.Current.MainPage.DisplayAlert("Error",
                         "Unable to load session details", "OK");
+                    await _navigationService.GoBackAsync();
                 }
             }
         }

@@ -15,12 +15,20 @@ namespace ClimbTrack.Services
         private readonly bool _useMockDatabase = false;
         private readonly IAuthService _authService;
         private readonly INavigationService _navigationService;
+        private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IConnectivity _connectivity;
 
-        public DatabaseService(IFirebaseService firebase,IAuthService authService, INavigationService navigationService)
+        public DatabaseService(
+            IErrorHandlingService errorHandlingService, 
+            IFirebaseService firebase,IAuthService authService, 
+            INavigationService navigationService,
+            IConnectivity connectivity = null)
         {
+            _errorHandlingService = errorHandlingService;
             _firebaseService = firebase;
             _authService = authService;
             _navigationService = navigationService;
+            _connectivity = connectivity ?? Connectivity.Current;
 
             // Inizializza il client del database solo se non stiamo usando dati fittizi
             if (!_useMockDatabase)
@@ -55,7 +63,10 @@ namespace ClimbTrack.Services
                 var client = await _authService.GetAuthenticatedClientAsync();
                 if (client == null)
                 {
-                    throw new UnauthorizedAccessException("User must be authenticated to add items");
+                    // Instead of throwing, handle it properly
+                    await _errorHandlingService.HandleAuthenticationExceptionAsync(
+                        new UnauthorizedAccessException("User must be authenticated to update items"),
+                        $"DatabaseService.AddItem<{typeof(T).Name}>({nodePath}, {item})");
                 }
 
                 var result = await client
@@ -67,6 +78,7 @@ namespace ClimbTrack.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error adding item: {ex.Message}");
+                await _errorHandlingService.HandleExceptionAsync(ex, $"DatabaseService.AddItem<{typeof(T).Name}>({nodePath})", false);
                 return null;
             }
         }
@@ -85,7 +97,10 @@ namespace ClimbTrack.Services
                 var client = await _authService.GetAuthenticatedClientAsync();
                 if (client == null)
                 {
-                    throw new UnauthorizedAccessException("User must be authenticated to update items");
+                    // Instead of throwing, handle it properly
+                    await _errorHandlingService.HandleAuthenticationExceptionAsync(
+                        new UnauthorizedAccessException("User must be authenticated to update items"),
+                        $"DatabaseService.UpdateItem<{typeof(T).Name}>({nodePath}, {itemId})"); ;
                 }
 
                 await client
@@ -96,7 +111,11 @@ namespace ClimbTrack.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating item: {ex.Message}");
+                // Handle other exceptions normally
+                await _errorHandlingService.HandleExceptionAsync(
+                    ex,
+                    $"DatabaseService.UpdateItem<{typeof(T).Name}>({nodePath}, {itemId})",
+                    false);
                 return false;
             }
         }
@@ -117,6 +136,10 @@ namespace ClimbTrack.Services
                 // If we couldn't get an authenticated client, use mock data
                 if (client == null)
                 {
+                    // Instead of throwing, handle it properly
+                    await _errorHandlingService.HandleAuthenticationExceptionAsync(
+                        new UnauthorizedAccessException("User must be authenticated to update items"),
+                        $"DatabaseService.GetItem<{typeof(T).Name}>({nodePath}, {itemId})"); ;
                     Debug.WriteLine("Failed to create authenticated client. Using mock data.");
                     return GetMockItem<T>(nodePath, itemId);
                 }
@@ -130,6 +153,10 @@ namespace ClimbTrack.Services
             }
             catch (Exception ex)
             {
+                await _errorHandlingService.HandleExceptionAsync(
+           ex,
+           $"DatabaseService.GetItem<{typeof(T).Name}>({nodePath}, {itemId})",
+           false);
                 Console.WriteLine($"Error getting item: {ex.Message}");
                 return default;
             }
@@ -144,12 +171,7 @@ namespace ClimbTrack.Services
 
             try
             {
-                //// Check internet connection first
-                //if (!await CheckInternetConnection())
-                //{
-                //    Debug.WriteLine("No Internet connection available");
-                //    return GetMockItems<T>(nodePath); // Return mock data when offline
-                //}
+              
 
                 // Get an authenticated client from the FirebaseService
                 var client = await _authService.GetAuthenticatedClientAsync();
@@ -248,7 +270,11 @@ namespace ClimbTrack.Services
                 var client = await _authService.GetAuthenticatedClientAsync();
                 if (client == null)
                 {
-                    throw new UnauthorizedAccessException("User must be authenticated to delete items");
+                    // Instead of throwing, handle it properly
+                    await _errorHandlingService.HandleAuthenticationExceptionAsync(
+                        new UnauthorizedAccessException("User must be authenticated to update items"),
+                        $"DatabaseService.DeleteItem<{typeof(string).Name}>({nodePath}, {itemId})"); ;
+                    
                 }
 
                 await client
@@ -298,7 +324,7 @@ namespace ClimbTrack.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Errore durante l'inizializzazione del database: {ex.Message}");
-                throw;
+                await _errorHandlingService.HandleExceptionAsync(ex, "DatabaseService.InitializeDatabaseAsync",true);
             }
         }
 

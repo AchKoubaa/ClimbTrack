@@ -2,6 +2,7 @@
 using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
+using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace ClimbTrack
@@ -13,6 +14,7 @@ namespace ClimbTrack
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                 .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -48,6 +50,11 @@ namespace ClimbTrack
             // Register domain services
             builder.Services.AddSingleton<IClimbingService, ClimbingService>();
             builder.Services.AddSingleton<ITrainingService, TrainingService>();
+            builder.Services.AddSingleton<IErrorHandlingService, ErrorHandlingService>();
+            builder.Services.AddSingleton<IAnalyticsService, AnalyticsService>();
+            builder.Services.AddSingleton<INetworkService, NetworkService>();
+            builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
+            builder.Services.AddSingleton<IDashboardService, DashboardService>();
 
             // Register the FirebaseService last (if still needed)
             builder.Services.AddScoped<IFirebaseService, FirebaseService>();
@@ -84,6 +91,7 @@ namespace ClimbTrack
             builder.Services.AddTransient<SessionDetailsViewModel>();
             builder.Services.AddTransient<AdminViewModel>();
             builder.Services.AddTransient<HistoricalViewModel>();
+            builder.Services.AddTransient<DashboardViewModel>();
 
 
             // Register pages
@@ -98,6 +106,34 @@ namespace ClimbTrack
             builder.Services.AddTransient<AdminPage>();
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddTransient<HistoricalPage>();
+            builder.Services.AddTransient<DashboardPage>();
+
+            // Add logging
+            builder.Services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddDebug();
+                // You can add other logging providers here
+            });
+
+            // Set up global exception handling
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                var errorService = builder.Services.BuildServiceProvider().GetService<IErrorHandlingService>();
+                if (errorService != null)
+                {
+                    errorService.HandleExceptionAsync((Exception)args.ExceptionObject, "UnhandledException", true).Wait();
+                }
+            };
+
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                args.SetObserved(); // Prevent the app from crashing
+                var errorService = builder.Services.BuildServiceProvider().GetService<IErrorHandlingService>();
+                if (errorService != null)
+                {
+                    errorService.HandleExceptionAsync(args.Exception, "UnobservedTaskException", true).Wait();
+                }
+            };
 
 #if DEBUG
             builder.Logging.AddDebug();

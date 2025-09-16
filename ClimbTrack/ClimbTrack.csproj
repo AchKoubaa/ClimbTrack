@@ -64,11 +64,6 @@
 	</ItemGroup>
 
 	
-
-	
-	
-
-	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="FirebaseAdmin" Version="3.3.0" />
@@ -77,10 +72,12 @@
 		<PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.70.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="3.10.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0" />
+		<PackageReference Include="Microcharts.Maui" Version="1.0.1" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.51" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SendGrid" Version="9.29.3" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
 	</ItemGroup>
 	
@@ -116,7 +113,13 @@
 		</ItemGroup>
 		
 	<ItemGroup>
+ <MauiXaml Update="Controls\ErrorBoundary.xaml">
+   <Generator>MSBuild:Compile</Generator>
+ </MauiXaml>
  <MauiXaml Update="Views\AdminPage.xaml">
+   <Generator>MSBuild:Compile</Generator>
+ </MauiXaml>
+ <MauiXaml Update="Views\DashboardPage.xaml">
    <Generator>MSBuild:Compile</Generator>
  </MauiXaml>
  <MauiXaml Update="Views\EditProfilePage.xaml">

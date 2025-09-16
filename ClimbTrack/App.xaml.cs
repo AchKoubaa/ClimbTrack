@@ -12,19 +12,27 @@ namespace ClimbTrack
         private readonly INavigationService _navigationService;
         private readonly IGoogleAuthService _googleAuthService;
         private readonly IFirebaseService _firebaseService;
+        private readonly IErrorHandlingService _errorHandlingService;
+
 
         public App(AppShell appShell,
             IAuthService authService, 
             IDatabaseService databaseService,
             INavigationService navigationService, 
             IGoogleAuthService googleAuthService, 
-            IFirebaseService firebaseService)
+            IFirebaseService firebaseService,
+            IErrorHandlingService errorHandlingService)
         {
             InitializeComponent();
             _authService = authService;
             _databaseService = databaseService;
             _navigationService = navigationService;
             _googleAuthService = googleAuthService;
+            _errorHandlingService = errorHandlingService;
+
+            // Set up global exception handling
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             // Verifica se l'utente è autenticato
             var user = _authService.GetCurrentUser();
@@ -56,10 +64,33 @@ namespace ClimbTrack
         {
             base.OnStart();
 
-            // Inizializza l'autenticazione e il database
-            await InitializeAppAsync();
+            try
+            {
+                // Initialize database
+                await InitializeAppAsync();
+            }
+            catch (Exception ex)
+            {
+                await HandleStartupException(ex, "App initialization failed");
+            }
         }
 
+        private async Task HandleStartupException(Exception ex, string context)
+        {
+            // Log the error
+            Debug.WriteLine($"Error during {context}: {ex.Message}");
+
+            // Use error handling service if available
+            if (_errorHandlingService != null)
+            {
+                await _errorHandlingService.HandleExceptionAsync(ex, context, false);
+            }
+
+            // Show a user-friendly message
+            await MainPage.DisplayAlert("Error",
+                "An error occurred during startup. Some features may not be available.",
+                "OK");
+        }
         private async Task InitializeAppAsync()
         {
             try

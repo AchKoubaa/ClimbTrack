@@ -5,6 +5,8 @@
              x:Class="ClimbTrack.Views.LoginPage"
              x:DataType="viewmodel:LoginViewModel"
              BackgroundColor="White">
+    
+  
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
             <!-- Title -->
@@ -127,4 +129,5 @@
             </Grid>
         </VerticalStackLayout>
     </ScrollView>
+       
 </ContentPage>

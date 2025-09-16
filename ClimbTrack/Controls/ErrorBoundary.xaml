@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ClimbTrack.Controls.ErrorBoundary">
+    <Grid>
+        <ContentView x:Name="ContentContainer" IsVisible="{Binding IsErrorVisible, Converter={StaticResource InverseBoolConverter}}" />
+
+        <VerticalStackLayout x:Name="ErrorContainer" 
+                           IsVisible="{Binding IsErrorVisible}"
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center"
+                           Spacing="15"
+                           Padding="20">
+            <Image Source="error_icon.png" 
+                   HeightRequest="64" 
+                   WidthRequest="64" 
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+
+            <Button Text="Retry" 
+                    Command="{Binding RetryCommand}"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding CanRetry}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

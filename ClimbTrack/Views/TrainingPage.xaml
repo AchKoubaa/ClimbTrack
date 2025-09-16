@@ -5,8 +5,7 @@
              xmlns:converters="clr-namespace:ClimbTrack.Converters"
              xmlns:system="clr-namespace:System;assembly=netstandard"
              x:Class="ClimbTrack.Views.TrainingPage"
-             x:DataType="viewmodels:TrainingViewModel"
-             >
+             x:DataType="viewmodels:TrainingViewModel">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -93,10 +92,10 @@
                VerticalOptions="Center" />
         </Grid>
     </Shell.TitleView>
-
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
         <!-- Timer Display -->
-        <StackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="5">
+        <VerticalStackLayout  Grid.Row="0" HorizontalOptions="Center" Spacing="5">
             <!--<Label Text="Tempo" 
                    FontSize="16" 
                    TextColor="#666666" 
@@ -106,10 +105,10 @@
                    Style="{StaticResource TimerStyle}"
                    AutomationProperties.Name="Timer allenamento"
                    AutomationProperties.HelpText="Tempo trascorso dall'inizio dell'allenamento" />-->
-        </StackLayout>
+        </VerticalStackLayout>
 
         <!-- Panel Info -->
-        <StackLayout Grid.Row="1" Spacing="5">
+        <VerticalStackLayout  Grid.Row="1" Spacing="5">
             <!--<Label Text="Pannello" 
                    FontSize="14" 
                    TextColor="#666666"
@@ -117,7 +116,7 @@
             <Label Text="{Binding Panel}" 
                    Style="{StaticResource PanelLabelStyle}"
                    AutomationProperties.Name="{Binding Panel, StringFormat='Pannello {0}'}" />
-        </StackLayout>
+        </VerticalStackLayout>
 
         <!-- Routes List -->
         <CollectionView Grid.Row="2" 
@@ -145,7 +144,7 @@
                                 VerticalOptions="Center"
                                 AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
 
-                            <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
+                            <VerticalStackLayout  Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
                                 <!--<Label 
                                     Text="{Binding Route.Name}" 
                                     FontSize="16"
@@ -157,7 +156,7 @@
                                     TextColor="#666666"
                                     FontAttributes="Bold"
                                     AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
-                            </StackLayout>
+                            </VerticalStackLayout>
 
                             <!-- Indicatore di difficoltà migliorato -->
                             <!--<Frame Grid.Column="2"
@@ -186,7 +185,7 @@
 
                             <!-- Attempts counter and completion checkbox -->
                             <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" ColumnDefinitions="Auto,*,Auto" IsVisible="{Binding IsSelected}">
-                                <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                <HorizontalStackLayout  Grid.Column="0" Spacing="5">
                                     <Label Text="Presa" 
                                            FontSize="18"
                                            FontAttributes="Bold"
@@ -212,7 +211,7 @@
                                             Style="{StaticResource CounterButtonStyle}"
                                             AutomationProperties.Name="Aumenta tentativi"
                                             AutomationProperties.HelpText="Aumenta il numero di tentativi" />
-                                </StackLayout>
+                                </HorizontalStackLayout>
 
                             </Grid>
 
@@ -221,13 +220,13 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyView>
-                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <VerticalStackLayout  VerticalOptions="Center" HorizontalOptions="Center">
                     <Label Text="Nessun percorso disponibile" 
                            FontSize="18" 
                            TextColor="#666666"
                            HorizontalOptions="Center"
                            AutomationProperties.Name="Nessun percorso disponibile" />
-                </StackLayout>
+                </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
 
@@ -254,4 +253,5 @@
                 AutomationProperties.HelpText="Premi per terminare l'allenamento e salvare i risultati" />
         </Grid>
     </Grid>
+    </ScrollView>
 </ContentPage>

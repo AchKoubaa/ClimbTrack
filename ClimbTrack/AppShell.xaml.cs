@@ -3,8 +3,9 @@ using System.Diagnostics;
 
 namespace ClimbTrack
 {
-    public partial class AppShell : Shell
+    public partial class AppShell : Shell, IDisposable
     {
+        private bool _disposed = false;
         public AppShell()
         {
             InitializeComponent();
@@ -15,7 +16,7 @@ namespace ClimbTrack
             //// Initially hide the Storico tab
             if (StoricoTab != null)
             {
-                StoricoTab.IsVisible = false;
+                StoricoTab.IsVisible = true;
             }
 
             // Subscribe to navigation events
@@ -28,7 +29,7 @@ namespace ClimbTrack
             Routing.RegisterRoute("login", typeof(LoginPage));
             Routing.RegisterRoute("register", typeof(RegisterPage));
             Routing.RegisterRoute("home", typeof(HomePage));
-            Routing.RegisterRoute("dashboard", typeof(MainPage));
+            Routing.RegisterRoute("dashboard", typeof(DashboardPage));
             Routing.RegisterRoute("training", typeof(TrainingPage));
             Routing.RegisterRoute("profile", typeof(ProfilePage));
             Routing.RegisterRoute("editProfile", typeof(EditProfilePage));
@@ -95,5 +96,29 @@ namespace ClimbTrack
                 Debug.WriteLine($"Error in OnNavigated: {ex.Message}");
             }
         }
+
+        // Implement IDisposable pattern
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Unsubscribe from events to prevent memory leaks
+                    Navigated -= OnNavigated;
+
+                    // Dispose any other managed resources here
+                }
+
+                _disposed = true;
+            }
+        }
+
     }
 }

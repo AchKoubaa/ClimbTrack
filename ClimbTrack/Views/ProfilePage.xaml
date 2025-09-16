@@ -134,6 +134,17 @@
                             AutomationProperties.Name="Modifica profilo"
                             AutomationProperties.HelpText="Premi per modificare i dati del tuo profilo" />
 
+                        <!-- Logout Button -->
+                        <Button Grid.Row="2" 
+                                Text="Logout" 
+                                Command="{Binding LogoutCommand}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                BackgroundColor="{StaticResource AccentColor}"
+                                HeightRequest="50"
+                                Margin="0,20"
+                                AutomationProperties.Name="Logout button"
+                                AutomationProperties.HelpText="Press to log out from your account"/>
+
                         <!-- Admin Button -->
                         <Button 
                             Text="Amministrazione"
