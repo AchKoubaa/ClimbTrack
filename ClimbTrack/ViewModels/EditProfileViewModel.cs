@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace ClimbTrack.ViewModels
 {
-    [QueryProperty(nameof(ProfileParameter), "Profile")]
+    [QueryProperty(nameof(ProfileId), "ProfileId")]
     public class EditProfileViewModel : BaseViewModel
     {
         private readonly IDatabaseService _databaseService;
@@ -14,6 +14,7 @@ namespace ClimbTrack.ViewModels
         private readonly INavigationService _navigationService;
 
         private UserProfile _userProfile;
+        private string _profileId;
 
         public UserProfile UserProfile
         {
@@ -21,14 +22,13 @@ namespace ClimbTrack.ViewModels
             set => SetProperty(ref _userProfile, value);
         }
 
-        public object ProfileParameter
+        public string ProfileId
         {
+            get => _profileId;
             set
             {
-                if (value is UserProfile profile)
-                {
-                    UserProfile = profile;
-                }
+                _profileId = value;
+                LoadProfileAsync(_profileId).ConfigureAwait(false);
             }
         }
 
@@ -48,7 +48,35 @@ namespace ClimbTrack.ViewModels
             UserProfile = new UserProfile();
 
             SaveCommand = new Command(async () => await Save());
-            CancelCommand = new Command(async () => await _navigationService.GoBackAsync());
+            CancelCommand = new Command(async () => await GoBack());
+        }
+
+        private async Task LoadProfileAsync(string profileId)
+        {
+            if (string.IsNullOrEmpty(profileId))
+            {
+                return;
+            }
+
+            await ExecuteWithBusy(async () =>
+            {
+                try
+                {
+                    string userId = await _authService.GetUserId();
+                    // Assuming you have a method to get a user profile by ID
+                    UserProfile = await _databaseService.GetItem<UserProfile>($"users/{userId}", "profile");
+
+                    if (UserProfile == null)
+                    {
+                        UserProfile = new UserProfile();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile caricare il profilo: {ex.Message}", "OK");
+                    UserProfile = new UserProfile();
+                }
+            });
         }
 
         private async Task Save()
@@ -60,13 +88,27 @@ namespace ClimbTrack.ViewModels
                     string userId = await _authService.GetUserId();
                     await _databaseService.UpdateItem($"users/{userId}", "profile", UserProfile);
                     await Application.Current.MainPage.DisplayAlert("Successo", "Profilo aggiornato con successo!", "OK");
-                    await _navigationService.GoBackAsync();
+                    await GoBack();
                 }
                 catch (Exception ex)
                 {
                     await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile aggiornare il profilo: {ex.Message}", "OK");
                 }
             });
+        }
+
+        private async Task GoBack()
+        {
+            try
+            {
+                // Replace "//profile" with your actual route to the profile page
+                await Shell.Current.GoToAsync("//profile");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Route navigation failed: {ex.Message}");
+            }
         }
     }
 }

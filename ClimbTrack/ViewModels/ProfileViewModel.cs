@@ -261,9 +261,9 @@ namespace ClimbTrack.ViewModels
         private async Task EditProfile()
         {
             await _navigationService.NavigateToAsync("//editProfile", new Dictionary<string, object>
-            {
-                { "Profile", UserProfile }
-            });
+    {
+        { "ProfileId", UserProfile.Id }
+    });
         }
 
         private async Task ViewSessionDetails(TrainingSession session)
