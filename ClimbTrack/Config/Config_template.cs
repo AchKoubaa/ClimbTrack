@@ -11,7 +11,7 @@ namespace ClimbTrack.Config
         // Credenziali Firebase
         public static string ApiKey = "YOUR_API_KEY_HERE";
         public static string AuthDomain = "YOUR_AUTH_DOMAIN_HERE";
-        public static string DatabaseUrl = "https://climbtracknew-default-rtdb.europe-west1.firebasedatabase.app";
+        public static string DatabaseUrl = "https://climbtracknew-default.europe-west1.firebasedatabase.app";
         public static string ProjectId = "YOUR_PROJECT_ID_HERE";
         public static string StorageBucket = "YOUR_STORAGE_BUCKET_HERE";
         public static string MessagingSenderId = "YOUR_MESSAGING_SENDER_ID_HERE";
