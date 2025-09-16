@@ -16,5 +16,5 @@ namespace ClimbTrack.Services
      
         Task TrackErrorAsync(Exception exception, string context = null);
     }
-    }
+}
 

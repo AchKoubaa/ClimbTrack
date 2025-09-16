@@ -36,6 +36,9 @@ namespace ClimbTrack.Services
 
             _httpClient = new HttpClient();
             _apiEndpoint = "https://api.youranalytics.com/v1"; // Replace with your actual endpoint
+
+            // Subscribe to connectivity changes
+            _connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
         }
 
         /// <inheritdoc />
@@ -82,7 +85,9 @@ namespace ClimbTrack.Services
             {
                 if (_connectivity.NetworkAccess != NetworkAccess.Internet)
                 {
-                    _logger.LogInformation("No internet connection available, skipping analytics");
+                    _logger.LogInformation("No internet connection available, queuing analytics event: {EventName}", eventName);
+                    // Optionally queue the event for later sending
+                    QueueEventForLaterSending(eventName, properties);
                     return;
                 }
 
@@ -96,12 +101,47 @@ namespace ClimbTrack.Services
                     DeviceId = _deviceId
                 };
 
+                // Add timeout to prevent long-hanging requests
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
                 await _httpClient.PostAsJsonAsync($"{_apiEndpoint}/events", payload);
                 _logger.LogDebug("Tracked event: {EventName}", eventName);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogWarning(ex, "Network error while tracking event: {EventName}. Will queue for later.", eventName);
+                // Queue the event for later sending
+                QueueEventForLaterSending(eventName, properties);
+            }
+            catch (TaskCanceledException ex)
+            {
+                _logger.LogWarning(ex, "Request timeout while tracking event: {EventName}. Will queue for later.", eventName);
+                // Queue the event for later sending
+                QueueEventForLaterSending(eventName, properties);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to track event: {EventName}", eventName);
+            }
+        }
+        private void QueueEventForLaterSending(string eventName, Dictionary<string, string> properties)
+        {
+            try
+            {
+                // Simple implementation: store in local storage
+                // In a real app, you might use a more sophisticated queuing mechanism
+                var queuedEvents = GetQueuedEvents();
+                queuedEvents.Add(new QueuedEvent
+                {
+                    EventName = eventName,
+                    Properties = properties,
+                    Timestamp = DateTimeOffset.UtcNow
+                });
+                SaveQueuedEvents(queuedEvents);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to queue event for later sending: {EventName}", eventName);
             }
         }
 
@@ -262,6 +302,119 @@ namespace ClimbTrack.Services
             {
                 _logger.LogError(ex, "Failed to track error");
             }
+        }
+
+        // Simple class to represent a queued event
+        private class QueuedEvent
+        {
+            public string EventName { get; set; }
+            public Dictionary<string, string> Properties { get; set; }
+            public DateTimeOffset Timestamp { get; set; }
+        }
+
+        // Get previously queued events from storage
+        private List<QueuedEvent> GetQueuedEvents()
+        {
+            try
+            {
+                var json = Preferences.Get("queued_analytics_events", null);
+                if (string.IsNullOrEmpty(json))
+                    return new List<QueuedEvent>();
+
+                return System.Text.Json.JsonSerializer.Deserialize<List<QueuedEvent>>(json)
+                    ?? new List<QueuedEvent>();
+            }
+            catch
+            {
+                return new List<QueuedEvent>();
+            }
+        }
+
+        // Save queued events to storage
+        private void SaveQueuedEvents(List<QueuedEvent> events)
+        {
+            try
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(events);
+                Preferences.Set("queued_analytics_events", json);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to save queued events");
+            }
+        }
+
+        public async Task ProcessQueuedEventsAsync()
+        {
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _logger.LogInformation("No internet connection available, skipping processing of queued events");
+                return;
+            }
+
+            try
+            {
+                var queuedEvents = GetQueuedEvents();
+                if (queuedEvents.Count == 0)
+                    return;
+
+                _logger.LogInformation("Processing {Count} queued analytics events", queuedEvents.Count);
+
+                // Process events in batches to avoid overwhelming the network
+                foreach (var batch in queuedEvents.Chunk(10))
+                {
+                    foreach (var queuedEvent in batch)
+                    {
+                        try
+                        {
+                            var payload = new
+                            {
+                                Type = "event",
+                                EventName = queuedEvent.EventName,
+                                Properties = queuedEvent.Properties ?? new Dictionary<string, string>(),
+                                Timestamp = queuedEvent.Timestamp,
+                                AppId = _appId,
+                                DeviceId = _deviceId,
+                                IsQueued = true
+                            };
+
+                            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                            await _httpClient.PostAsJsonAsync($"{_apiEndpoint}/events", payload, cts.Token);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Failed to process queued event: {EventName}", queuedEvent.EventName);
+                            // Continue with other events even if one fails
+                        }
+
+                        // Small delay to avoid overwhelming the network
+                        await Task.Delay(100);
+                    }
+                }
+
+                // Clear successfully processed events
+                SaveQueuedEvents(new List<QueuedEvent>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing queued events");
+            }
+        }
+
+        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet)
+            {
+                // Network is available, process queued events
+                _ = ProcessQueuedEventsAsync();
+            }
+        }
+
+        // Don't forget to unsubscribe when the service is disposed
+        public void Dispose()
+        {
+            _connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+            _httpClient?.Dispose();
         }
     }
 }

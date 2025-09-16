@@ -1,4 +1,5 @@
-﻿using ClimbTrack.Services;
+﻿using ClimbTrack.Config;
+using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace ClimbTrack
         private readonly IGoogleAuthService _googleAuthService;
         private readonly IFirebaseService _firebaseService;
         private readonly IErrorHandlingService _errorHandlingService;
-
+        private readonly IAnalyticsService _analyticsService;
 
         public App(AppShell appShell,
             IAuthService authService, 
@@ -21,7 +22,8 @@ namespace ClimbTrack
             INavigationService navigationService, 
             IGoogleAuthService googleAuthService, 
             IFirebaseService firebaseService,
-            IErrorHandlingService errorHandlingService)
+            IErrorHandlingService errorHandlingService, 
+            IAnalyticsService analyticsService)
         {
             InitializeComponent();
             _authService = authService;
@@ -29,6 +31,7 @@ namespace ClimbTrack
             _navigationService = navigationService;
             _googleAuthService = googleAuthService;
             _errorHandlingService = errorHandlingService;
+            _analyticsService = analyticsService;
 
             // Set up global exception handling
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -66,6 +69,21 @@ namespace ClimbTrack
 
             try
             {
+                try
+                {
+                    await _analyticsService.InitializeAsync(FirebaseConfig.AppId);
+
+                    // Track app start event
+                    await _analyticsService.TrackEventAsync("app_start", new Dictionary<string, string>
+                    {
+                        ["user_authenticated"] = (_authService.GetCurrentUser() != null).ToString()
+                    });
+                }
+                catch (HttpRequestException ex)
+                {
+                    // Log but continue - analytics should not prevent app startup
+                    Debug.WriteLine($"Network error initializing analytics: {ex.Message}");
+                }
                 // Initialize database
                 await InitializeAppAsync();
             }

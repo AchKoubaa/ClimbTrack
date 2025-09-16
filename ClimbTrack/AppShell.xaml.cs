@@ -6,6 +6,7 @@ namespace ClimbTrack
     public partial class AppShell : Shell, IDisposable
     {
         private bool _disposed = false;
+
         public AppShell()
         {
             InitializeComponent();

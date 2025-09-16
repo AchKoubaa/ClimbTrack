@@ -26,16 +26,26 @@ namespace ClimbTrack.Services
         private readonly IAnalyticsService _analyticsService;
         private readonly IConnectivity _connectivity;
         private readonly INavigationService _navigationService;
-
+        private bool _analyticsInitialized = false;
         public ErrorHandlingService(
             IAnalyticsService analyticsService = null,
-            IConnectivity connectivity = null, INavigationService navigationService = null)
+            IConnectivity connectivity = null, 
+            INavigationService navigationService = null)
         {
             _analyticsService = analyticsService;
             _connectivity = connectivity ?? Connectivity.Current;
             _navigationService = navigationService;
         }
 
+        public async Task InitializeAnalyticsAsync(string appId)
+        {
+            if (_analyticsService != null && !_analyticsInitialized)
+            {
+                await _analyticsService.InitializeAsync(appId);
+                _analyticsInitialized = true;
+            }
+
+        }
         // Add this new method
         public async Task HandleAuthenticationExceptionAsync(Exception ex, string context = null)
         {
@@ -84,7 +94,7 @@ namespace ClimbTrack.Services
             LogErrorInternal(ex, context, severity);
 
             // Track in analytics if available
-            if (_analyticsService != null)
+            if (_analyticsService != null && _analyticsInitialized)
             {
                 await _analyticsService.TrackErrorAsync(ex, context);
             }
@@ -102,7 +112,7 @@ namespace ClimbTrack.Services
             Debug.WriteLine($"ERROR [{context ?? "Unknown"}]: {message}");
 
             // Track in analytics if available
-            if (_analyticsService != null)
+            if (_analyticsService != null && _analyticsInitialized)
             {
                 await _analyticsService.TrackEventAsync("Error", new Dictionary<string, string>
                 {
