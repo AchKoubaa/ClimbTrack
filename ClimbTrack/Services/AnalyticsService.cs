@@ -74,7 +74,7 @@ namespace ClimbTrack.Services
         /// <inheritdoc />
         public async Task TrackEventAsync(string eventName, Dictionary<string, string> properties = null)
         {
-            EnsureInitialized();
+            //EnsureInitialized();
 
             if (string.IsNullOrEmpty(eventName))
             {

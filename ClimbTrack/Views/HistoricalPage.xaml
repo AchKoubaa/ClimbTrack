@@ -26,6 +26,8 @@
                 <Setter Property="Padding" Value="15,8" />
                 <Setter Property="FontSize" Value="14" />
             </Style>
+
+         
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -52,51 +54,84 @@
                            EmptyView="Nessuna sessione di allenamento trovata">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:TrainingSession">
-                        <Frame Style="{StaticResource SessionCardStyle}">
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
-                                <!-- Date -->
-                                <Label 
-                                    Grid.Row="0" 
-                                    Grid.Column="0"
-                                    Text="{Binding FormattedDate}" 
-                                    FontSize="16" 
-                                    FontAttributes="Bold"
-                                    TextColor="{StaticResource TextPrimaryColor}" />
+                        <!-- SwipeView wrapping the Frame -->
+                        <SwipeView>
+                            <!-- Main content (the session card) -->
+                            <SwipeView.Content>
+                                <Frame Style="{StaticResource SessionCardStyle}">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                        <!-- Date -->
+                                        <Label 
+                                            Grid.Row="0" 
+                                            Grid.Column="0"
+                                            Text="{Binding FormattedDate}" 
+                                            FontSize="16" 
+                                            FontAttributes="Bold"
+                                            TextColor="{StaticResource TextPrimaryColor}" />
 
-                                <!-- Duration -->
-                                <Label 
-                                    Grid.Row="0" 
-                                    Grid.Column="1"
-                                    Text="{Binding FormattedDuration}" 
-                                    FontSize="16" 
-                                    TextColor="{StaticResource TextSecondaryColor}" />
+                                        <!-- Duration -->
+                                        <Label 
+                                            Grid.Row="0" 
+                                            Grid.Column="1"
+                                            Text="{Binding FormattedDuration}" 
+                                            FontSize="16" 
+                                            TextColor="{StaticResource TextSecondaryColor}" />
 
-                                <!-- Panel Type -->
-                                <Label 
-                                    Grid.Row="1" 
-                                    Grid.Column="0"
-                                    Text="{Binding PanelType, StringFormat='Pannello: {0}'}" 
-                                    FontSize="14" 
-                                    TextColor="{StaticResource TextSecondaryColor}"
-                                    Margin="0,5,0,0" />
+                                        <!-- Panel Type -->
+                                        <Label 
+                                            Grid.Row="1" 
+                                            Grid.Column="0"
+                                            Text="{Binding PanelType, StringFormat='Pannello: {0}'}" 
+                                            FontSize="14" 
+                                            TextColor="{StaticResource TextSecondaryColor}"
+                                            Margin="0,5,0,0" />
 
-                                <!-- Routes Completed -->
-                                <Label 
-                                    Grid.Row="2" 
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    FontSize="14" 
-                                    TextColor="{StaticResource TextSecondaryColor}"
-                                    Margin="0,5,0,0">
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="Percorsi completati: {0}/{1}">
-                                            <Binding Path="CompletedRoutesCount" />
-                                            <Binding Path="TotalRoutes" />
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                            </Grid>
-                        </Frame>
+                                        <!-- Routes Completed -->
+                                        <Label 
+                                            Grid.Row="2" 
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            FontSize="14" 
+                                            TextColor="{StaticResource TextSecondaryColor}"
+                                            Margin="0,5,0,0">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="Percorsi completati: {0}/{1}">
+                                                    <Binding Path="CompletedRoutesCount" />
+                                                    <Binding Path="TotalRoutes" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </Grid>
+                                </Frame>
+                            </SwipeView.Content>
+
+                            <!-- Left swipe actions -->
+                            <SwipeView.LeftItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem Text="Dettagli" 
+                                               IconImageSource="details_icon.png"
+                                               BackgroundColor="{StaticResource Primary}"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HistoricalViewModel}}, Path=ViewDetailsCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+
+                            <!-- Right swipe actions -->
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem Text="Elimina" 
+                                               IconImageSource="delete_icon.png"
+                                               BackgroundColor="#FF5252"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HistoricalViewModel}}, Path=DeleteSessionCommand}"
+                                               CommandParameter="{Binding .}" />
+                                    <SwipeItem Text="Condividi" 
+                                               IconImageSource="share_icon.png"
+                                               BackgroundColor="#4CAF50"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:HistoricalViewModel}}, Path=ShareSessionCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

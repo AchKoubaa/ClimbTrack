@@ -11,6 +11,7 @@ namespace ClimbTrack.ViewModels
 {
     [QueryProperty(nameof(SessionId), "id")]
     [QueryProperty(nameof(UserId), "userId")]
+   
     public class SessionDetailsViewModel : BaseViewModel
     {
         private readonly ITrainingService _trainingService;
@@ -62,7 +63,6 @@ namespace ClimbTrack.ViewModels
             set => SetProperty(ref _userId, value);
         }
 
-
         public ObservableCollection<CompletedRouteViewModel> CompletedRoutes
         {
             get => _completedRoutes;
@@ -110,9 +110,10 @@ namespace ClimbTrack.ViewModels
             Title = "Dettagli Sessione";
             CompletedRoutes = new ObservableCollection<CompletedRouteViewModel>();
 
-            GoBackCommand = new Command(async () => await _navigationService.GoBackAsync());
+            GoBackCommand = new Command(async () => await _navigationService.NavigateToAsync("//historical"));
             DeleteSessionCommand = new Command(async () => await DeleteSession());
         }
+
 
         private void UpdateSessionDisplayProperties()
         {
@@ -132,11 +133,34 @@ namespace ClimbTrack.ViewModels
 
         private async void LoadSessionById()
         {
-            if (!string.IsNullOrEmpty(_sessionId) && !string.IsNullOrEmpty(_userId))
+            // Check if the user is authenticated
+            bool isAuthenticated = await _authService.IsAuthenticated();
+            if (!isAuthenticated)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Unable to load session: user not authenticated.",
+                    "OK");
+                await _navigationService.NavigateToAsync("//login");
+                return;
+            }
+
+            // Get the user ID
+            string userId = await _authService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Unable to load session: user ID not found.",
+                    "OK");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(_sessionId))
             {
                 try
                 {
-                    var session = await _trainingService.GetTrainingSessionAsync(_userId, _sessionId);
+                    var session = await _trainingService.GetTrainingSessionAsync(userId, _sessionId);
                     if (session != null)
                     {
                         Session = session;
@@ -226,8 +250,20 @@ namespace ClimbTrack.ViewModels
                 try
                 {
                     // Verifica se l'utente è autenticato
-                    var currentUser = _authService.GetCurrentUser();
-                    if (currentUser == null && string.IsNullOrEmpty(Session.UserId))
+                    bool isAuthenticated = await _authService.IsAuthenticated();
+                    if (!isAuthenticated)
+                    {
+                        await Application.Current.MainPage.DisplayAlert(
+                           "Errore",
+                           "Non è possibile eliminare la sessione: utente non autenticato.",
+                           "OK");
+                        await _navigationService.NavigateToAsync("//login");
+                        return;
+                    }
+
+                    // Verifica se l'utente è autenticato
+                    string userId = await _authService.GetUserId();
+                    if (userId == null && string.IsNullOrEmpty(Session.UserId))
                     {
                         await Application.Current.MainPage.DisplayAlert(
                             "Errore",
@@ -236,16 +272,22 @@ namespace ClimbTrack.ViewModels
                         return;
                     }
 
-                    // Usa l'ID utente della sessione o quello dell'utente corrente
-                    string userId = !string.IsNullOrEmpty(Session.UserId) ? Session.UserId : currentUser.Uid;
+                    if(SessionId == null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert(
+                            "Errore",
+                            "Non è possibile eliminare la sessione: sessione non caricata.",
+                            "OK");
+                        return;
+                    }
 
                     // Elimina la sessione utilizzando il servizio specializzato
-                    bool success = await _trainingService.DeleteTrainingSessionAsync(userId, Session.Id);
+                    bool success = await _trainingService.DeleteTrainingSessionAsync(userId, SessionId);
 
                     if (success)
                     {
                         await Application.Current.MainPage.DisplayAlert("Successo", "Sessione eliminata con successo!", "OK");
-                        await _navigationService.GoBackAsync();
+                        await _navigationService.NavigateToAsync("//historical");
                     }
                     else
                     {

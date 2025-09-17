@@ -92,8 +92,10 @@
                VerticalOptions="Center" />
         </Grid>
     </Shell.TitleView>
-    <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
+
+    <Grid RowDefinitions="*, Auto">
+        <ScrollView Grid.Row="0">
+            <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
         <!-- Timer Display -->
         <VerticalStackLayout  Grid.Row="0" HorizontalOptions="Center" Spacing="5">
             <!--<Label Text="Tempo" 
@@ -229,18 +231,11 @@
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
-
+            </Grid>
+        </ScrollView>
+        
         <!-- Action Buttons -->
-        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
-            <!--<Button 
-                Grid.Column="0"
-                Text="Inizia" 
-                Command="{Binding StartTrainingCommand}"
-                Style="{StaticResource ActionButtonStyle}"
-                IsVisible="{Binding IsTrainingActive, Converter={StaticResource InverseBoolConverter}}"
-                AutomationProperties.Name="Inizia allenamento"
-                AutomationProperties.HelpText="Premi per iniziare l'allenamento" />-->
-
+        <Grid Grid.Row="1" Padding="20">
             <Button 
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -253,5 +248,5 @@
                 AutomationProperties.HelpText="Premi per terminare l'allenamento e salvare i risultati" />
         </Grid>
     </Grid>
-    </ScrollView>
+    
 </ContentPage>

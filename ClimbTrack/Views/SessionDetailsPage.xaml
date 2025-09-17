@@ -70,6 +70,14 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="arrow_left.svg"
+                 Command="{Binding GoBackCommand}"
+                 Order="Primary"
+                 Priority="-1"
+                 AutomationProperties.Name="Go Back"
+                 AutomationProperties.HelpText="Navigate to the previous page" />
+    </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Header -->
@@ -127,7 +135,9 @@
                                         WidthRequest="24"
                                         HeightRequest="24"
                                         CornerRadius="12"
+                                        BackgroundColor="Transparent"
                                         VerticalOptions="Center"
+                                        Margin="0,0,20,20"
                                         AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
 
                                     <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">

@@ -63,8 +63,9 @@
                    VerticalOptions="Center" />
         </Grid>
     </Shell.TitleView>
-    <ScrollView>
-        <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="10" RowSpacing="0">
+    <Grid RowDefinitions="*, Auto">
+        <ScrollView Grid.Row="0">
+            <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="10" RowSpacing="0">
         
             <!-- Header with panel selection -->
             <VerticalStackLayout Grid.Row="0" Spacing="0" Margin="0,0,0,10">
@@ -162,7 +163,9 @@
                            AutomationProperties.Name="Caricamento in corso" />
                 </VerticalStackLayout>
             </Grid>
-        
+            </Grid>
+        </ScrollView>
+
         <!-- Start button -->
             <Button Grid.Row="3"
                     Text="Inizia Allenamento" 
@@ -171,5 +174,5 @@
                     AutomationProperties.Name="Inizia Allenamento"
                     AutomationProperties.HelpText="Premi per iniziare un nuovo allenamento con i percorsi selezionati" />
         </Grid>
-  </ScrollView>
+
 </ContentPage>

@@ -196,7 +196,7 @@
                                                IsVisible="{Binding IsTrainingFrequencyChartLoading}"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"
-                                               Color="#3498db" />       
+                                               Color="#00fdff" />       
                         </Grid>
                     </Frame>
 

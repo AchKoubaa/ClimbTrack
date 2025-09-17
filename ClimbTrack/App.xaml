@@ -34,6 +34,8 @@
             <Style x:Key="CompletedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
                 <Setter Property="BackgroundColor" Value="#E8F5E9" />
             </Style>
+            <Color x:Key="DangerColor">#DC3545</Color>
+            <Color x:Key="CompletedBackgroundColor">#E8F5E9</Color>
 
         </ResourceDictionary>
     </Application.Resources>

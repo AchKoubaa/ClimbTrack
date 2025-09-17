@@ -52,6 +52,10 @@ namespace ClimbTrack.ViewModels
         public ICommand RefreshCommand { get; }
         public ICommand ClearFiltersCommand { get; }
 
+        public ICommand ViewDetailsCommand { get; }
+        public ICommand DeleteSessionCommand { get; }
+        public ICommand ShareSessionCommand { get; }
+
         public HistoricalViewModel(
             ITrainingService trainingService,
             INavigationService navigationService,
@@ -66,6 +70,9 @@ namespace ClimbTrack.ViewModels
 
             RefreshCommand = new Command(async () => await Refresh());
             ClearFiltersCommand = new Command(ClearFilters);
+            ViewDetailsCommand = new Command<TrainingSession>(async (session) => await ViewSessionDetails(session));
+            DeleteSessionCommand = new Command<TrainingSession>(async (session) => await DeleteSession(session));
+            ShareSessionCommand = new Command<TrainingSession>(async (session) => await ShareSession(session));
         }
 
         public async Task Initialize()
@@ -146,6 +153,98 @@ namespace ClimbTrack.ViewModels
 
             // Reload all sessions
             LoadSessions();
+        }
+
+        private async Task ViewSessionDetails(TrainingSession session)
+        {
+            if (session == null) return;
+
+            // Navigate to details page
+            await _navigationService.NavigateToAsync("SessionDetailsPage", new Dictionary<string, object>
+            {
+                  { "id", session.Id },
+                  { "userId", session.UserId }
+            });
+        }
+
+        private async Task DeleteSession(TrainingSession session)
+        {
+            if (session == null) return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert(
+                "Conferma eliminazione",
+                "Sei sicuro di voler eliminare questa sessione di allenamento?",
+                "Sì", "No");
+
+            if (confirm)
+            {
+                try
+                {
+                    // Verifica se l'utente è autenticato
+                    var currentUser = _authService.GetCurrentUser();
+                    if (currentUser == null && string.IsNullOrEmpty(session.UserId))
+                    {
+                        await Application.Current.MainPage.DisplayAlert(
+                            "Errore",
+                            "Non è possibile eliminare la sessione: utente non autenticato.",
+                            "OK");
+                        return;
+                    }
+
+                    // Usa l'ID utente della sessione o quello dell'utente corrente
+                    string userId = !string.IsNullOrEmpty(session.UserId) ? session.UserId : currentUser.Uid;
+
+                    // Elimina la sessione utilizzando il servizio specializzato
+                    bool success = await _trainingService.DeleteTrainingSessionAsync(userId, session.Id);
+
+                    if (success)
+                    {
+                        // Remove from the collection
+                        Sessions.Remove(session);
+                        await Application.Current.MainPage.DisplayAlert("Successo", "Sessione eliminata con successo!", "OK");
+                        await _navigationService.GoBackAsync();
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Errore", "Impossibile eliminare la sessione.", "OK");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Errore",
+                        $"Impossibile eliminare la sessione: {ex.Message}",
+                        "OK");
+                }
+            }
+        }
+
+        private async Task ShareSession(TrainingSession session)
+        {
+            if (session == null) return;
+
+            try
+            {
+                // Create share text
+                string shareText = $"Ho completato un allenamento il {session.FormattedDate}!\n" +
+                                  $"Durata: {session.FormattedDuration}\n" +
+                                  $"Pannello: {session.PanelType}\n" +
+                                  $"Percorsi completati: {session.CompletedRoutesCount}/{session.TotalRoutes}";
+
+                // Use Share API
+                await Share.RequestAsync(new ShareTextRequest
+                {
+                    Text = shareText,
+                    Title = "Condividi sessione di allenamento"
+                });
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Errore",
+                    $"Impossibile condividere la sessione: {ex.Message}",
+                    "OK");
+            }
         }
     }
 }

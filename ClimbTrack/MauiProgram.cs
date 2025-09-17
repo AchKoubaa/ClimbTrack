@@ -2,6 +2,7 @@
 using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
+using CommunityToolkit.Maui;
 using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +15,7 @@ namespace ClimbTrack
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                  .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {

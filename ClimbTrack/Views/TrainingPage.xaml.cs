@@ -5,7 +5,7 @@ namespace ClimbTrack.Views
     public partial class TrainingPage : ContentPage
     {
         private readonly TrainingViewModel _viewModel;
-
+        private bool _hasCheckedRoutes = false;
         public TrainingPage(TrainingViewModel viewModel)
         {
             InitializeComponent();
@@ -13,13 +13,24 @@ namespace ClimbTrack.Views
             BindingContext = viewModel;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // Verifica se ci sono percorsi disponibili
-            if (_viewModel.TrainingRoutes == null || _viewModel.TrainingRoutes.Count == 0)
+
+
+            // Only check routes once and after they've been loaded
+            if (!_hasCheckedRoutes)
             {
-                DisplayAlert("Attenzione", "Non ci sono percorsi disponibili per questo allenamento.", "OK");
+                // Wait for the view model to finish loading routes
+                // This ensures we don't check before data is available
+                await Task.Delay(500); // Short delay to allow routes to load
+
+                if (_viewModel.TrainingRoutes == null || _viewModel.TrainingRoutes.Count == 0)
+                {
+                    await DisplayAlert("Attenzione", "Non ci sono percorsi disponibili per questo allenamento.", "OK");
+                }
+
+                _hasCheckedRoutes = true;
             }
         }
 
@@ -32,8 +43,6 @@ namespace ClimbTrack.Views
                 _viewModel.EndTrainingCommand.Execute(null);
             }
         }
-
-       
 
         protected override bool OnBackButtonPressed()
         {

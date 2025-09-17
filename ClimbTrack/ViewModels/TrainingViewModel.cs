@@ -43,9 +43,6 @@ namespace ClimbTrack.ViewModels
                 }
             }
         }
-
-
-
         public string UserId
         {
             get => _userId;

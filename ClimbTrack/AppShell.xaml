@@ -11,6 +11,15 @@
     TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}">
 
+    <Shell.Resources>
+        <Style x:Key="GoBackButtonStyle" TargetType="ToolbarItem">
+            <Setter Property="IconImageSource" Value="arrow_left.svg" />
+            <Setter Property="Command" 
+                    Value="{Binding Source={RelativeSource AncestorType={x:Type Shell}}, 
+                Path=GoToAsync, StringFormat='..'}"/>
+           
+        </Style>
+    </Shell.Resources>
     
     <TabBar x:Name="MainTabs" Route="main" >
         <Tab Title="Home" 
