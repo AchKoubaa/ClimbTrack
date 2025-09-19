@@ -19,19 +19,19 @@ namespace ClimbTrack.Views
 
 
             // Only check routes once and after they've been loaded
-            if (!_hasCheckedRoutes)
-            {
-                // Wait for the view model to finish loading routes
-                // This ensures we don't check before data is available
-                await Task.Delay(500); // Short delay to allow routes to load
+            //if (!_hasCheckedRoutes)
+            //{
+            //    // Wait for the view model to finish loading routes
+            //    // This ensures we don't check before data is available
+            //    await Task.Delay(500); // Short delay to allow routes to load
 
-                if (_viewModel.TrainingRoutes == null || _viewModel.TrainingRoutes.Count == 0)
-                {
-                    await DisplayAlert("Attenzione", "Non ci sono percorsi disponibili per questo allenamento.", "OK");
-                }
+            //    if (_viewModel.TrainingRoutes == null || _viewModel.TrainingRoutes.Count == 0)
+            //    {
+            //        await DisplayAlert("Attenzione", "Non ci sono percorsi disponibili per questo allenamento.", "OK");
+            //    }
 
-                _hasCheckedRoutes = true;
-            }
+            //    _hasCheckedRoutes = true;
+            //}
         }
 
         protected override void OnDisappearing()

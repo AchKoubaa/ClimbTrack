@@ -1,6 +1,7 @@
 using ClimbTrack.Models;
 using ClimbTrack.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ClimbTrack.Views
@@ -37,14 +38,27 @@ namespace ClimbTrack.Views
         {
             if (e.CurrentSelection.FirstOrDefault() is TrainingSession session)
             {
-                // For now, just navigate to the session details page without passing the session
-                // We'll fix the navigation issue later
-                await Shell.Current.GoToAsync($"//sessionDetails?id={session.Id}&userId={session.UserId}");
-
-                // Deselect the item
-                if (sender is CollectionView collectionView)
+                try
                 {
-                    collectionView.SelectedItem = null;
+                    // Deselect the item first to prevent multiple selections
+                    if (sender is CollectionView collectionView)
+                    {
+                        collectionView.SelectedItem = null;
+                    }
+
+                    
+                    await Shell.Current.GoToAsync("sessionDetails", new Dictionary<string, object>
+            {
+                { "id", session.Id },
+                { "userId", session.UserId }
+            });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Navigation error: {ex.Message}");
+                    // Show an error message to the user
+                    await Shell.Current.DisplayAlert("Navigation Error",
+                        "Unable to open session details. Please try again.", "OK");
                 }
             }
         }

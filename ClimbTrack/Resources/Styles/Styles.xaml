@@ -20,7 +20,8 @@
     </Style>
 
     <Style TargetType="BoxView">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+        <Setter Property="BackgroundColor" 
+                Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
     <!-- Base Button Style -->
@@ -449,7 +450,7 @@
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundCream}, Dark={StaticResource OffBlack}}" />
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
@@ -477,5 +478,149 @@
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
+
+    <!-- Form Label Style -->
+    <Style x:Key="FormLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="#888888" />
+        <Setter Property="Margin" Value="5,0,0,5" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Link Label Style -->
+    <Style x:Key="LinkLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="#E08D69" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <!-- Error Label Style -->
+    <Style x:Key="ErrorLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="Red" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,5,0,0" />
+    </Style>
+
+    <!-- Entry Frame Style -->
+    <Style x:Key="EntryFrameStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="BorderColor" Value="#E0E0E0" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="HeightRequest" Value="50" />
+    </Style>
+
+    <!-- Social Button Frame Style -->
+    <Style x:Key="SocialButtonFrameStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="25" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="BorderColor" Value="#E0E0E0" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="HeightRequest" Value="50" />
+    </Style>
+    
+    <!-- Move these styles to Styles.xaml -->
+    <Style x:Key="PanelPickerStyle" TargetType="Picker">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="Black" />
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+    </Style>
+
+    <Style x:Key="RouteItemStyle" TargetType="Frame">
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
+    <Style x:Key="StartButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#707CD0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="24,12" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="HeightRequest" Value="50" />
+    </Style>
+
+    <Style x:Key="DifficultyIndicatorStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="HeightRequest" Value="24" />
+        <Setter Property="WidthRequest" Value="24" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="TimerStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="TextColor" Value="#333333" />
+    </Style>
+
+    <Style x:Key="PanelLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="#333333" />
+    </Style>
+
+   
+
+    <Style x:Key="SelectedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
+        <Setter Property="BorderColor" Value="#0000FF" />
+
+    </Style>
+
+    <Style x:Key="CompletedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
+        <Setter Property="BackgroundColor" Value="#E8F5E9" />
+    </Style>
+
+    <Style x:Key="CompletedSelectedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource CompletedRouteItemStyle}">
+        <Setter Property="BorderColor" Value="#0000FF" />
+
+    </Style>
+
+    <Style x:Key="ActionButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#2196F3" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="25" />
+        <Setter Property="Padding" Value="24,12" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+    </Style>
+
+    <Style x:Key="EndButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+        <Setter Property="BackgroundColor" Value="#F44336" />
+    </Style>
+
+    <Style x:Key="CounterButtonStyle" TargetType="Button">
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#2196F3, Dark=#1565C0}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.5" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    
 
 </ResourceDictionary>

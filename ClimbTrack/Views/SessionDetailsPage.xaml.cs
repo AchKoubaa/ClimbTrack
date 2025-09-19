@@ -16,13 +16,17 @@ namespace ClimbTrack.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            // Puoi aggiungere qui eventuali inizializzazioni necessarie
+            
+            // hide the tab bar when this page appears
+            Shell.SetTabBarIsVisible(this, false);
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            // Puoi eseguire operazioni di pulizia qui se necessario
+            // Optional: Restore the tab bar when leaving this page
+           
+            Shell.SetTabBarIsVisible(this, true);
         }
 
         protected override bool OnBackButtonPressed()

@@ -5,22 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ClimbTrack"
     xmlns:views="clr-namespace:ClimbTrack.Views"
-    Shell.FlyoutBehavior="Disabled"
+   Shell.FlyoutBehavior="Disabled"
     BackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     ForegroundColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
     TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}">
 
-    <Shell.Resources>
-        <Style x:Key="GoBackButtonStyle" TargetType="ToolbarItem">
-            <Setter Property="IconImageSource" Value="arrow_left.svg" />
-            <Setter Property="Command" 
-                    Value="{Binding Source={RelativeSource AncestorType={x:Type Shell}}, 
-                Path=GoToAsync, StringFormat='..'}"/>
-           
-        </Style>
-    </Shell.Resources>
-    
+
     <TabBar x:Name="MainTabs" Route="main" >
         <Tab Title="Home" 
              Icon="house.svg"
@@ -62,10 +53,10 @@
                 Route="profile" />
         </Tab>
         <Tab Title="Storico" 
-     Icon="clock.svg"
-     x:Name="StoricoTab"
-     AutomationProperties.Name="Storico Tab"
-     AutomationProperties.HelpText="Visualizza lo storico degli allenamenti">
+             Icon="clock.svg"
+             x:Name="StoricoTab"
+             AutomationProperties.Name="Storico Tab"
+             AutomationProperties.HelpText="Visualizza lo storico degli allenamenti">
             <ShellContent ContentTemplate="{DataTemplate views:HistoricalPage}" Route="historical" />
         </Tab>
     </TabBar>
@@ -84,15 +75,9 @@
         ContentTemplate="{DataTemplate views:RegisterPage}"
         Route="register" />
 
-    <!-- Pagine di dettaglio (non nella TabBar) -->
     <ShellContent
-        Shell.NavBarIsVisible="True"
-        Title="Dettagli Sessione"
-        ContentTemplate="{DataTemplate views:SessionDetailsPage}"
-        Route="sessionDetails" />
-
-    <ShellContent
-        Shell.NavBarIsVisible="True"
+        Shell.NavBarIsVisible="False"
+        Shell.TabBarIsVisible="False"
         Title="Modifica Profilo"
         ContentTemplate="{DataTemplate views:EditProfilePage}"
         Route="editProfile" />

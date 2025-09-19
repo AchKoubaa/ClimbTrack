@@ -1,4 +1,5 @@
 ﻿using ClimbTrack.Services;
+using ClimbTrack.Views;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -154,7 +155,20 @@ namespace ClimbTrack.ViewModels
 
         private async Task ExecuteRegisterCommand()
         {
-            await _navigationService.NavigateToAsync("RegisterPage");
+            // Create RegisterViewModel with necessary dependencies
+            var registerViewModel = new RegisterViewModel(
+                _authService,
+                _navigationService,
+                _databaseService,
+                _firebaseService
+            // Add other dependencies as needed
+            );
+
+            // Create RegisterPage with the ViewModel
+            var registerPage = new RegisterPage(registerViewModel);
+
+            await Application.Current.MainPage.Navigation.PushAsync(registerPage);
+            //await _navigationService.NavigateToAsync("RegisterPage");
         }
 
         private async Task ExecuteForgotPasswordCommand()

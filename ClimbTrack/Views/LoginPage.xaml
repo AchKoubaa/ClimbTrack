@@ -3,19 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:ClimbTrack.ViewModels"
              x:Class="ClimbTrack.Views.LoginPage"
-             x:DataType="viewmodel:LoginViewModel"
-             BackgroundColor="White">
+             x:DataType="viewmodel:LoginViewModel">
     
   
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
             <!-- Title -->
             <Label Text="Indoor Climbing Workouts" 
-                   FontSize="24" 
-                   TextColor="#333333" 
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"
-                   Margin="0,0,0,20"/>
+       Style="{StaticResource Headline}"
+       Margin="0,0,0,20"/>
             <!-- Error Message -->
             <Label Text="{Binding ErrorMessage}"
         TextColor="Red"
@@ -25,12 +21,8 @@
         Margin="0,5,0,0"/>
             
             <!-- Google Sign In Button -->
-            <Frame CornerRadius="25" 
-                   HasShadow="False" 
-                   BorderColor="#E0E0E0" 
-                   Padding="10" 
-                   HeightRequest="50"
-                   Margin="0,0,0,20">
+            <Frame Style="{StaticResource SocialButtonFrameStyle}"
+       Margin="0,0,0,20">
                 <Grid>
                     <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                         <Image Source="google_g.png" HeightRequest="240" WidthRequest="240"/>
@@ -49,7 +41,8 @@
                      Margin="0,10,0,20"/>
 
             <!-- Email Entry -->
-            <Label Text="Email" TextColor="#888888" Margin="5,0,0,5"/>
+           <Label Text="Email" 
+       Style="{StaticResource FormLabelStyle}"/>
             <Frame CornerRadius="5" 
                    HasShadow="False" 
                    BorderColor="#E0E0E0" 
@@ -104,9 +97,8 @@
 
             <!-- Register Link -->
             <Label Text="Register" 
-                   TextColor="#E08D69" 
-                   HorizontalOptions="Center"
-                   FontSize="16">
+       Style="{StaticResource LinkLabelStyle}"
+       HorizontalOptions="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
                 </Label.GestureRecognizers>

@@ -70,17 +70,11 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="arrow_left.svg"
-                 Command="{Binding GoBackCommand}"
-                 Order="Primary"
-                 Priority="-1"
-                 AutomationProperties.Name="Go Back"
-                 AutomationProperties.HelpText="Navigate to the previous page" />
-    </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,*,Auto">
-        <!-- Header -->
+
+    <ScrollView >
+        <StackLayout Spacing="0">
+            <!-- Header -->
         <Frame Grid.Row="0" Style="{StaticResource HeaderFrameStyle}">
             <StackLayout Spacing="5">
                 <Label Text="{Binding DateDisplay}" 
@@ -103,7 +97,7 @@
         </Frame>
 
         <!-- Routes List -->
-        <ScrollView Grid.Row="1">
+        
             <StackLayout Padding="20">
                 <Label Text="Percorsi" 
                        Style="{StaticResource SectionTitleStyle}"
@@ -206,6 +200,6 @@
                     AutomationProperties.Name="Elimina sessione"
                     AutomationProperties.HelpText="Premi per eliminare questa sessione di allenamento" />
             </StackLayout>
-        </ScrollView>
-    </Grid>
+            </StackLayout>
+    </ScrollView>
 </ContentPage>

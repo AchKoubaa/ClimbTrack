@@ -28,6 +28,8 @@ namespace ClimbTrack.Services
                 {
                     Debug.WriteLine($"Navigation already in progress, ignoring duplicate request to {route}");
                     return;
+
+                    
                 }
 
                 _isNavigating = true;
@@ -38,6 +40,7 @@ namespace ClimbTrack.Services
                     _isNavigating = false;
                     return;
                 }
+                
 
                 if (Shell.Current == null)
                 {
@@ -48,14 +51,14 @@ namespace ClimbTrack.Services
 
                 Debug.WriteLine($"Navigating to {route}");
 
-                if (parameters != null)
-                {
-                    await Shell.Current.GoToAsync(route, parameters);
-                }
-                else
-                {
-                    await Shell.Current.GoToAsync(route);
-                }
+                    if (parameters != null)
+                    {
+                        await Shell.Current.GoToAsync(route, parameters);
+                    }
+                    else
+                    {
+                        await Shell.Current.GoToAsync(route);
+                    }
             }
             catch (Exception ex)
             {

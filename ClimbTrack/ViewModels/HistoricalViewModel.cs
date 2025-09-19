@@ -160,7 +160,7 @@ namespace ClimbTrack.ViewModels
             if (session == null) return;
 
             // Navigate to details page
-            await _navigationService.NavigateToAsync("SessionDetailsPage", new Dictionary<string, object>
+            await _navigationService.NavigateToAsync("sessionDetails", new Dictionary<string, object>
             {
                   { "id", session.Id },
                   { "userId", session.UserId }

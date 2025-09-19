@@ -22,20 +22,7 @@
             <converters:RouteStyleConverter x:Key="RouteStyleConverter" />
             <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
             
-            <!-- Styles -->
-            <Style x:Key="RouteItemStyle" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="White" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="HasShadow" Value="True" />
-                <Setter Property="Padding" Value="15" />
-                <Setter Property="Margin" Value="0,0,0,10" />
-            </Style>
-
-            <Style x:Key="CompletedRouteItemStyle" TargetType="Frame" BasedOn="{StaticResource RouteItemStyle}">
-                <Setter Property="BackgroundColor" Value="#E8F5E9" />
-            </Style>
-            <Color x:Key="DangerColor">#DC3545</Color>
-            <Color x:Key="CompletedBackgroundColor">#E8F5E9</Color>
+            
 
         </ResourceDictionary>
     </Application.Resources>

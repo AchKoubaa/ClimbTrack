@@ -37,6 +37,7 @@ namespace ClimbTrack
             Routing.RegisterRoute("sessionDetails", typeof(SessionDetailsPage));
             Routing.RegisterRoute("admin", typeof(AdminPage));
             Routing.RegisterRoute("historical", typeof(HistoricalPage));
+            Routing.RegisterRoute(nameof(Views.RegisterPage), typeof(Views.RegisterPage));
         }
 
         private void OnNavigated(object sender, ShellNavigatedEventArgs e)

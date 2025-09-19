@@ -1,5 +1,4 @@
-﻿using ClimbTrack.Config;
-using ClimbTrack.Services;
+﻿using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
 using System.Diagnostics;

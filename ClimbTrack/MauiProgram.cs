@@ -68,6 +68,7 @@ namespace ClimbTrack
             builder.Services.AddSingleton<BoolToStyleConverter>();
             builder.Services.AddSingleton<DifficultyToColorConverter>();
             builder.Services.AddSingleton<ItalianDateConverter>();
+            builder.Services.AddSingleton<BoolToOpacityConverter>();
 
             // Register converters in resources
             builder.Services.AddSingleton<ResourceDictionary>(provider =>
@@ -79,6 +80,7 @@ namespace ClimbTrack
                 dictionary.Add("BoolToStyleConverter", provider.GetRequiredService<BoolToStyleConverter>());
                 dictionary.Add("DifficultyToColorConverter", provider.GetRequiredService<DifficultyToColorConverter>());
                 dictionary.Add("ItalianDateConverter", provider.GetRequiredService<ItalianDateConverter>());
+                dictionary.Add("BoolToOpacityConverter", provider.GetRequiredService<BoolToOpacityConverter>());
                 return dictionary;
             });
 

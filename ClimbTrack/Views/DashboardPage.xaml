@@ -8,7 +8,7 @@
              x:Class="ClimbTrack.Views.DashboardPage"
              x:DataType="viewmodels:DashboardViewModel"
              Title="{Binding Title}"
-             BackgroundColor="#F5F5F5">
+             >
 
 
    
