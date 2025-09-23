@@ -1,8 +1,8 @@
-﻿using ClimbTrack.Models;
-using ClimbTrack.Services;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ClimbTrack.Models;
+using ClimbTrack.Services;
 
 namespace ClimbTrack.ViewModels
 {
@@ -12,6 +12,7 @@ namespace ClimbTrack.ViewModels
         private readonly IDatabaseService _databaseService;
         private readonly IAuthService _authService;
         private readonly INavigationService _navigationService;
+        private readonly IPhotoPickerService _photoPickerService;
 
         private UserProfile _userProfile;
         private string _profileId;
@@ -34,21 +35,25 @@ namespace ClimbTrack.ViewModels
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand PickPhotoCommand { get; }
 
         public EditProfileViewModel(
             IDatabaseService databaseService,
             IAuthService authService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IPhotoPickerService photoPickerService)
         {
             _databaseService = databaseService;
             _authService = authService;
             _navigationService = navigationService;
+            _photoPickerService = photoPickerService;
 
             Title = "Modifica Profilo";
             UserProfile = new UserProfile();
 
             SaveCommand = new Command(async () => await Save());
             CancelCommand = new Command(async () => await GoBack());
+            PickPhotoCommand = new Command(async () => await PickPhoto());
         }
 
         private async Task LoadProfileAsync(string profileId)
@@ -63,7 +68,6 @@ namespace ClimbTrack.ViewModels
                 try
                 {
                     string userId = await _authService.GetUserId();
-                    // Assuming you have a method to get a user profile by ID
                     UserProfile = await _databaseService.GetItem<UserProfile>($"users/{userId}", "profile");
 
                     if (UserProfile == null)
@@ -95,6 +99,46 @@ namespace ClimbTrack.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile aggiornare il profilo: {ex.Message}", "OK");
                 }
             });
+        }
+
+        private async Task PickPhoto()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            try
+            {
+                var photoPath = await _photoPickerService.PickAndSavePhotoAsync();
+
+                if (!string.IsNullOrEmpty(photoPath))
+                {
+                    // Store the previous path in case we need to revert
+                    string previousPath = UserProfile.PhotoUrl;
+
+                    // Update the path
+                    UserProfile.PhotoUrl = photoPath;
+
+                    // Verify the file is accessible
+                    if (!_photoPickerService.IsPathValid(photoPath))
+                    {
+                        // Revert to the previous path if the new one is invalid
+                        UserProfile.PhotoUrl = previousPath;
+
+                        await Application.Current.MainPage.DisplayAlert("Avviso",
+                            "Impossibile accedere all'immagine selezionata. Riprova con un'altra immagine.", "OK");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore",
+                    $"Impossibile selezionare la foto: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task GoBack()

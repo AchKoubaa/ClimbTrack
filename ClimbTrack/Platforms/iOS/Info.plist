@@ -28,5 +28,7 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photos to let you select a profile picture.</string>
 </dict>
 </plist>

@@ -3,6 +3,7 @@ using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
 using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 
@@ -57,6 +58,8 @@ namespace ClimbTrack
             builder.Services.AddSingleton<INetworkService, NetworkService>();
             builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
             builder.Services.AddSingleton<IDashboardService, DashboardService>();
+            builder.Services.AddSingleton<IPhotoPickerService, PhotoPickerService>();
+           
 
             // Register the FirebaseService last (if still needed)
             builder.Services.AddScoped<IFirebaseService, FirebaseService>();

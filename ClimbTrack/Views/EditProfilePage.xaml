@@ -1,62 +1,55 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ClimbTrack.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ClimbTrack.Views.EditProfilePage"
              x:DataType="viewmodels:EditProfileViewModel"
              Title="{Binding Title}">
 
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="FormLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
-                <Setter Property="Margin" Value="0,10,0,5" />
-            </Style>
-
-            <Style x:Key="FormEntryStyle" TargetType="Entry">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="Margin" Value="0,0,0,15" />
-            </Style>
-
-            <Style x:Key="FormEditorStyle" TargetType="Editor">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="Margin" Value="0,0,0,15" />
-                <Setter Property="AutoSize" Value="TextChanges" />
-            </Style>
-
-            <Style x:Key="ActionButtonStyle" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="CornerRadius" Value="25" />
-                <Setter Property="Padding" Value="24,12" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
-                <Setter Property="Margin" Value="0,10,0,0" />
-            </Style>
-
-            <Style x:Key="CancelButtonStyle" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="CornerRadius" Value="25" />
-                <Setter Property="Padding" Value="24,12" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
-                <Setter Property="Margin" Value="0,10,0,0" />
-            </Style>
-        </ResourceDictionary>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </ContentPage.Resources>
 
     <ScrollView>
         <StackLayout Padding="20">
+            <!-- Profile Image Section -->
+            <StackLayout Orientation="Vertical" Spacing="10">
+                <Frame CornerRadius="75" HeightRequest="150" WidthRequest="150" 
+                       Padding="0" IsClippedToBounds="True" 
+                       HorizontalOptions="Center" BorderColor="{StaticResource PrimaryColor}">
+                    <Grid>
+                        <!-- Default image or initials when no photo is available -->
+                        <StackLayout IsVisible="{Binding UserProfile.HasPhoto, Converter={StaticResource InvertedBoolConverter}}"
+                                    BackgroundColor="{StaticResource PrimaryColor}"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Fill">
+                            <Label Text="{Binding UserProfile.Initials}"
+                                   TextColor="White"
+                                   FontSize="48"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   AutomationProperties.Name="Iniziali Profilo" />
+                        </StackLayout>
+
+                        <!-- Selected profile image -->
+                        <Image Source="{Binding UserProfile.PhotoUrl}"
+                               IsVisible="{Binding UserProfile.HasPhoto}"
+                               Aspect="AspectFill"
+                               HeightRequest="150" WidthRequest="150"
+                               AutomationProperties.Name="Foto Profilo" />
+                    </Grid>
+                </Frame>
+
+                <Button Text="Seleziona Foto" 
+                        Command="{Binding PickPhotoCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        HorizontalOptions="Center"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        AutomationProperties.Name="Seleziona Foto"
+                        AutomationProperties.HelpText="Premi per selezionare una nuova foto profilo" />
+            </StackLayout>
+
+            <!-- Rest of your form fields -->
             <Label Text="Nome Visualizzato" 
                    Style="{StaticResource FormLabelStyle}"
                    AutomationProperties.Name="Etichetta Nome Visualizzato" />
@@ -73,14 +66,6 @@
                    Style="{StaticResource FormEntryStyle}"
                    AutomationProperties.Name="Email"
                    AutomationProperties.HelpText="La tua email non può essere modificata" />
-
-            <Label Text="URL Foto Profilo" 
-                   Style="{StaticResource FormLabelStyle}"
-                   AutomationProperties.Name="Etichetta URL Foto Profilo" />
-            <Entry Text="{Binding UserProfile.PhotoUrl}" 
-                   Style="{StaticResource FormEntryStyle}"
-                   AutomationProperties.Name="URL Foto Profilo"
-                   AutomationProperties.HelpText="Inserisci l'URL della tua foto profilo" />
 
             <Label Text="Bio" 
                    Style="{StaticResource FormLabelStyle}"
@@ -111,14 +96,14 @@
             <Button Text="Salva Modifiche" 
                     Command="{Binding SaveCommand}" 
                     Style="{StaticResource ActionButtonStyle}"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                     AutomationProperties.Name="Salva Modifiche"
                     AutomationProperties.HelpText="Premi per salvare le modifiche al profilo" />
 
             <Button Text="Annulla" 
                     Command="{Binding CancelCommand}" 
                     Style="{StaticResource CancelButtonStyle}"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                     AutomationProperties.Name="Annulla"
                     AutomationProperties.HelpText="Premi per annullare le modifiche e tornare indietro" />
         </StackLayout>
