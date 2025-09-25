@@ -77,7 +77,7 @@ namespace ClimbTrack.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile caricare il profilo: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile caricare il profilo: {ex.Message}", "OK");
                     UserProfile = new UserProfile();
                 }
             });
@@ -91,12 +91,12 @@ namespace ClimbTrack.ViewModels
                 {
                     string userId = await _authService.GetUserId();
                     await _databaseService.UpdateItem($"users/{userId}", "profile", UserProfile);
-                    await Application.Current.MainPage.DisplayAlert("Successo", "Profilo aggiornato con successo!", "OK");
+                    await Shell.Current.DisplayAlert("Successo", "Profilo aggiornato con successo!", "OK");
                     await GoBack();
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile aggiornare il profilo: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile aggiornare il profilo: {ex.Message}", "OK");
                 }
             });
         }
@@ -125,14 +125,14 @@ namespace ClimbTrack.ViewModels
                         // Revert to the previous path if the new one is invalid
                         UserProfile.PhotoUrl = previousPath;
 
-                        await Application.Current.MainPage.DisplayAlert("Avviso",
+                        await Shell.Current.DisplayAlert("Avviso",
                             "Impossibile accedere all'immagine selezionata. Riprova con un'altra immagine.", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Errore",
+                await Shell.Current.DisplayAlert("Errore",
                     $"Impossibile selezionare la foto: {ex.Message}", "OK");
             }
             finally

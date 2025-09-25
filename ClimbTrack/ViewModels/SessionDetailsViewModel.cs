@@ -137,11 +137,11 @@ namespace ClimbTrack.ViewModels
             bool isAuthenticated = await _authService.IsAuthenticated();
             if (!isAuthenticated)
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Shell.Current.DisplayAlert(
                     "Error",
                     "Unable to load session: user not authenticated.",
                     "OK");
-                await _navigationService.NavigateToAsync("//login");
+                await Shell.Current.GoToAsync("login");
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace ClimbTrack.ViewModels
             string userId = await _authService.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Shell.Current.DisplayAlert(
                     "Error",
                     "Unable to load session: user ID not found.",
                     "OK");
@@ -170,17 +170,17 @@ namespace ClimbTrack.ViewModels
                     else
                     {
                         // Handle the case when session is not found
-                        await Application.Current.MainPage.DisplayAlert("Error",
+                        await Shell.Current.DisplayAlert("Error",
                             "Session not found", "OK");
-                        await _navigationService.GoBackAsync();
+                        await Shell.Current.GoToAsync("..");
                     }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error loading session by ID: {ex.Message}");
-                    await Application.Current.MainPage.DisplayAlert("Error",
+                    await Shell.Current.DisplayAlert("Error",
                         "Unable to load session details", "OK");
-                    await _navigationService.GoBackAsync();
+                    await Shell.Current.GoToAsync("..");
                 }
             }
         }
@@ -234,13 +234,13 @@ namespace ClimbTrack.ViewModels
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile caricare i dettagli dei percorsi: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Errore", $"Impossibile caricare i dettagli dei percorsi: {ex.Message}", "OK");
             }
         }
 
         private async Task DeleteSession()
         {
-            bool confirm = await Application.Current.MainPage.DisplayAlert(
+            bool confirm = await Shell.Current.DisplayAlert(
                 "Elimina Sessione",
                 "Sei sicuro di voler eliminare questa sessione di allenamento? Questa azione non può essere annullata.",
                 "Elimina", "Annulla");
@@ -253,11 +253,11 @@ namespace ClimbTrack.ViewModels
                     bool isAuthenticated = await _authService.IsAuthenticated();
                     if (!isAuthenticated)
                     {
-                        await Application.Current.MainPage.DisplayAlert(
+                        await Shell.Current.DisplayAlert(
                            "Errore",
                            "Non è possibile eliminare la sessione: utente non autenticato.",
                            "OK");
-                        await _navigationService.NavigateToAsync("//login");
+                        await Shell.Current.GoToAsync("login");
                         return;
                     }
 
@@ -265,7 +265,7 @@ namespace ClimbTrack.ViewModels
                     string userId = await _authService.GetUserId();
                     if (userId == null && string.IsNullOrEmpty(Session.UserId))
                     {
-                        await Application.Current.MainPage.DisplayAlert(
+                        await Shell.Current.DisplayAlert(
                             "Errore",
                             "Non è possibile eliminare la sessione: utente non autenticato.",
                             "OK");
@@ -274,7 +274,7 @@ namespace ClimbTrack.ViewModels
 
                     if(SessionId == null)
                     {
-                        await Application.Current.MainPage.DisplayAlert(
+                        await Shell.Current.DisplayAlert(
                             "Errore",
                             "Non è possibile eliminare la sessione: sessione non caricata.",
                             "OK");
@@ -286,17 +286,17 @@ namespace ClimbTrack.ViewModels
 
                     if (success)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Successo", "Sessione eliminata con successo!", "OK");
+                        await Shell.Current.DisplayAlert("Successo", "Sessione eliminata con successo!", "OK");
                         await _navigationService.NavigateToAsync("//historical");
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Errore", "Impossibile eliminare la sessione.", "OK");
+                        await Shell.Current.DisplayAlert("Errore", "Impossibile eliminare la sessione.", "OK");
                     }
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile eliminare la sessione: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile eliminare la sessione: {ex.Message}", "OK");
                 }
             }
         }

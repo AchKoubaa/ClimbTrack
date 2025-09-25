@@ -55,7 +55,7 @@ namespace ClimbTrack.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Photo picking failed: {ex}");
-                await Application.Current.MainPage.DisplayAlert("Errore",
+                await Shell.Current.DisplayAlert("Errore",
                     $"Impossibile selezionare la foto: {ex.Message}", "OK");
                 return null;
             }

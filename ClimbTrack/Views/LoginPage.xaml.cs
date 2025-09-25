@@ -11,10 +11,11 @@ public partial class LoginPage : ContentPage
     private readonly LoginViewModel _viewModel;
     private IErrorHandlingService _errorHandlingService;
 
-    public LoginPage(LoginViewModel viewModel)
+    public LoginPage(LoginViewModel viewModel, IErrorHandlingService errorHandlingService)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        _errorHandlingService = errorHandlingService;
         BindingContext = _viewModel;
 
         // Subscribe to property changed event to handle error messages

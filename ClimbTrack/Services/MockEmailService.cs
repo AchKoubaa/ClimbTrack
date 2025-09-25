@@ -15,7 +15,7 @@ namespace ClimbTrack.Services
             // Mostra il codice in un popup di debug
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Shell.Current.DisplayAlert(
                     "Codice di Verifica (SIMULATO)",
                     $"Il codice per {email} è: {code}",
                     "OK");

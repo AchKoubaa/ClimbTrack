@@ -420,15 +420,15 @@ namespace ClimbTrack.Services
                 // If we couldn't get an authenticated client, prompt the user to login
                 if (seedingClient == null)
                 {
-                   await _navigationService.DisplayAlertAsync(
+                   await Shell.Current.DisplayAlert(
                         "Autenticazione Richiesta",
                         "È necessario effettuare l'accesso per inizializzare il database. Vuoi accedere ora?",
                         "Ok");
 
-                   
-                        // Navigate to the login page
-                        await _navigationService.NavigateToLoginPage();
-                    
+
+                    // Navigate to the login page
+                    await Shell.Current.GoToAsync("login");
+
                     // Return early as we can't proceed without authentication
                     return;
                 }

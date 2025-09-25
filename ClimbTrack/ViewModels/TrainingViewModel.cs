@@ -236,7 +236,7 @@ namespace ClimbTrack.ViewModels
 
                 if (selectedRoute != null)
                 {
-                    bool shouldSave = await Application.Current.MainPage.DisplayAlert(
+                    bool shouldSave = await Shell.Current.DisplayAlert(
                         "Fine Allenamento",
                         "Vuoi salvare questa sessione di allenamento?",
                         "Sì", "No");
@@ -249,7 +249,7 @@ namespace ClimbTrack.ViewModels
                 else
                 {
                     // No route selected, just show a message
-                    await Application.Current.MainPage.DisplayAlert(
+                    await Shell.Current.DisplayAlert(
                         "Fine Allenamento",
                         "Nessun percorso selezionato. La sessione non verrà salvata.",
                         "OK");
@@ -261,7 +261,7 @@ namespace ClimbTrack.ViewModels
                     route.IsSelected = false;
                 }
 
-                await _navigationService.GoBackAsync();
+                await Shell.Current.GoToAsync("..");
             }
         }
 
@@ -279,7 +279,7 @@ namespace ClimbTrack.ViewModels
 
                     if (string.IsNullOrEmpty(userId))
                     {
-                        await Application.Current.MainPage.DisplayAlert(
+                        await Shell.Current.DisplayAlert(
                             "Errore",
                             "Devi essere autenticato per salvare la sessione di allenamento.",
                             "OK");
@@ -293,7 +293,7 @@ namespace ClimbTrack.ViewModels
                 // If no route is selected, show an error and return
                 if (selectedRoute == null)
                 {
-                    await Application.Current.MainPage.DisplayAlert(
+                    await Shell.Current.DisplayAlert(
                         "Errore",
                         "Nessun percorso selezionato. Seleziona un percorso prima di terminare l'allenamento.",
                         "OK");
@@ -319,11 +319,11 @@ namespace ClimbTrack.ViewModels
 
                 // Usa il servizio specializzato per salvare la sessione
                 await _trainingService.SaveTrainingSessionAsync(session);
-                await Application.Current.MainPage.DisplayAlert("Successo", "Sessione di allenamento salvata con successo!", "OK");
+                await Shell.Current.DisplayAlert("Successo", "Sessione di allenamento salvata con successo!", "OK");
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile salvare la sessione: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Errore", $"Impossibile salvare la sessione: {ex.Message}", "OK");
             }
         }
 

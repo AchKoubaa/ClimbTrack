@@ -146,14 +146,14 @@ namespace ClimbTrack.ViewModels
                         await _firebaseService.SendVerificationCodeEmailAsync(Email);
 
                         // Prompt user to verify email now
-                        bool verifyNow = await _navigationService.DisplayAlertAsync(
+                        bool verifyNow = await Shell.Current.DisplayAlert(
                             "Email Verification",
                             "A verification code has been sent to your email. Would you like to verify your email now?",
                             "Yes", "Later");
 
                         if (verifyNow)
                         {
-                            string code = await _navigationService.DisplayPromptAsync(
+                            string code = await Shell.Current.DisplayPromptAsync(
                                 "Verification",
                                 "Enter the code sent to your email");
 
@@ -174,8 +174,8 @@ namespace ClimbTrack.ViewModels
                         Console.WriteLine($"Failed to send verification email: {ex.Message}");
                     }
 
-                    await _navigationService.DisplayAlertAsync("Success", "Registration successful", "OK");
-                    await _navigationService.NavigateToMainPage();
+                    await Shell.Current.DisplayAlert("Success", "Registration successful", "OK");
+                    await Shell.Current.GoToAsync("home");
                 }
                 catch (Exception ex)
                 {
@@ -225,7 +225,7 @@ namespace ClimbTrack.ViewModels
                     await _firebaseService.SendVerificationCodeEmailAsync(Email);
 
                     // Prompt for verification code
-                    string code = await _navigationService.DisplayPromptAsync(
+                    string code = await Shell.Current.DisplayPromptAsync(
                         "Verification",
                         "Enter the code sent to your email");
 
@@ -252,8 +252,8 @@ namespace ClimbTrack.ViewModels
 
                     await _databaseService.UpdateItem("users", userId, userData);
 
-                    await _navigationService.DisplayAlertAsync("Success", "Registration successful", "OK");
-                    await _navigationService.NavigateToMainPage();
+                    await Shell.Current.DisplayAlert("Success", "Registration successful", "OK");
+                    await Shell.Current.GoToAsync("home");
                 }
                 catch (Exception ex)
                 {
@@ -264,7 +264,7 @@ namespace ClimbTrack.ViewModels
 
         private async Task ExecuteBackToLoginCommand()
         {
-            await _navigationService.GoBackAsync();
+            await Shell.Current.GoToAsync("..");
         }
 
         // Helper method to validate email format

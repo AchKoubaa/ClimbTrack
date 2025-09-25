@@ -3,6 +3,7 @@ using ClimbTrack.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Microsoft.Maui.Storage;
+using System.Diagnostics;
 
 namespace ClimbTrack.ViewModels
 {
@@ -103,6 +104,13 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
+                    // Check if user is authenticated
+                    if (!await _authService.IsAuthenticated())
+                    {
+                        Debug.WriteLine("User not authenticated, redirecting to login page");
+                        await Shell.Current.GoToAsync("login");
+                        return;
+                    }
                     // Load the user profile
                     await LoadUserProfile();
 
@@ -111,7 +119,7 @@ namespace ClimbTrack.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile caricare i dati del profilo: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile caricare i dati del profilo: {ex.Message}", "OK");
                 }
             });
         }
@@ -120,6 +128,13 @@ namespace ClimbTrack.ViewModels
         {
             try
             {
+                // Check if user is authenticated
+                if (!await _authService.IsAuthenticated())
+                {
+                    Debug.WriteLine("User not authenticated, redirecting to login page");
+                    await Shell.Current.GoToAsync("login");
+                    return;
+                }
                 // Get user ID
                 string userId = await _authService.GetUserId();
 
@@ -153,7 +168,7 @@ namespace ClimbTrack.ViewModels
                 bool isAuthenticated = await _authService.IsAuthenticated();
                 if (!isAuthenticated)
                 {
-                    await _navigationService.NavigateToAsync("//login");
+                    await Shell.Current.GoToAsync("//login");
                     return;
                 }
 
@@ -239,7 +254,7 @@ namespace ClimbTrack.ViewModels
 
         private async Task Logout()
         {
-            bool confirm = await Application.Current.MainPage.DisplayAlert(
+            bool confirm = await Shell.Current.DisplayAlert(
                 "Logout",
                 "Sei sicuro di voler effettuare il logout?",
                 "Sì", "No");
@@ -248,12 +263,17 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
-                    await _authService.Logout();
-                    await _navigationService.NavigateToAsync("//login");
+                     _authService.Logout();
+
+                    if (Shell.Current is AppShell appShell)
+                    {
+                        appShell.ShowLoginContent();
+                    }
+
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile effettuare il logout: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile effettuare il logout: {ex.Message}", "OK");
                 }
             }
         }
@@ -289,7 +309,7 @@ namespace ClimbTrack.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error",
+                    await Shell.Current.DisplayAlert("Error",
                         $"Unable to view session details: {ex.Message}", "OK");
                 }
             }

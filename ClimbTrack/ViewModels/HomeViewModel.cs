@@ -87,7 +87,7 @@ namespace ClimbTrack.ViewModels
                 {
                     _loginPromptShown = true;
                     // Consider showing a toast or small notification instead of redirecting
-                    // await _navigationService.DisplayAlertAsync("Accedi per salvare i tuoi progressi","ok", "cancel");
+                    // await Shell.Current.DisplayAlert("Accedi per salvare i tuoi progressi","ok", "cancel");
                 }
             }
 
@@ -143,7 +143,7 @@ namespace ClimbTrack.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile caricare i percorsi: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile caricare i percorsi: {ex.Message}", "OK");
                 }
             });
         }
@@ -160,7 +160,7 @@ namespace ClimbTrack.ViewModels
                     // If not authenticated, prompt the user to login
                     if (!isAuthenticated)
                     {
-                        bool shouldLogin = await _navigationService.DisplayAlertAsync(
+                        bool shouldLogin = await Shell.Current.DisplayAlert(
                             "Login Richiesto",
                             "Devi essere loggato per tracciare i tuoi allenamenti. Vuoi accedere ora?",
                             "Sì", "No");
@@ -168,13 +168,13 @@ namespace ClimbTrack.ViewModels
                         if (shouldLogin)
                         {
                             // Navigate to login page
-                            await _navigationService.NavigateToAsync("//login");
+                            await Shell.Current.GoToAsync("login");
                             return;
                         }
                         else
                         {
                             // User chose not to login, show a message
-                            await _navigationService.DisplayAlertAsync(
+                            await Shell.Current.DisplayAlert(
                                 "Modalità Limitata",
                                 "Stai usando l'app in modalità limitata. Le tue attività non saranno salvate.",
                                 "OK");
@@ -184,7 +184,7 @@ namespace ClimbTrack.ViewModels
                     // Check if there are any routes available
                     if (Routes == null || Routes.Count == 0)
                     {
-                        await _navigationService.DisplayAlertAsync(
+                        await Shell.Current.DisplayAlert(
                             "Nessun Percorso",
                             "Non ci sono percorsi disponibili per questo pannello.",
                             "OK");
@@ -213,7 +213,7 @@ namespace ClimbTrack.ViewModels
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error starting training: {ex.Message}");
-                    await _navigationService.DisplayAlertAsync("Errore", "Si è verificato un errore durante l'avvio dell'allenamento.", "OK");
+                    await Shell.Current.DisplayAlert("Errore", "Si è verificato un errore durante l'avvio dell'allenamento.", "OK");
                 }
             });
         }

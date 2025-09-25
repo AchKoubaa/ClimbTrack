@@ -89,14 +89,14 @@ namespace ClimbTrack.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await _navigationService.DisplayAlertAsync("Error", $"Failed to load user data: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Error", $"Failed to load user data: {ex.Message}", "OK");
                 }
             });
         }
 
         private async Task ExecuteLogoutCommand()
         {
-            bool confirm = await Application.Current.MainPage.DisplayAlert(
+            bool confirm = await Shell.Current.DisplayAlert(
                 "Logout",
                 "Sei sicuro di voler effettuare il logout?",
                 "Sì", "No");
@@ -105,12 +105,12 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
-                    await _authService.Logout();
-                    await _navigationService.NavigateToAsync("//login");
+                    _authService.Logout();
+                    await Shell.Current.GoToAsync("login");
                 }
                 catch (Exception ex)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", $"Impossibile effettuare il logout: {ex.Message}", "OK");
+                    await Shell.Current.DisplayAlert("Errore", $"Impossibile effettuare il logout: {ex.Message}", "OK");
                 }
             }
         }

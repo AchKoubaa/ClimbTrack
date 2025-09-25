@@ -98,7 +98,7 @@ namespace ClimbTrack.ViewModels
                     await _databaseService.UpdateItem("users", userId, userData);
 
                     // Navigate to main page
-                    await _navigationService.NavigateToMainPage();
+                    await Shell.Current.GoToAsync("home");
                 }
                 catch (Exception ex)
                 {
@@ -138,10 +138,11 @@ namespace ClimbTrack.ViewModels
                     BusyText = "Signing in...";
 
                     var userCredential = await _firebaseService.SignInWithEmailAndPassword(Email, Password);
-                    await _authService.SaveAuthData(userCredential);
+                    //await _authService.SaveAuthData(userCredential);
 
                     // Navigate to main page
-                    await _navigationService.NavigateToMainPage();
+                    await Shell.Current.GoToAsync("home");
+                  
                 }
 
                 catch (Exception ex)
@@ -155,25 +156,13 @@ namespace ClimbTrack.ViewModels
 
         private async Task ExecuteRegisterCommand()
         {
-            // Create RegisterViewModel with necessary dependencies
-            var registerViewModel = new RegisterViewModel(
-                _authService,
-                _navigationService,
-                _databaseService,
-                _firebaseService
-            // Add other dependencies as needed
-            );
-
-            // Create RegisterPage with the ViewModel
-            var registerPage = new RegisterPage(registerViewModel);
-
-            await Application.Current.MainPage.Navigation.PushAsync(registerPage);
-            //await _navigationService.NavigateToAsync("RegisterPage");
+          
+            await _navigationService.NavigateToAsync("register");
         }
 
         private async Task ExecuteForgotPasswordCommand()
         {
-            string email = await _navigationService.DisplayPromptAsync("Password Reset", "Enter your email address");
+            string email = await Shell.Current.DisplayPromptAsync("Password Reset", "Enter your email address");
 
             if (!string.IsNullOrWhiteSpace(email))
             {
@@ -182,21 +171,32 @@ namespace ClimbTrack.ViewModels
                     try
                     {
                         await _firebaseService.ResetPassword(email);
-                        await _navigationService.DisplayAlertAsync("Success", "Password reset email sent", "OK");
+                        await Shell.Current.DisplayAlert("Success", "Password reset email sent", "OK");
                     }
                     catch (Exception ex)
                     {
-                        await _navigationService.DisplayAlertAsync("Error", ex.Message, "OK");
+                        await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
                     }
                 });
             }
         }
 
+        private bool _isCheckingAuth = false;
         public async Task CheckAuthenticationStatus()
         {
-            if (await _authService.IsAuthenticated())
+            if (_isCheckingAuth) return;
+
+            try
             {
-                await _navigationService.NavigateToMainPage();
+                _isCheckingAuth = true;
+                if (await _authService.IsAuthenticated())
+                {
+                    await Shell.Current.GoToAsync("home");
+                }
+            }
+            finally
+            {
+                _isCheckingAuth = false;
             }
         }
 
@@ -209,7 +209,7 @@ namespace ClimbTrack.ViewModels
                     // Clear any previous error
                     ErrorMessage = string.Empty;
 
-                    string email = await _navigationService.DisplayPromptAsync("Email Verification", "Enter your email address");
+                    string email = await Shell.Current.DisplayPromptAsync("Email Verification", "Enter your email address");
 
                     if (string.IsNullOrWhiteSpace(email))
                     {
@@ -230,7 +230,7 @@ namespace ClimbTrack.ViewModels
                     //_firawait _firebaseService.SendVerificationCodeEmailAsync(email);
 
                     // Prompt for verification code
-                    string code = await _navigationService.DisplayPromptAsync("Verification", "Enter the code sent to your email");
+                    string code = await Shell.Current.DisplayPromptAsync("Verification", "Enter the code sent to your email");
 
                     if (string.IsNullOrWhiteSpace(code))
                     {
@@ -256,7 +256,7 @@ namespace ClimbTrack.ViewModels
                     await _databaseService.UpdateItem("users", userId, userData);
 
                     // Navigate to main page
-                    await _navigationService.NavigateToMainPage();
+                    await Shell.Current.GoToAsync("home");
                 }
                 catch (Exception ex)
                 {

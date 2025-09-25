@@ -10,7 +10,7 @@ namespace ClimbTrack.Services
         Task<string> GetUserId();
         Task<string> GetUserEmail();
         Task<bool> IsAuthenticated();
-        Task Logout();
+        void Logout();
         User GetCurrentUser();
         Task<FirebaseClient> GetAuthenticatedClientAsync();
 

@@ -70,7 +70,7 @@ namespace ClimbTrack.Services
             {
                 if (Application.Current?.MainPage != null)
                 {
-                    bool goToLogin = await Application.Current.MainPage.DisplayAlert(
+                    bool goToLogin = await Shell.Current.DisplayAlert(
                         "Authentication Required",
                         "You need to sign in to continue. Would you like to sign in now?",
                         "Yes", "No");
@@ -78,7 +78,7 @@ namespace ClimbTrack.Services
                     if (goToLogin && _navigationService != null)
                     {
                         // Navigate to login page
-                        await _navigationService.NavigateToAsync("//login");
+                        await Shell.Current.GoToAsync("login");
                     }
                 }
             });
@@ -150,7 +150,7 @@ namespace ClimbTrack.Services
             {
                 if (Application.Current?.MainPage != null)
                 {
-                    await Application.Current.MainPage.DisplayAlert(title, message, "OK");
+                    await Shell.Current.DisplayAlert(title, message, "OK");
                 }
                 else
                 {

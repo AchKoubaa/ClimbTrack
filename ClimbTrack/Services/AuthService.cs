@@ -175,15 +175,15 @@ namespace ClimbTrack.Services
             }
         }
 
-        public async Task Logout()
+        public async void Logout()
         {
             try
             {
                 //// Sign out from Firebase
-                //if (_authClient.User != null)
-                //{
-                //    await _authClient.SignOutAsync();
-                //}
+                if (_authClient.User != null)
+                {
+                    _authClient.SignOut();
+                }
 
                 // Clear stored authentication data
                 SecureStorage.Default.Remove(TokenKey);
@@ -206,7 +206,7 @@ namespace ClimbTrack.Services
         // Add method to handle authentication failures
         public async Task HandleAuthenticationFailure()
         {
-            await Logout();
+            Logout();
 
             if (Shell.Current != null)
             {
@@ -215,7 +215,7 @@ namespace ClimbTrack.Services
                 // Check if we can display an alert
                 if (Application.Current?.MainPage != null)
                 {
-                    await Application.Current.MainPage.DisplayAlert(
+                    await Shell.Current.DisplayAlert(
                         "Session Expired",
                         "Your session has expired. Please log in again.",
                         "OK");

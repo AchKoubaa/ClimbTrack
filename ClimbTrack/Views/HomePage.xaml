@@ -6,7 +6,8 @@
              xmlns:models="clr-namespace:ClimbTrack.Models"
              xmlns:converters="clr-namespace:ClimbTrack.Converters"
              x:Class="ClimbTrack.Views.HomePage"
-             x:DataType="viewmodels:HomeViewModel">
+             x:DataType="viewmodels:HomeViewModel"
+             Title="{Binding Title}">
 
     <ContentPage.Resources>
         <ResourceDictionary>

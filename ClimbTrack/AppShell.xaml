@@ -5,19 +5,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ClimbTrack"
     xmlns:views="clr-namespace:ClimbTrack.Views"
-   Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Disabled"
     BackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     ForegroundColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
     TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
-    TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}">
+    TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}"
+    Title="ClimbingApp">
 
+
+    <!-- Login Shell Content - This will be shown initially -->
+    <ShellContent
+        x:Name="LoginContent"
+        Title="Login"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="login" />
 
     <TabBar x:Name="MainTabs" Route="main" >
         <Tab Title="Home" 
              Icon="house.svg"
-             x:Name="HomeTab"
-             AutomationProperties.Name="Home Tab"
-             AutomationProperties.HelpText="Navigate to the home page">
+             x:Name="HomeTab">
             <ShellContent
                 ContentTemplate="{DataTemplate views:HomePage}"
                 Route="home" />
@@ -25,9 +31,7 @@
 
         <Tab Title="Dashboard" 
              Icon="speedometer.svg"
-             x:Name="DashboardTab"
-             AutomationProperties.Name="Dashboard Tab"
-             AutomationProperties.HelpText="Navigate to the dashboard">
+             x:Name="DashboardTab">
             <ShellContent
                 ContentTemplate="{DataTemplate views:DashboardPage}"
                 Route="dashboard" />
@@ -35,9 +39,7 @@
 
         <Tab Title="Training" 
              Icon="activity.svg"
-             x:Name="TrainingTab"
-             AutomationProperties.Name="Training Tab"
-             AutomationProperties.HelpText="Navigate to the training page">
+             x:Name="TrainingTab">
             <ShellContent
                 ContentTemplate="{DataTemplate views:TrainingPage}"
                 Route="training" />
@@ -45,28 +47,21 @@
 
         <Tab Title="Profilo" 
              Icon="person.svg"
-              x:Name="ProfileTab"
-             AutomationProperties.Name="Profile Tab"
-             AutomationProperties.HelpText="Navigate to your profile">
+             x:Name="ProfileTab">
             <ShellContent
                 ContentTemplate="{DataTemplate views:ProfilePage}"
                 Route="profile" />
         </Tab>
         <Tab Title="Storico" 
              Icon="clock.svg"
-             x:Name="StoricoTab"
-             AutomationProperties.Name="Storico Tab"
-             AutomationProperties.HelpText="Visualizza lo storico degli allenamenti">
-            <ShellContent ContentTemplate="{DataTemplate views:HistoricalPage}" Route="historical" />
+             x:Name="StoricoTab">
+            <ShellContent 
+                ContentTemplate="{DataTemplate views:HistoricalPage}" 
+                Route="historical" />
         </Tab>
     </TabBar>
 
-    <!-- Pagine di autenticazione (non nella TabBar) -->
-    <ShellContent
-        Shell.NavBarIsVisible="False"
-        Title="Login"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="login" />
+
 
     <!-- Registrazione -->
     <ShellContent
