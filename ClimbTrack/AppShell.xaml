@@ -65,7 +65,7 @@
 
     <!-- Registrazione -->
     <ShellContent
-        Shell.NavBarIsVisible="True"
+        Shell.NavBarIsVisible="False"
         Title="Registrazione"
         ContentTemplate="{DataTemplate views:RegisterPage}"
         Route="register" />
@@ -78,7 +78,8 @@
         Route="editProfile" />
 
     <ShellContent
-        Shell.NavBarIsVisible="True"
+         Shell.NavBarIsVisible="False"
+        Shell.TabBarIsVisible="False"
         Title="Amministrazione"
         ContentTemplate="{DataTemplate views:AdminPage}"
         Route="admin" />

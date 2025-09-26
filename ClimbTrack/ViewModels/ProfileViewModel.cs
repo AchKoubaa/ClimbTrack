@@ -92,7 +92,7 @@ namespace ClimbTrack.ViewModels
 
         private async Task GoToAdmin()
         {
-            await Shell.Current.GoToAsync("///admin");
+            await Shell.Current.GoToAsync("admin");
         }
 
         public async Task Initialize()
