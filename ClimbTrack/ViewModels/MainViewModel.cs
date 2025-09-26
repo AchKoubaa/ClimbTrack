@@ -12,7 +12,6 @@ namespace ClimbTrack.ViewModels
     {
         private readonly IDatabaseService _databaseService;
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
 
         private string _userId;
         private string _userEmail;
@@ -43,18 +42,16 @@ namespace ClimbTrack.ViewModels
 
         public MainViewModel(
             IDatabaseService databaseService,
-            IAuthService authService,
-            INavigationService navigationService)
+            IAuthService authService)
         {
             Title = "Home";
             _databaseService = databaseService;
             _authService = authService;
-            _navigationService = navigationService;
 
             LogoutCommand = new Command(async () => await ExecuteLogoutCommand());
-            NavigateToProfileCommand = new Command(async () => await _navigationService.NavigateToAsync("//profile"));
-            NavigateToTrainingCommand = new Command(async () => await _navigationService.NavigateToAsync("//training"));
-            NavigateToHistoryCommand = new Command(async () => await _navigationService.NavigateToAsync("//history"));
+            NavigateToProfileCommand = new Command(async () => await Shell.Current.GoToAsync("//profile"));
+            NavigateToTrainingCommand = new Command(async () => await Shell.Current.GoToAsync("//training"));
+            NavigateToHistoryCommand = new Command(async () => await Shell.Current.GoToAsync("//history"));
         }
 
         public async Task Initialize()
@@ -67,7 +64,7 @@ namespace ClimbTrack.ViewModels
                     bool isAuthenticated = await _authService.IsAuthenticated();
                     if (!isAuthenticated)
                     {
-                        await _navigationService.NavigateToAsync("///LoginPage");
+                        await Shell.Current.GoToAsync("///LoginPage");
                         return;
                     }
 
@@ -106,7 +103,7 @@ namespace ClimbTrack.ViewModels
                 try
                 {
                     _authService.Logout();
-                    await Shell.Current.GoToAsync("login");
+                    await Shell.Current.GoToAsync("///login");
                 }
                 catch (Exception ex)
                 {

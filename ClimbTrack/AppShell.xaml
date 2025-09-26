@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="ClimbTrack.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ClimbTrack"
     xmlns:views="clr-namespace:ClimbTrack.Views"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Disabled" 
+    x:Class="ClimbTrack.AppShell"
     BackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     ForegroundColor="{AppThemeBinding Light=#333333, Dark=#ffffff}"
     TabBarBackgroundColor="{AppThemeBinding Light=#f2f2f2, Dark=#333333}"
     TabBarUnselectedColor="{AppThemeBinding Light=#666666, Dark=#999999}"
-    Title="ClimbingApp">
+    Title="ClimbingApp" >
 
 
     <!-- Login Shell Content - This will be shown initially -->

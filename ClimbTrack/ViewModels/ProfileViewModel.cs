@@ -10,7 +10,6 @@ namespace ClimbTrack.ViewModels
     public class ProfileViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
         private readonly IDatabaseService _databaseService;
         private readonly ITrainingService _trainingService;
 
@@ -67,12 +66,10 @@ namespace ClimbTrack.ViewModels
 
         public ProfileViewModel(
             IAuthService authService,
-            INavigationService navigationService,
             IDatabaseService databaseService,
             ITrainingService trainingService)
         {
             _authService = authService;
-            _navigationService = navigationService;
             _databaseService = databaseService;
             _trainingService = trainingService;
 
@@ -90,12 +87,12 @@ namespace ClimbTrack.ViewModels
 
         private async Task ViewHistory()
         {
-            await _navigationService.NavigateToAsync("//historical");
+            await Shell.Current.GoToAsync("///historical");
         }
 
         private async Task GoToAdmin()
         {
-            await _navigationService.NavigateToAsync("admin");
+            await Shell.Current.GoToAsync("///admin");
         }
 
         public async Task Initialize()
@@ -108,7 +105,7 @@ namespace ClimbTrack.ViewModels
                     if (!await _authService.IsAuthenticated())
                     {
                         Debug.WriteLine("User not authenticated, redirecting to login page");
-                        await Shell.Current.GoToAsync("login");
+                        await Shell.Current.GoToAsync("///login");
                         return;
                     }
                     // Load the user profile
@@ -132,7 +129,7 @@ namespace ClimbTrack.ViewModels
                 if (!await _authService.IsAuthenticated())
                 {
                     Debug.WriteLine("User not authenticated, redirecting to login page");
-                    await Shell.Current.GoToAsync("login");
+                    await Shell.Current.GoToAsync("///login");
                     return;
                 }
                 // Get user ID
@@ -263,12 +260,15 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
-                     _authService.Logout();
-
+                   
+                        // Fallback if AppShell is not accessible
+                        _authService.Logout();
                     if (Shell.Current is AppShell appShell)
                     {
-                        appShell.ShowLoginContent();
+                        await Shell.Current.GoToAsync("//login");
                     }
+
+
 
                 }
                 catch (Exception ex)
@@ -280,7 +280,7 @@ namespace ClimbTrack.ViewModels
 
         private async Task EditProfile()
         {
-            await _navigationService.NavigateToAsync("editProfile", new Dictionary<string, object>
+            await Shell.Current.GoToAsync("editProfile", new Dictionary<string, object>
     {
         { "ProfileId", UserProfile.Id }
     });
@@ -302,7 +302,7 @@ namespace ClimbTrack.ViewModels
                     Preferences.Set(sessionKey, sessionJson);
 
                     // Navigate using the key
-                    await _navigationService.NavigateToAsync("//sessionDetails", new Dictionary<string, object>
+                    await Shell.Current.GoToAsync("//sessionDetails", new Dictionary<string, object>
             {
                 { "SessionKey", sessionKey }
             });

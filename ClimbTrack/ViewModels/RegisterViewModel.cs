@@ -11,7 +11,6 @@ namespace ClimbTrack.ViewModels
     public class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
         private readonly IDatabaseService _databaseService;
         private readonly IFirebaseService _firebaseService;
 
@@ -64,13 +63,11 @@ namespace ClimbTrack.ViewModels
 
         public RegisterViewModel(
             IAuthService authService,
-            INavigationService navigationService,
             IDatabaseService databaseService,
             IFirebaseService firebaseService)
         {
             Title = "Register";
             _authService = authService;
-            _navigationService = navigationService;
             _databaseService = databaseService;
             _firebaseService = firebaseService;
 
@@ -175,7 +172,7 @@ namespace ClimbTrack.ViewModels
                     }
 
                     await Shell.Current.DisplayAlert("Success", "Registration successful", "OK");
-                    await Shell.Current.GoToAsync("home");
+                    await Shell.Current.GoToAsync("///home");
                 }
                 catch (Exception ex)
                 {
@@ -253,7 +250,7 @@ namespace ClimbTrack.ViewModels
                     await _databaseService.UpdateItem("users", userId, userData);
 
                     await Shell.Current.DisplayAlert("Success", "Registration successful", "OK");
-                    await Shell.Current.GoToAsync("home");
+                    await Shell.Current.GoToAsync("///home");
                 }
                 catch (Exception ex)
                 {

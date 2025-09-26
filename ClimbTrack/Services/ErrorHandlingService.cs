@@ -25,16 +25,14 @@ namespace ClimbTrack.Services
     {
         private readonly IAnalyticsService _analyticsService;
         private readonly IConnectivity _connectivity;
-        private readonly INavigationService _navigationService;
         private bool _analyticsInitialized = false;
         public ErrorHandlingService(
             IAnalyticsService analyticsService = null,
-            IConnectivity connectivity = null, 
-            INavigationService navigationService = null)
+            IConnectivity connectivity = null)
         {
             _analyticsService = analyticsService;
             _connectivity = connectivity ?? Connectivity.Current;
-            _navigationService = navigationService;
+            
         }
 
         public async Task InitializeAnalyticsAsync(string appId)
@@ -68,17 +66,17 @@ namespace ClimbTrack.Services
             // Show a user-friendly message
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                if (Application.Current?.MainPage != null)
+                if (Shell.Current != null)
                 {
                     bool goToLogin = await Shell.Current.DisplayAlert(
                         "Authentication Required",
                         "You need to sign in to continue. Would you like to sign in now?",
                         "Yes", "No");
 
-                    if (goToLogin && _navigationService != null)
+                    if (goToLogin)
                     {
                         // Navigate to login page
-                        await Shell.Current.GoToAsync("login");
+                        await Shell.Current.GoToAsync("///login");
                     }
                 }
             });
@@ -148,7 +146,7 @@ namespace ClimbTrack.Services
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                if (Application.Current?.MainPage != null)
+                if (Shell.Current != null)
                 {
                     await Shell.Current.DisplayAlert(title, message, "OK");
                 }

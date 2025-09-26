@@ -14,20 +14,18 @@ namespace ClimbTrack.Services
         private readonly IFirebaseService _firebaseService;
         private readonly bool _useMockDatabase = false;
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
+       
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IConnectivity _connectivity;
 
         public DatabaseService(
             IErrorHandlingService errorHandlingService, 
             IFirebaseService firebase,IAuthService authService, 
-            INavigationService navigationService,
             IConnectivity connectivity = null)
         {
             _errorHandlingService = errorHandlingService;
             _firebaseService = firebase;
             _authService = authService;
-            _navigationService = navigationService;
             _connectivity = connectivity ?? Connectivity.Current;
 
             // Inizializza il client del database solo se non stiamo usando dati fittizi

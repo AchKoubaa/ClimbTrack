@@ -17,40 +17,52 @@ namespace ClimbTrack
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                 .UseMicrocharts()
+                .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Nel MauiProgram.cs
+            builder
+                .RegisterServices()
+                .RegisterConverters()
+                .RegisterViewModels()
+                .RegisterViews()
+                .ConfigureLogging();
+
+            return builder.Build();
+        }
+
+        public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
+        {
+            // Email services
             builder.Services.AddSingleton<IEmailService>(serviceProvider =>
-                 new SmtpEmailService(
-                     "smtp.gmail.com",
-                     587,
-                     "koubaaachraf99@gmail.com",
-                     "zcws lduo gbbz ened", // Per Gmail, dovrai generare una "App Password"
-                     "koubaaachraf99@gmail.com",
-                     "ClimbTrack",
-                     true
-                 )
-             );
+                new SmtpEmailService(
+                    "smtp.gmail.com",
+                    587,
+                    "koubaaachraf99@gmail.com",
+                    "zcws lduo gbbz ened", // For Gmail, you'll need to generate an "App Password"
+                    "koubaaachraf99@gmail.com",
+                    "ClimbTrack",
+                    true
+                )
+            );
 
             // Test services
-            builder.Services.AddSingleton<IEmailService, MockEmailService>();
+            //builder.Services.AddSingleton<IEmailService, MockEmailService>();
 
-            // Register core services first
-            builder.Services.AddSingleton<INavigationService, NavigationService>();
+            // Core services
             builder.Services.AddSingleton<ILocalHttpServer, LocalHttpServer>();
 
-            // Register Firebase services
+            // Firebase services
             builder.Services.AddSingleton<IServiceAccountService, ServiceAccountService>();
             builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IGoogleAuthService, GoogleAuthService>();
-            
-            // Register domain services
+            builder.Services.AddScoped<IFirebaseService, FirebaseService>();
+
+            // Domain services
             builder.Services.AddSingleton<IClimbingService, ClimbingService>();
             builder.Services.AddSingleton<ITrainingService, TrainingService>();
             builder.Services.AddSingleton<IErrorHandlingService, ErrorHandlingService>();
@@ -59,11 +71,12 @@ namespace ClimbTrack
             builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
             builder.Services.AddSingleton<IDashboardService, DashboardService>();
             builder.Services.AddSingleton<IPhotoPickerService, PhotoPickerService>();
-           
 
-            // Register the FirebaseService last (if still needed)
-            builder.Services.AddScoped<IFirebaseService, FirebaseService>();
+            return builder;
+        }
 
+        public static MauiAppBuilder RegisterConverters(this MauiAppBuilder builder)
+        {
             // Register converters
             builder.Services.AddSingleton<StringNotNullOrEmptyBoolConverter>();
             builder.Services.AddSingleton<BoolToColorConverter>();
@@ -87,7 +100,11 @@ namespace ClimbTrack
                 return dictionary;
             });
 
-            // Register view models
+            return builder;
+        }
+
+        public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
+        {
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<MainViewModel>();
@@ -100,8 +117,11 @@ namespace ClimbTrack
             builder.Services.AddTransient<HistoricalViewModel>();
             builder.Services.AddTransient<DashboardViewModel>();
 
+            return builder;
+        }
 
-            // Register pages
+        public static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
+        {
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainPage>();
@@ -115,6 +135,11 @@ namespace ClimbTrack
             builder.Services.AddTransient<HistoricalPage>();
             builder.Services.AddTransient<DashboardPage>();
 
+            return builder;
+        }
+
+        public static MauiAppBuilder ConfigureLogging(this MauiAppBuilder builder)
+        {
             // Add logging
             builder.Services.AddLogging(loggingBuilder =>
             {
@@ -146,7 +171,7 @@ namespace ClimbTrack
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            return builder;
         }
     }
 }

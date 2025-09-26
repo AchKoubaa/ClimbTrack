@@ -357,7 +357,7 @@ namespace ClimbTrack.ViewModels
 
         private async Task GoToTrainingAsync()
         {
-            await Shell.Current.GoToAsync("//HomePage");
+            await Shell.Current.GoToAsync("///home");
         }
 
         // Chart creation methods

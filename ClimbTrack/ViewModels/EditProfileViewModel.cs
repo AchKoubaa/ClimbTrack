@@ -11,7 +11,6 @@ namespace ClimbTrack.ViewModels
     {
         private readonly IDatabaseService _databaseService;
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
         private readonly IPhotoPickerService _photoPickerService;
 
         private UserProfile _userProfile;
@@ -40,12 +39,10 @@ namespace ClimbTrack.ViewModels
         public EditProfileViewModel(
             IDatabaseService databaseService,
             IAuthService authService,
-            INavigationService navigationService,
             IPhotoPickerService photoPickerService)
         {
             _databaseService = databaseService;
             _authService = authService;
-            _navigationService = navigationService;
             _photoPickerService = photoPickerService;
 
             Title = "Modifica Profilo";
@@ -146,7 +143,7 @@ namespace ClimbTrack.ViewModels
             try
             {
                 // Replace "//profile" with your actual route to the profile page
-                await Shell.Current.GoToAsync("//profile");
+                await Shell.Current.GoToAsync("///profile");
                 return;
             }
             catch (Exception ex)

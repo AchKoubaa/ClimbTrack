@@ -18,7 +18,6 @@ namespace ClimbTrack.ViewModels
     public class TrainingViewModel : BaseViewModel
     {
         private readonly ITrainingService _trainingService;
-        private readonly INavigationService _navigationService;
         private readonly IAuthService _authService;
 
         private string _panel;
@@ -153,11 +152,9 @@ namespace ClimbTrack.ViewModels
 
         public TrainingViewModel(
             ITrainingService trainingService,
-            INavigationService navigationService,
             IAuthService authService)
         {
             _trainingService = trainingService;
-            _navigationService = navigationService;
             _authService = authService;
 
             Title = "Allenamento";

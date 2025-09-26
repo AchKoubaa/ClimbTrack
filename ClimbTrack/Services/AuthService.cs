@@ -197,6 +197,7 @@ namespace ClimbTrack.Services
             {
                 Console.WriteLine($"Error during logout: {ex.Message}");
             }
+            return;
         }
         public User GetCurrentUser()
         {
@@ -210,18 +211,13 @@ namespace ClimbTrack.Services
 
             if (Shell.Current != null)
             {
-                await Shell.Current.GoToAsync("//login");
+                await Shell.Current.GoToAsync("///login");
 
-                // Check if we can display an alert
-                if (Application.Current?.MainPage != null)
-                {
-                    await Shell.Current.DisplayAlert(
+                await Shell.Current.DisplayAlert(
                         "Session Expired",
                         "Your session has expired. Please log in again.",
                         "OK");
-                }
             }
-
         }
 
         public async Task<FirebaseClient> GetAuthenticatedClientAsync()
@@ -261,7 +257,6 @@ namespace ClimbTrack.Services
                 return null;
             }
         }
-
 
         private void OnFirebaseAuthStateChanged(object sender, UserEventArgs e)
         {

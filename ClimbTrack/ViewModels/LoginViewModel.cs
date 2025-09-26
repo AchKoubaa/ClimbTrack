@@ -8,7 +8,6 @@ namespace ClimbTrack.ViewModels
     public class LoginViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
         private readonly IGoogleAuthService _googleAuthService;
         private readonly IDatabaseService _databaseService;
         private readonly IFirebaseService _firebaseService;
@@ -50,14 +49,12 @@ namespace ClimbTrack.ViewModels
 
         public LoginViewModel(
             IAuthService authService,
-            INavigationService navigationService,
             IGoogleAuthService googleAuthService,
             IDatabaseService databaseService,
             IFirebaseService firebaseService)
         {
             Title = "Login";
             _authService = authService;
-            _navigationService = navigationService;
             _googleAuthService = googleAuthService;
             _databaseService = databaseService;
             _firebaseService = firebaseService;
@@ -98,7 +95,7 @@ namespace ClimbTrack.ViewModels
                     await _databaseService.UpdateItem("users", userId, userData);
 
                     // Navigate to main page
-                    await Shell.Current.GoToAsync("home");
+                    await Shell.Current.GoToAsync("///home");
                 }
                 catch (Exception ex)
                 {
@@ -140,8 +137,13 @@ namespace ClimbTrack.ViewModels
                     var userCredential = await _firebaseService.SignInWithEmailAndPassword(Email, Password);
                     //await _authService.SaveAuthData(userCredential);
 
+
+                   
+                        await Shell.Current.GoToAsync("///home");
+                    
+
                     // Navigate to main page
-                    await Shell.Current.GoToAsync("home");
+                    //await Shell.Current.GoToAsync("//home");
                   
                 }
 
@@ -157,7 +159,7 @@ namespace ClimbTrack.ViewModels
         private async Task ExecuteRegisterCommand()
         {
           
-            await _navigationService.NavigateToAsync("register");
+            await Shell.Current.GoToAsync("register");
         }
 
         private async Task ExecuteForgotPasswordCommand()
@@ -191,7 +193,7 @@ namespace ClimbTrack.ViewModels
                 _isCheckingAuth = true;
                 if (await _authService.IsAuthenticated())
                 {
-                    await Shell.Current.GoToAsync("home");
+                    await Shell.Current.GoToAsync("///home");
                 }
             }
             finally
@@ -256,7 +258,7 @@ namespace ClimbTrack.ViewModels
                     await _databaseService.UpdateItem("users", userId, userData);
 
                     // Navigate to main page
-                    await Shell.Current.GoToAsync("home");
+                    await Shell.Current.GoToAsync("///home");
                 }
                 catch (Exception ex)
                 {

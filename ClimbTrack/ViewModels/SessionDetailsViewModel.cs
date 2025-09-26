@@ -16,7 +16,6 @@ namespace ClimbTrack.ViewModels
     {
         private readonly ITrainingService _trainingService;
         private readonly IClimbingService _climbingService;
-        private readonly INavigationService _navigationService;
         private readonly IAuthService _authService;
 
         private TrainingSession _session;
@@ -99,18 +98,16 @@ namespace ClimbTrack.ViewModels
         public SessionDetailsViewModel(
             ITrainingService trainingService,
             IClimbingService climbingService,
-            INavigationService navigationService,
             IAuthService authService)
         {
             _trainingService = trainingService;
             _climbingService = climbingService;
-            _navigationService = navigationService;
             _authService = authService;
 
             Title = "Dettagli Sessione";
             CompletedRoutes = new ObservableCollection<CompletedRouteViewModel>();
 
-            GoBackCommand = new Command(async () => await _navigationService.NavigateToAsync("//historical"));
+            GoBackCommand = new Command(async () => await Shell.Current.GoToAsync("///historical"));
             DeleteSessionCommand = new Command(async () => await DeleteSession());
         }
 
@@ -141,7 +138,7 @@ namespace ClimbTrack.ViewModels
                     "Error",
                     "Unable to load session: user not authenticated.",
                     "OK");
-                await Shell.Current.GoToAsync("login");
+                await Shell.Current.GoToAsync("///login");
                 return;
             }
 
@@ -257,7 +254,7 @@ namespace ClimbTrack.ViewModels
                            "Errore",
                            "Non è possibile eliminare la sessione: utente non autenticato.",
                            "OK");
-                        await Shell.Current.GoToAsync("login");
+                        await Shell.Current.GoToAsync("///login");
                         return;
                     }
 
@@ -287,7 +284,7 @@ namespace ClimbTrack.ViewModels
                     if (success)
                     {
                         await Shell.Current.DisplayAlert("Successo", "Sessione eliminata con successo!", "OK");
-                        await _navigationService.NavigateToAsync("//historical");
+                        await Shell.Current.GoToAsync("///historical");
                     }
                     else
                     {

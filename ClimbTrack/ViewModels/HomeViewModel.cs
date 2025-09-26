@@ -11,7 +11,6 @@ namespace ClimbTrack.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        private readonly INavigationService _navigationService;
         private readonly IClimbingService _climbingService;
 
         private ObservableCollection<ClimbingRoute> _routes;
@@ -56,11 +55,9 @@ namespace ClimbTrack.ViewModels
 
         public HomeViewModel(
             IAuthService authService,
-            INavigationService navigationService,
             IClimbingService climbingService)
         {
             _authService = authService;
-            _navigationService = navigationService;
             _climbingService = climbingService;
 
             Title = "CLIMBING WORKOUTS";
@@ -208,7 +205,7 @@ namespace ClimbTrack.ViewModels
                     }
 
                     // Navigate to training page
-                    await _navigationService.NavigateToAsync("//training", parameters);
+                    await Shell.Current.GoToAsync("//training", parameters);
                 }
                 catch (Exception ex)
                 {

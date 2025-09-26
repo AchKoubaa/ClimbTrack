@@ -12,7 +12,6 @@ namespace ClimbTrack.ViewModels
     public class HistoricalViewModel : BaseViewModel
     {
         private readonly ITrainingService _trainingService;
-        private readonly INavigationService _navigationService;
         private readonly IAuthService _authService;
 
         private ObservableCollection<TrainingSession> _sessions;
@@ -59,11 +58,9 @@ namespace ClimbTrack.ViewModels
 
         public HistoricalViewModel(
             ITrainingService trainingService,
-            INavigationService navigationService,
             IAuthService authService)
         {
             _trainingService = trainingService;
-            _navigationService = navigationService;
             _authService = authService;
 
             Title = "Storico Allenamenti";
@@ -91,7 +88,7 @@ namespace ClimbTrack.ViewModels
                 if (!await _authService.IsAuthenticated())
                 {
                     Debug.WriteLine("User not authenticated, redirecting to login page");
-                    await Shell.Current.GoToAsync("login");
+                    await Shell.Current.GoToAsync("///login");
                     return;
                 }
                 // Get user ID
@@ -168,7 +165,7 @@ namespace ClimbTrack.ViewModels
             if (session == null) return;
 
             // Navigate to details page
-            await _navigationService.NavigateToAsync("sessionDetails", new Dictionary<string, object>
+            await Shell.Current.GoToAsync("sessionDetails", new Dictionary<string, object>
             {
                   { "id", session.Id },
                   { "userId", session.UserId }

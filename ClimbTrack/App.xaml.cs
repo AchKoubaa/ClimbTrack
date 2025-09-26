@@ -21,6 +21,7 @@ namespace ClimbTrack
             _databaseService = databaseService;
             _errorHandlingService = errorHandlingService;
 
+           
             // Set up global exception handling
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
