@@ -1,4 +1,5 @@
-﻿using ClimbTrack.Converters;
+﻿using ClimbTrack.Config;
+using ClimbTrack.Converters;
 using ClimbTrack.Services;
 using ClimbTrack.ViewModels;
 using ClimbTrack.Views;
@@ -36,6 +37,8 @@ namespace ClimbTrack
 
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
+            // Carica la configurazione Firebase
+            FirebaseConfig.TryLoadConfigurationAsync().Wait();
             // Email services
             builder.Services.AddSingleton<IEmailService>(serviceProvider =>
                 new SmtpEmailService(

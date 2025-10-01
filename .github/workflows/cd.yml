@@ -1,0 +1,84 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+
+jobs:
+  build-android:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Install MAUI workload
+      run: dotnet workload install maui
+      
+    # Configurazione Firebase per Android
+    - name: Setup Firebase configuration for Android
+      run: |
+        mkdir -p Platforms/Android
+        echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > Platforms/Android/google-services.json
+        
+        # Verifica che il file sia stato creato correttamente
+        if (Test-Path -Path "Platforms/Android/google-services.json") {
+          Write-Host "Firebase Android configuration file created successfully"
+        } else {
+          Write-Error "Failed to create Firebase Android configuration file"
+          exit 1
+        }
+    
+    # Configurazione Firebase generale
+    - name: Create Firebase config file
+      run: |
+        echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+        
+        # Verifica che il file sia stato creato correttamente
+        if (Test-Path -Path "firebase-config.json") {
+          Write-Host "Firebase general configuration file created successfully"
+        } else {
+          Write-Error "Failed to create Firebase general configuration file"
+          exit 1
+        }
+      
+    # Aggiornamento automatico della versione se viene utilizzato un tag
+    - name: Update version
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        $version = "${{ github.ref }}".Substring(11)  # Rimuove 'refs/tags/v'
+        $csproj = Get-Content ClimbTrack.csproj
+        $csproj = $csproj -replace '<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>', "<ApplicationDisplayVersion>$version</ApplicationDisplayVersion>"
+        $buildNumber = [int]($csproj -match '<ApplicationVersion>(\d+)</ApplicationVersion>' | ForEach-Object { $matches[1] })
+        $buildNumber++
+        $csproj = $csproj -replace '<ApplicationVersion>.*</ApplicationVersion>', "<ApplicationVersion>$buildNumber</ApplicationVersion>"
+        Set-Content ClimbTrack.csproj $csproj
+      shell: pwsh
+      
+    - name: Build Android app
+      run: dotnet publish -f net9.0-android -c Release
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-app
+        path: bin/Release/net9.0-android/*-Signed.apk
+        
+    # Opzionale: Crea una release GitHub quando viene creato un tag
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: bin/Release/net9.0-android/*-Signed.apk
+        name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

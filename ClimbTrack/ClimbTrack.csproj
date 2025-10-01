@@ -147,6 +147,10 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
-
+	<ItemGroup>
+		<MauiAsset Include="Resources\Raw\firebase-config.json">
+			<LogicalName>firebase-config.json</LogicalName>
+		</MauiAsset>
+	</ItemGroup>
 	
 </Project>

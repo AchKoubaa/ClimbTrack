@@ -22,6 +22,33 @@ jobs:
     - name: Install MAUI workload
       run: dotnet workload install maui
       
+    # Configurazione Firebase per Android
+    - name: Setup Firebase configuration for Android
+      run: |
+        mkdir -p Platforms/Android
+        echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > Platforms/Android/google-services.json
+        
+        # Verifica che il file sia stato creato correttamente
+        if (Test-Path -Path "Platforms/Android/google-services.json") {
+          Write-Host "Firebase Android configuration file created successfully"
+        } else {
+          Write-Error "Failed to create Firebase Android configuration file"
+          exit 1
+        }
+    
+    # Configurazione Firebase generale
+    - name: Create Firebase config file
+      run: |
+        echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+        
+        # Verifica che il file sia stato creato correttamente
+        if (Test-Path -Path "firebase-config.json") {
+          Write-Host "Firebase general configuration file created successfully"
+        } else {
+          Write-Error "Failed to create Firebase general configuration file"
+          exit 1
+        }
+      
     - name: Restore dependencies
       run: dotnet restore ClimbTrack.sln
       
@@ -31,3 +58,11 @@ jobs:
     # Se hai test unitari, aggiungi questo step
     # - name: Test
     #   run: dotnet test ClimbTrack.sln --configuration Release --no-build
+    
+    - name: Publish build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-packages
+        path: |
+          bin/Release/net9.0-android/**/*.apk
+          bin/Release/net9.0-windows10.0.19041.0/**/*.msix
