@@ -81,17 +81,11 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SendGrid" Version="9.29.3" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
 	
 	
-		<ItemGroup>
-    <MauiAsset Include="climbtracknew-firebase-adminsdk-fbsvc-1602593b84.json" LogicalName="climbtracknew-firebase-adminsdk-fbsvc-1602593b84.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </MauiAsset>
-    
-</ItemGroup>
-	
+		
 	
 		<ItemGroup>
 		  <Compile Update="Views\HomePage.xaml.cs">
@@ -154,10 +148,5 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-	  <PackageReference Include="Xamarin.GooglePlayServices.Auth">
-	    <Version>121.3.0.3</Version>
-	  </PackageReference>
-	</ItemGroup>
-
+	
 </Project>

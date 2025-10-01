@@ -4,13 +4,12 @@ namespace ClimbTrack.Converters
 {
     public class DifficultyToColorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is int difficulty)
             {
                 return difficulty switch
                 {
-                    
                     1 => Color.FromArgb("#FF80AB"),  // Rosa 
                     2 => Color.FromArgb("#F5F5F5"),  // Bianco 
                     4 => Color.FromArgb("#43A047"),  // Verde
@@ -26,7 +25,7 @@ namespace ClimbTrack.Converters
             return Color.FromArgb("#9E9E9E");  // Grigio - Default
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

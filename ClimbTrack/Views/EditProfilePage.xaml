@@ -28,7 +28,7 @@
                                    FontSize="48"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"
-                                   AutomationProperties.Name="Iniziali Profilo" />
+                                   />
                         </StackLayout>
 
                         <!-- Selected profile image -->
@@ -36,7 +36,7 @@
                                IsVisible="{Binding UserProfile.HasPhoto}"
                                Aspect="AspectFill"
                                HeightRequest="150" WidthRequest="150"
-                               AutomationProperties.Name="Foto Profilo" />
+                               />
                     </Grid>
                 </Frame>
 
@@ -45,44 +45,44 @@
                         Style="{StaticResource SecondaryButtonStyle}"
                         HorizontalOptions="Center"
                         IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                        AutomationProperties.Name="Seleziona Foto"
-                        AutomationProperties.HelpText="Premi per selezionare una nuova foto profilo" />
+                       
+                        />
             </StackLayout>
 
             <!-- Rest of your form fields -->
             <Label Text="Nome Visualizzato" 
                    Style="{StaticResource FormLabelStyle}"
-                   AutomationProperties.Name="Etichetta Nome Visualizzato" />
+                   />
             <Entry Text="{Binding UserProfile.DisplayName}" 
                    Style="{StaticResource FormEntryStyle}"
-                   AutomationProperties.Name="Nome Visualizzato"
-                   AutomationProperties.HelpText="Inserisci il tuo nome visualizzato" />
+                  
+                   />
 
             <Label Text="Email" 
                    Style="{StaticResource FormLabelStyle}"
-                   AutomationProperties.Name="Etichetta Email" />
+                   />
             <Entry Text="{Binding UserProfile.Email}" 
                    IsEnabled="False" 
                    Style="{StaticResource FormEntryStyle}"
-                   AutomationProperties.Name="Email"
-                   AutomationProperties.HelpText="La tua email non può essere modificata" />
+                  
+                   />
 
             <Label Text="Bio" 
                    Style="{StaticResource FormLabelStyle}"
-                   AutomationProperties.Name="Etichetta Bio" />
+                   />
             <Editor Text="{Binding UserProfile.Bio}" 
                     Style="{StaticResource FormEditorStyle}" 
                     HeightRequest="100"
-                    AutomationProperties.Name="Bio"
-                    AutomationProperties.HelpText="Inserisci una breve biografia" />
+                   
+                    />
 
             <Label Text="Palestra Preferita" 
                    Style="{StaticResource FormLabelStyle}"
-                   AutomationProperties.Name="Etichetta Palestra Preferita" />
+                   />
             <Entry Text="{Binding UserProfile.PreferredGym}" 
                    Style="{StaticResource FormEntryStyle}"
-                   AutomationProperties.Name="Palestra Preferita"
-                   AutomationProperties.HelpText="Inserisci il nome della tua palestra preferita" />
+                  
+                   />
 
             <!-- Indicatore di caricamento -->
             <ActivityIndicator IsRunning="{Binding IsBusy}" 
@@ -90,22 +90,22 @@
                                Color="{StaticResource PrimaryColor}"
                                HorizontalOptions="Center"
                                Margin="0,10,0,10"
-                               AutomationProperties.Name="Caricamento in corso"
-                               AutomationProperties.IsInAccessibleTree="{Binding IsBusy}" />
+                              
+                               />
 
             <Button Text="Salva Modifiche" 
                     Command="{Binding SaveCommand}" 
                     Style="{StaticResource ActionButtonStyle}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                    AutomationProperties.Name="Salva Modifiche"
-                    AutomationProperties.HelpText="Premi per salvare le modifiche al profilo" />
+                   
+                    />
 
             <Button Text="Annulla" 
                     Command="{Binding CancelCommand}" 
                     Style="{StaticResource CancelButtonStyle}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                    AutomationProperties.Name="Annulla"
-                    AutomationProperties.HelpText="Premi per annullare le modifiche e tornare indietro" />
+                   
+                    />
         </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -35,11 +35,11 @@
                            FontSize="16" 
                            TextColor="#666666" 
                            HorizontalOptions="Center"
-                           AutomationProperties.Name="Etichetta tempo" />
+                           />
                     <Label Text="{Binding ElapsedTimeDisplay}" 
                            Style="{StaticResource TimerStyle}"
-                           AutomationProperties.Name="Timer allenamento"
-                           AutomationProperties.HelpText="Tempo trascorso dall'inizio dell'allenamento" />-->
+                          
+                           />-->
                 </VerticalStackLayout>
 
                 <!-- Panel Info -->
@@ -47,17 +47,17 @@
                     <!--<Label Text="Pannello" 
                            FontSize="14" 
                            TextColor="#666666"
-                           AutomationProperties.Name="Etichetta pannello" />-->
+                           />-->
                     <Label Text="{Binding Panel}" 
                            Style="{StaticResource PanelLabelStyle}"
-                           AutomationProperties.Name="{Binding Panel, StringFormat='Pannello {0}'}" />
+                           />
                 </VerticalStackLayout>
 
                 <!-- Routes List -->
                 <CollectionView Grid.Row="2" 
                                 ItemsSource="{Binding TrainingRoutes}" 
                                 SelectionMode="None"
-                                AutomationProperties.Name="Lista percorsi">
+                               >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:TrainingRouteItem">
                             <Frame Style="{Binding Converter={StaticResource RouteStyleConverter}}">
@@ -77,20 +77,20 @@
                                         CornerRadius="12"
                                          BackgroundColor="Transparent"
                                         VerticalOptions="Center"
-                                        AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+                                        />
 
                                     <VerticalStackLayout  Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
                                         <!--<Label 
                                             Text="{Binding Route.Name}" 
                                             FontSize="16"
                                             TextColor="#333333"
-                                            AutomationProperties.Name="{Binding Route.Name, StringFormat='Nome percorso: {0}'}" />-->
+                                            />-->
                                         <Label 
                                             Text="{Binding Route.Color}" 
                                             FontSize="18"
                                             TextColor="#666666"
                                             FontAttributes="Bold"
-                                            AutomationProperties.Name="{Binding Route.Color, StringFormat='Colore: {0}'}" />
+                                            />
                                     </VerticalStackLayout>
 
                                     <!-- Indicatore di difficoltà migliorato -->
@@ -104,7 +104,7 @@
                                                TextColor="White"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"
-                                               AutomationProperties.Name="{Binding Route.Difficulty, StringFormat='Difficoltà: {0}'}" />
+                                               />
                                     </Frame>-->
 
                                     <CheckBox Grid.Column="2"
@@ -115,8 +115,8 @@
                                               IsVisible="{Binding IsSelected}"
                                               Color="#0000FF"
                                               BackgroundColor="Transparent"
-                                              AutomationProperties.Name="Percorso completato"
-                                              AutomationProperties.HelpText="Segna il percorso come completato" />
+                                             
+                                              />
 
                                     <!-- Attempts counter and completion checkbox -->
                                     <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" ColumnDefinitions="Auto,*,Auto" IsVisible="{Binding IsSelected}">
@@ -125,27 +125,27 @@
                                                    FontSize="18"
                                                    FontAttributes="Bold"
                                                    VerticalOptions="Center"
-                                                   AutomationProperties.Name="Etichetta tentativi" />
+                                                   />
                                             <Button Text="-" 
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=DecrementAttemptsCommand}" 
                                                     CommandParameter="{Binding}"
                                                      IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IsTrainingActive}"
                                                     Style="{StaticResource CounterButtonStyle}"
-                                                    AutomationProperties.Name="Diminuisci tentativi"
-                                                    AutomationProperties.HelpText="Diminuisci il numero di tentativi" />
+                                                   
+                                                    />
                                             <Label Text="{Binding AttemptsDisplay}" 
                                                    VerticalOptions="Center" 
                                                    FontSize="16" 
                                                    FontAttributes="Bold" 
                                                    Margin="10,0"
-                                                   AutomationProperties.Name="{Binding Attempts, StringFormat='Numero tentativi: {0}'}" />
+                                                   />
                                             <Button Text="+" 
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IncrementAttemptsCommand}" 
                                                     CommandParameter="{Binding}"
                                                      IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TrainingViewModel}}, Path=IsTrainingActive}"
                                                     Style="{StaticResource CounterButtonStyle}"
-                                                    AutomationProperties.Name="Aumenta tentativi"
-                                                    AutomationProperties.HelpText="Aumenta il numero di tentativi" />
+                                                   
+                                                    />
                                         </HorizontalStackLayout>
 
                                     </Grid>
@@ -160,7 +160,7 @@
                                    FontSize="18" 
                                    TextColor="#666666"
                                    HorizontalOptions="Center"
-                                   AutomationProperties.Name="Nessun percorso disponibile" />
+                                   />
                         </VerticalStackLayout>
                     </CollectionView.EmptyView>
                 </CollectionView>
@@ -177,8 +177,8 @@
                 Style="{StaticResource EndButtonStyle}"
                 IsVisible="{Binding IsTrainingActive}"
                 HorizontalOptions="Fill"
-                AutomationProperties.Name="Termina allenamento"
-                AutomationProperties.HelpText="Premi per terminare l'allenamento e salvare i risultati" />
+               
+                />
         </Grid>
     </Grid>
     

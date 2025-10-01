@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClimbTrack.Config
+﻿namespace ClimbTrack.Config
 {
     public static class FirebaseConfig
     {
@@ -19,6 +13,7 @@ namespace ClimbTrack.Config
         public static string MessagingSenderId = "703559950083";
         public static string AppId = "1:703559950083:web:7f70a9919a11de0819d336";
         public static string MeasurementId = "G-NC3CTXJ2CZ";
+        public static string WebClientId = "703559950083-kbfeqqi9evvmmgbn482ff65iaq5tchud.apps.googleusercontent.com";
         // URL specifici per l'autenticazione
         public static string SignUpUrl = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
         public static string SignInUrl = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";

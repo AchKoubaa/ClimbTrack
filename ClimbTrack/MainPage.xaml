@@ -13,12 +13,12 @@
                    FontAttributes="Bold" 
                    TextColor="{StaticResource TextPrimaryColor}"
                    HorizontalOptions="Center"
-                   AutomationProperties.Name="Welcome title"/>
+                  />
             <Label Text="{Binding WelcomeMessage}" 
                    FontSize="26" 
                    TextColor="{StaticResource TextPrimaryColor}"
                    HorizontalOptions="Center"
-                   AutomationProperties.Name="Welcome message"/>
+                  />
         </VerticalStackLayout>
 
         <!-- Content Area -->
@@ -30,38 +30,38 @@
                    FontSize="22" 
                    TextColor="{StaticResource TextPrimaryColor}"
                    HorizontalOptions="Center"
-                   AutomationProperties.Name="Login confirmation message"/>
+                  />
             <Button Text="My Profile" 
             Command="{Binding NavigateToProfileCommand}"
             Style="{StaticResource SecondaryButtonStyle}"
             Margin="0,10"
-            AutomationProperties.Name="Go to profile"
-            AutomationProperties.HelpText="View and edit your profile"/>
+           
+           />
 
             <Button Text="Start Training" 
             Command="{Binding NavigateToTrainingCommand}"
             Style="{StaticResource SecondaryButtonStyle}"
             Margin="0,10"
-            AutomationProperties.Name="Start training"
-            AutomationProperties.HelpText="Begin a new training session"/>
+           
+           />
 
             <Button Text="View History" 
             Command="{Binding NavigateToHistoryCommand}"
             Style="{StaticResource SecondaryButtonStyle}"
             Margin="0,10"
-            AutomationProperties.Name="View history"
-            AutomationProperties.HelpText="See your training history"/>
+           
+           />
             <Label Text="Your user ID:" 
                    FontSize="18" 
                    TextColor="{StaticResource TextSecondaryColor}"
                    HorizontalOptions="Center"
-                   AutomationProperties.Name="User ID label"/>
+                  />
             <Label Text="{Binding UserId}" 
                    FontSize="14" 
                    TextColor="{StaticResource TextSecondaryColor}"
                    HorizontalOptions="Center"
-                   AutomationProperties.Name="User ID value"
-                   AutomationProperties.HelpText="This is your unique user identifier"/>
+                  
+                  />
         </VerticalStackLayout>
 
         <!-- Logout Button -->
@@ -72,8 +72,8 @@
                 BackgroundColor="{StaticResource AccentColor}"
                 HeightRequest="50"
                 Margin="0,20"
-                AutomationProperties.Name="Logout button"
-                AutomationProperties.HelpText="Press to log out from your account"/>
+               
+               />
 
         <!-- Loading Indicator -->
         <Grid Grid.RowSpan="3" 
@@ -86,13 +86,13 @@
                                    Color="White"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"
-                                   AutomationProperties.Name="Loading indicator"
-                                   AutomationProperties.IsInAccessibleTree="{Binding IsBusy}"/>
+                                  
+                                  />
                 <Label Text="Loading..."
                        TextColor="White"
                        HorizontalOptions="Center"
-                       AutomationProperties.Name="Loading text"
-                       AutomationProperties.IsInAccessibleTree="{Binding IsBusy}"/>
+                      
+                      />
             </VerticalStackLayout>
         </Grid>
     </Grid>

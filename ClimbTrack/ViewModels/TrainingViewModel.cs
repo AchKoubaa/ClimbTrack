@@ -22,7 +22,6 @@ namespace ClimbTrack.ViewModels
 
         private string _panel;
         private string _userId;
-        private string _routesQuery;
         private ObservableCollection<ClimbingRoute> _routes;
         private ObservableCollection<TrainingRouteItem> _trainingRoutes;
         private DateTime _startTime;

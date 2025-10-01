@@ -73,7 +73,7 @@ namespace ClimbTrack.Services
             }
         }
 
-        public async Task<UserCredential> SignInWithEmailAndPassword(string email, string password)
+        public async Task<GeneralResponse<UserCredential>> SignInWithEmailAndPassword(string email, string password)
         {
             try
             {
@@ -81,62 +81,109 @@ namespace ClimbTrack.Services
                 // Verify that we received valid credentials
                 if (userCredential == null)
                 {
-                    throw new InvalidOperationException("Failed to sign in: No user credentials returned.");
+                    return GeneralResponse<UserCredential>.Failure(
+                        "Failed to sign in: No user credentials returned.",
+                        null);
                 }
                 await _authService.SaveAuthData(userCredential);
-                return userCredential;
+                return GeneralResponse<UserCredential>.Success(userCredential, "Sign in successful"); 
             }
             catch (Firebase.Auth.FirebaseAuthHttpException ex)
             {
                 // Handle specific HTTP errors from Firebase Auth
                 string errorMessage = ParseFirebaseAuthError(ex);
+                string actionNeeded = GetActionForAuthError(ex);
 
                 // Log the error with your error handling service
                 await _errorHandlingService.LogErrorAsync(errorMessage, "SignInWithEmailAndPassword", false);
 
-                // Throw a more user-friendly exception
-                throw new AuthenticationException(errorMessage, ex);
+                // Return a failure response with user-friendly message and action needed
+                return GeneralResponse<UserCredential>.Failure($"{errorMessage}. {actionNeeded}");
             }
             catch (Firebase.Auth.FirebaseAuthException ex)
             {
                 // Handle other Firebase Auth errors
                 await _errorHandlingService.HandleAuthenticationExceptionAsync(ex, "SignInWithEmailAndPassword");
-                throw;
+
+                string errorMessage = GetUserFriendlyMessage(ex);
+                string actionNeeded = GetActionForAuthError(ex);
+
+                return GeneralResponse<UserCredential>.Failure($"{errorMessage}. {actionNeeded}");
             }
             catch (Exception ex)
             {
                 // Handle unexpected errors
                 await _errorHandlingService.HandleExceptionAsync(ex, "SignInWithEmailAndPassword", true);
-                throw;
+                return GeneralResponse<UserCredential>.Failure(
+             "An unexpected error occurred. Please try again later or contact support.");
             }
         }
 
+        // Helper method to parse Firebase auth errors
         private string ParseFirebaseAuthError(Firebase.Auth.FirebaseAuthHttpException ex)
         {
-            // Extract the error message from the response
-            if (ex.ResponseData != null && ex.ResponseData.Contains("INVALID_LOGIN_CREDENTIALS"))
+            // Extract the error code from the exception
+            string errorCode = ex.Reason!.ToString() ?? "Unknown";
+
+            switch (errorCode)
             {
-                return "Invalid email or password. Please try again.";
+                case "EmailNotFound":
+                    return "The email address you entered doesn't exist in our records";
+                case "WrongPassword":
+                    return "The password you entered is incorrect";
+                case "UserDisabled":
+                    return "This account has been disabled";
+                case "TooManyAttempts":
+                    return "Too many failed login attempts. Please try again later";
+                case "InvalidEmail":
+                    return "The email address format is invalid";
+                case "NetworkRequestFailed":
+                    return "Network connection issue. Please check your internet connection";
+                default:
+                    return $"Authentication error: {errorCode}";
             }
-            else if (ex.ResponseData != null && ex.ResponseData.Contains("EMAIL_NOT_FOUND"))
+        }
+
+        // Helper method to suggest actions based on error
+        private string GetActionForAuthError(Exception ex)
+        {
+            string errorCode = "";
+
+            if (ex is Firebase.Auth.FirebaseAuthHttpException httpEx)
             {
-                return "Email not found. Please check your email or register.";
+                errorCode = httpEx.Reason!.ToString() ?? "";
             }
-            else if (ex.ResponseData != null && ex.ResponseData.Contains("INVALID_PASSWORD"))
+            else if (ex is Firebase.Auth.FirebaseAuthException authEx)
             {
-                return "Incorrect password. Please try again.";
-            }
-            else if (ex.ResponseData != null && ex.ResponseData.Contains("USER_DISABLED"))
-            {
-                return "This account has been disabled. Please contact support.";
-            }
-            else if (ex.ResponseData != null && ex.ResponseData.Contains("TOO_MANY_ATTEMPTS_TRY_LATER"))
-            {
-                return "Too many failed login attempts. Please try again later or reset your password.";
+                errorCode = authEx.Reason!.ToString() ?? "";
             }
 
-            // Default message for other errors
-            return "Authentication failed. Please try again.";
+            switch (errorCode)
+            {
+                case "EmailNotFound":
+                    return "Please check your email address or sign up for a new account";
+                case "WrongPassword":
+                    return "Please try again or use the 'Forgot Password' option";
+                case "UserDisabled":
+                    return "Please contact support for assistance";
+                case "TooManyAttempts":
+                    return "Try again later or reset your password";
+                case "NetworkRequestFailed":
+                    return "Check your internet connection and try again";
+                case "InvalidEmail":
+                    return "Please enter a valid email address";
+                default:
+                    return "If the problem persists, please contact support";
+            }
+        }
+
+        // Helper method for other Firebase auth exceptions
+        private string GetUserFriendlyMessage(Firebase.Auth.FirebaseAuthException ex)
+        {
+            // You can expand this based on the specific error types you encounter
+            return ex.Message.Contains("password")
+                ? "There was a problem with your password"
+                : "There was a problem signing you in";
         }
 
         public async Task ResetPassword(string email)

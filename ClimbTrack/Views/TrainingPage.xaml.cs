@@ -44,27 +44,6 @@ namespace ClimbTrack.Views
             }
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            // Chiedi conferma prima di uscire se l'allenamento è attivo
-            if (_viewModel.IsTrainingActive)
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    bool shouldExit = await DisplayAlert(
-                        "Allenamento in corso",
-                        "Sei sicuro di voler uscire? L'allenamento verrà terminato senza salvare.",
-                        "Esci", "Annulla");
-
-                    if (shouldExit)
-                    {
-                        await Navigation.PopAsync();
-                    }
-                });
-                return true; // Impedisce il comportamento predefinito del pulsante indietro
-            }
-
-            return base.OnBackButtonPressed();
-        }
+       
     }
 }

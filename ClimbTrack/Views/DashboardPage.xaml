@@ -9,72 +9,11 @@
              x:DataType="viewmodels:DashboardViewModel"
              Title="{Binding Title}"
              >
-
-
-   
     
     <ContentPage.Resources>
         <ResourceDictionary>
              <!--Converters--> 
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-
-             <!--Styles--> 
-            <Style x:Key="CardStyle" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="White" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="HasShadow" Value="True" />
-                <Setter Property="Padding" Value="15" />
-                <Setter Property="Margin" Value="0,0,0,15" />
-            </Style>
-
-            <Style x:Key="CardTitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#333333" />
-                <Setter Property="Margin" Value="0,0,0,10" />
-            </Style>
-
-            <Style x:Key="StatLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="TextColor" Value="#666666" />
-            </Style>
-
-            <Style x:Key="StatValueStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#333333" />
-            </Style>
-
-            <Style x:Key="ChartContainerStyle" TargetType="charts:ChartView">
-                <Setter Property="HeightRequest" Value="200" />
-                <Setter Property="Margin" Value="0,10,0,0" />
-            </Style>
-
-            <Style x:Key="ChartSubtitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="TextColor" Value="#666666" />
-                <Setter Property="Margin" Value="0,0,0,5" />
-            </Style>
-
-            <Style x:Key="LegendBoxStyle" TargetType="BoxView">
-                <Setter Property="WidthRequest" Value="12" />
-                <Setter Property="HeightRequest" Value="12" />
-                <Setter Property="VerticalOptions" Value="Center" />
-            </Style>
-
-            <Style x:Key="LegendTextStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="TextColor" Value="#666666" />
-                <Setter Property="VerticalOptions" Value="Center" />
-            </Style>
-
-            <Style x:Key="SessionItemStyle" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="#EEEEEE" />
-                <Setter Property="CornerRadius" Value="8" />
-                <Setter Property="HasShadow" Value="False" />
-                <Setter Property="Padding" Value="0" />
-            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -89,18 +28,18 @@
                 <VerticalStackLayout IsVisible="{Binding HasData, Converter={StaticResource InverseBoolConverter}}"
                                      VerticalOptions="Center" HorizontalOptions="Center" Spacing="20" Margin="0,50,0,0">
                     <Image Source="no_data.png" HeightRequest="120" 
-                           AutomationProperties.Name="No data illustration" />
+                           />
                     <Label Text="No training data yet" 
                            FontSize="20" 
                            FontAttributes="Bold" 
                            HorizontalOptions="Center"
-                           AutomationProperties.Name="No data title" />
+                           />
                     <Label Text="Complete your first training session to see your statistics here" 
                            FontSize="16" 
                            TextColor="#666666" 
                            HorizontalOptions="Center" 
                            HorizontalTextAlignment="Center"
-                           AutomationProperties.Name="No data description" />
+                           />
                     <Button Text="Start Training" 
                             Command="{Binding GoToTrainingCommand}" 
                             BackgroundColor="#3498db" 
@@ -108,113 +47,121 @@
                             CornerRadius="20" 
                             Padding="20,10" 
                             Margin="0,20,0,0"
-                            AutomationProperties.Name="Start training button"
-                            AutomationProperties.HelpText="Tap to start your first training session" />
+                           
+                            />
                 </VerticalStackLayout>
 
                  <!--Dashboard Content--> 
                 <VerticalStackLayout IsVisible="{Binding HasData}" Spacing="15">
-                     <!--Summary Cards--> 
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Summary Cards-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <VerticalStackLayout>
                             <Label Text="Training Summary" 
-                                   Style="{StaticResource CardTitleStyle}"
-                                   AutomationProperties.IsInAccessibleTree="True"
-                                   AutomationProperties.Name="Training Summary Section" />
+               Style="{StaticResource CardTitleStyle}"
+              />
 
                             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="15" RowSpacing="15">
-                                 <!--Sessions--> 
+                                <!--Sessions-->
                                 <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                                     <Label Text="Total Sessions" 
-                                           Style="{StaticResource StatLabelStyle}"
-                                           AutomationProperties.Name="Total Sessions Label" />
+                       Style="{StaticResource StatLabelStyle}"
+                       />
                                     <Label Text="{Binding TotalSessions}" 
-                                           Style="{StaticResource StatValueStyle}"
-                                           AutomationProperties.Name="Total Sessions Value" />
+                       Style="{StaticResource StatValueStyle}"
+                       />
                                 </VerticalStackLayout>
 
-                                 <!--Routes--> 
+                                <!--Routes-->
                                 <VerticalStackLayout Grid.Row="0" Grid.Column="1">
                                     <Label Text="Routes Completed" 
-                                           Style="{StaticResource StatLabelStyle}"
-                                           AutomationProperties.Name="Routes Completed Label" />
+                       Style="{StaticResource StatLabelStyle}"
+                       />
                                     <Label Text="{Binding TotalRoutesCompleted}" 
-                                           Style="{StaticResource StatValueStyle}"
-                                           AutomationProperties.Name="Routes Completed Value" />
+                       Style="{StaticResource StatValueStyle}"
+                       />
                                 </VerticalStackLayout>
 
-                                 <!--Completion Rate--> 
+                                <!--Completion Rate-->
                                 <VerticalStackLayout Grid.Row="1" Grid.Column="0">
                                     <Label Text="Completion Rate" 
-                                           Style="{StaticResource StatLabelStyle}"
-                                           AutomationProperties.Name="Completion Rate Label" />
+                       Style="{StaticResource StatLabelStyle}"
+                       />
                                     <Label Text="{Binding CompletionRate}" 
-                                           Style="{StaticResource StatValueStyle}"
-                                           AutomationProperties.Name="Completion Rate Value" />
+                       Style="{StaticResource StatValueStyle}"
+                       />
                                 </VerticalStackLayout>
 
-                                 <!--Total Time--> 
+                                <!--Total Time-->
                                 <VerticalStackLayout Grid.Row="1" Grid.Column="1">
                                     <Label Text="Total Training Time" 
-                                           Style="{StaticResource StatLabelStyle}"
-                                           AutomationProperties.Name="Total Training Time Label" />
+                       Style="{StaticResource StatLabelStyle}"
+                       />
                                     <Label Text="{Binding TotalTrainingTime}" 
-                                           Style="{StaticResource StatValueStyle}"
-                                           AutomationProperties.Name="Total Training Time Value" />
+                       Style="{StaticResource StatValueStyle}"
+                       />
                                 </VerticalStackLayout>
 
-                                 <!--Average Session Time--> 
+                                <!--Average Session Time-->
                                 <VerticalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                                     <Label Text="Average Session Duration" 
-                                           Style="{StaticResource StatLabelStyle}"
-                                           AutomationProperties.Name="Average Session Duration Label" />
+                       Style="{StaticResource StatLabelStyle}"
+                       />
                                     <Label Text="{Binding AverageSessionTime}" 
-                                           Style="{StaticResource StatValueStyle}"
-                                           AutomationProperties.Name="Average Session Duration Value" />
+                       Style="{StaticResource StatValueStyle}"
+                       />
                                 </VerticalStackLayout>
                             </Grid>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
-                     <!--Training Frequency Chart--> 
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Training Frequency Chart-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Grid>
                             <VerticalStackLayout>
                                 <Label Text="Training Frequency" 
-                                       Style="{StaticResource CardTitleStyle}"
-                                       AutomationProperties.Name="Training Frequency Chart Title" />
+                   Style="{StaticResource CardTitleStyle}"
+                   />
                                 <Label Text="Number of sessions in the last 14 days" 
-                                       Style="{StaticResource ChartSubtitleStyle}"
-                                       AutomationProperties.Name="Training Frequency Chart Description" />
+                   Style="{StaticResource ChartSubtitleStyle}"
+                   />
                                 <charts:ChartView Chart="{Binding TrainingFrequencyChart}" 
-                                                 Style="{StaticResource ChartContainerStyle}"
-                                                 AutomationProperties.Name="Training Frequency Chart" />
+                             Style="{StaticResource ChartContainerStyle}"
+                             />
                             </VerticalStackLayout>
 
-                             <!--Chart Loading Indicator-->
+                            <!--Chart Loading Indicator-->
                             <ActivityIndicator IsRunning="{Binding IsTrainingFrequencyChartLoading}" 
-                                               IsVisible="{Binding IsTrainingFrequencyChartLoading}"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               Color="#00fdff" />       
+                           IsVisible="{Binding IsTrainingFrequencyChartLoading}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Color="#00fdff" />
                         </Grid>
-                    </Frame>
+                    </Border>
 
-                     <!--Difficulty Distribution Chart--> 
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Difficulty Distribution Chart-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Grid>
                             <VerticalStackLayout>
                                 <Label Text="Routes by Difficulty" 
-                                       Style="{StaticResource CardTitleStyle}"
-                                       AutomationProperties.Name="Routes by Difficulty Chart Title" />
+                   Style="{StaticResource CardTitleStyle}"
+                   />
                                 <Label Text="Distribution of completed routes by difficulty level" 
-                                       Style="{StaticResource ChartSubtitleStyle}"
-                                       AutomationProperties.Name="Routes by Difficulty Chart Description" />
+                   Style="{StaticResource ChartSubtitleStyle}"
+                   />
                                 <charts:ChartView Chart="{Binding DifficultyDistributionChart}" 
-                                                 Style="{StaticResource ChartContainerStyle}"
-                                                 AutomationProperties.Name="Routes by Difficulty Chart" />
+                             Style="{StaticResource ChartContainerStyle}"
+                             />
 
-                                 <!--Legend for difficulty levels--> 
+                                <!--Legend for difficulty levels-->
                                 <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Center" Margin="0,10,0,0">
                                     <BoxView Color="#f39c12" Style="{StaticResource LegendBoxStyle}" />
                                     <Label Text="Level 1" Style="{StaticResource LegendTextStyle}" Margin="5,0,15,0" />
@@ -233,42 +180,47 @@
                                 </FlexLayout>
                             </VerticalStackLayout>
 
-                             <!--Chart Loading Indicator-->
+                            <!--Chart Loading Indicator-->
                             <ActivityIndicator IsRunning="{Binding IsDifficultyDistributionChartLoading}" 
-                                               IsVisible="{Binding IsDifficultyDistributionChartLoading}"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               Color="#3498db" />
+                           IsVisible="{Binding IsDifficultyDistributionChartLoading}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Color="#3498db" />
                         </Grid>
-                    </Frame>
+                    </Border>
 
-                     <!--Training Time by Day Chart--> 
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Training Time by Day Chart-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Grid>
                             <VerticalStackLayout>
                                 <Label Text="Training Time by Day" 
-                                       Style="{StaticResource CardTitleStyle}"
-                                       AutomationProperties.Name="Training Time by Day Chart Title" />
+                   Style="{StaticResource CardTitleStyle}"
+                   />
                                 <Label Text="Total minutes spent training on each day of the week" 
-                                       Style="{StaticResource ChartSubtitleStyle}"
-                                       AutomationProperties.Name="Training Time by Day Chart Description" />
+                   Style="{StaticResource ChartSubtitleStyle}"
+                   />
                                 <charts:ChartView Chart="{Binding TrainingTimeByDayChart}" 
-                                                 Style="{StaticResource ChartContainerStyle}"
-                                                 AutomationProperties.Name="Training Time by Day Chart" />
+                             Style="{StaticResource ChartContainerStyle}"
+                             />
                             </VerticalStackLayout>
 
-                             <!--Chart Loading Indicator-->
+                            <!--Chart Loading Indicator-->
                             <ActivityIndicator IsRunning="{Binding IsTrainingTimeByDayChartLoading}" 
-                   IsVisible="{Binding IsTrainingTimeByDayChartLoading}"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   Color="#3498db" />
+                           IsVisible="{Binding IsTrainingTimeByDayChartLoading}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Color="#3498db" />
                         </Grid>
-                    </Frame>
+                    </Border>
 
-
-                     <!--Completion Rate by Difficulty Chart-->
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Completion Rate by Difficulty Chart-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Grid>
                             <VerticalStackLayout>
                                 <Label Text="Completion Rate by Difficulty" Style="{StaticResource CardTitleStyle}" />
@@ -285,10 +237,13 @@
                            VerticalOptions="Center"
                            Color="#3498db" />
                         </Grid>
-                    </Frame>
+                    </Border>
 
                     <!--Average Attempts per Difficulty Chart-->
-                    <Frame Style="{StaticResource CardStyle}">
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Grid>
                             <VerticalStackLayout>
                                 <Label Text="Average Attempts by Difficulty" Style="{StaticResource CardTitleStyle}" />
@@ -305,67 +260,72 @@
                            VerticalOptions="Center"
                            Color="#3498db" />
                         </Grid>
-                    </Frame>
+                    </Border>
 
-                    <!--Recent Sessions--> 
-                    <Frame Style="{StaticResource CardStyle}">
+                    <!--Recent Sessions-->
+                    <Border Style="{StaticResource CardStyle}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <VerticalStackLayout>
                             <Label Text="Recent Sessions" Style="{StaticResource CardTitleStyle}" />
 
                             <CollectionView ItemsSource="{Binding RecentSessions}" 
-                                          SelectionMode="None" 
-                                          EmptyView="No recent sessions found">
+                      SelectionMode="None" 
+                      EmptyView="No recent sessions found">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate x:DataType="models:TrainingSession">
                                         <Grid Padding="5" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                                            <Frame Grid.RowSpan="2" Grid.ColumnSpan="2" 
-                                                   BackgroundColor="Transparent" 
-                                                   BorderColor="#EEEEEE" 
-                                                   CornerRadius="8" 
-                                                   HasShadow="False"
-                                                   Padding="0">
-                                                <Frame.GestureRecognizers>
+                                            <Border Grid.RowSpan="2" Grid.ColumnSpan="2" 
+                               BackgroundColor="Transparent" 
+                               Stroke="#EEEEEE" 
+                               StrokeThickness="1"
+                               Padding="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Border.GestureRecognizers>
                                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DashboardViewModel}}, Path=ViewSessionDetailsCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Frame.GestureRecognizers>
-                                            </Frame>
+                                                      CommandParameter="{Binding}" />
+                                                </Border.GestureRecognizers>
+                                            </Border>
 
                                             <VerticalStackLayout Grid.Row="0" Grid.Column="0" Padding="10,5">
                                                 <Label Text="{Binding FormattedDate}" 
-                                                       FontAttributes="Bold" 
-                                                       TextColor="#333333" />
+                                   FontAttributes="Bold" 
+                                   TextColor="#333333" />
                                                 <Label Text="{Binding PanelType}" 
-                                                       FontSize="14" 
-                                                       TextColor="#666666" />
+                                   FontSize="14" 
+                                   TextColor="#666666" />
                                             </VerticalStackLayout>
 
                                             <HorizontalStackLayout Grid.Row="0" Grid.Column="1" 
-                                                                  Spacing="5" 
-                                                                  VerticalOptions="Center"
-                                                                  Padding="10,5">
+                                              Spacing="5" 
+                                              VerticalOptions="Center"
+                                              Padding="10,5">
                                                 <Label Text="{Binding CompletedRoutesCount}" 
-                                                       FontAttributes="Bold" 
-                                                       TextColor="#3498db" />
+                                   FontAttributes="Bold" 
+                                   TextColor="#3498db" />
                                                 <Label Text="/" 
-                                                       TextColor="#666666" />
+                                   TextColor="#666666" />
                                                 <Label Text="{Binding TotalRoutes}" 
-                                                       TextColor="#666666" />
+                                   TextColor="#666666" />
                                                 <Label Text="routes" 
-                                                       TextColor="#666666" 
-                                                       Margin="5,0,0,0" />
+                                   TextColor="#666666" 
+                                   Margin="5,0,0,0" />
                                             </HorizontalStackLayout>
 
                                             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                   Text="{Binding FormattedDuration, StringFormat='Duration: {0}'}" 
-                                                   FontSize="14" 
-                                                   TextColor="#666666" 
-                                                   Padding="10,0,10,5" />
+                               Text="{Binding FormattedDuration, StringFormat='Duration: {0}'}" 
+                               FontSize="14" 
+                               TextColor="#666666" 
+                               Padding="10,0,10,5" />
                                         </Grid>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
                

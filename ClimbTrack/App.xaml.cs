@@ -5,20 +5,15 @@ namespace ClimbTrack
 {
     public partial class App : Application
     {
-        private readonly IAuthService _authService;
-        private readonly IDatabaseService _databaseService;
+        
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly AppShell _appShell;
 
         public App(AppShell appShell,
-            IAuthService authService,
-            IDatabaseService databaseService,
             IErrorHandlingService errorHandlingService)
         {
             InitializeComponent();
             _appShell = appShell;
-            _authService = authService;
-            _databaseService = databaseService;
             _errorHandlingService = errorHandlingService;
 
            

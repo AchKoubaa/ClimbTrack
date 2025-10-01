@@ -20,7 +20,7 @@ namespace ClimbTrack.Services
         private readonly FirebaseAuthClient _authClient;
 
         // Add the event
-        public event EventHandler AuthStateChanged;
+        public event EventHandler AuthStateChanged = delegate { };
         public AuthService()
         {
             // Configure Firebase Auth using the FirebaseConfig class

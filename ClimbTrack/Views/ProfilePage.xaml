@@ -81,8 +81,8 @@
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                  Command="{Binding RefreshCommand}"
-                 AutomationProperties.Name="Aggiorna profilo"
-                 AutomationProperties.HelpText="Trascina verso il basso per aggiornare i dati del profilo">
+                
+                >
         <ScrollView>
             <StackLayout Spacing="0">
                 <!-- Profile Header -->
@@ -90,13 +90,13 @@
                     <StackLayout Spacing="10">
                         <!-- Profile Image -->
                         <Frame Style="{StaticResource ProfileImageStyle}"
-                               AutomationProperties.Name="Immagine profilo">
+                              >
                             <Grid>
                                 <Image 
                                     Source="{Binding UserProfile.PhotoUrl}" 
                                     Aspect="AspectFill"
                                     IsVisible="{Binding UserProfile.HasPhoto}"
-                                    AutomationProperties.Name="Foto profilo" />
+                                    />
 
                                 <Label 
                                     Text="{Binding UserProfile.Initials}" 
@@ -107,17 +107,17 @@
                                     HorizontalOptions="Center"
                                     VerticalOptions="Center"
                                     IsVisible="{Binding UserProfile.HasPhoto, Converter={StaticResource InverseBoolConverter}}"
-                                    AutomationProperties.Name="Iniziali profilo" />
+                                    />
                             </Grid>
                         </Frame>
 
                         <!-- Profile Info -->
                         <Label Text="{Binding UserProfile.DisplayName}" 
                                Style="{StaticResource ProfileNameStyle}"
-                               AutomationProperties.Name="Nome utente" />
+                               />
                         <Label Text="{Binding UserProfile.Email}" 
                                Style="{StaticResource ProfileEmailStyle}"
-                               AutomationProperties.Name="Email utente" />
+                               />
 
                         <!-- Edit Profile Button -->
                         <Button 
@@ -131,8 +131,8 @@
                             Padding="15,8"
                             HorizontalOptions="Center"
                             Margin="0,10,0,0"
-                            AutomationProperties.Name="Modifica profilo"
-                            AutomationProperties.HelpText="Premi per modificare i dati del tuo profilo" />
+                           
+                            />
 
                         <!-- Logout Button -->
                         <Button Grid.Row="2" 
@@ -142,8 +142,8 @@
                                 BackgroundColor="{StaticResource AccentColor}"
                                 HeightRequest="50"
                                 Margin="0,20"
-                                AutomationProperties.Name="Logout button"
-                                AutomationProperties.HelpText="Press to log out from your account"/>
+                               
+                               />
 
                         <!-- Admin Button -->
                         <Button 
@@ -153,8 +153,8 @@
                             TextColor="White"
                             CornerRadius="10"
                             Margin="0,20,0,0"
-                            AutomationProperties.Name="Amministrazione"
-                            AutomationProperties.HelpText="Accedi alle funzionalità di amministrazione" />
+                           
+                            />
                     </StackLayout>
                 </Frame>
 
@@ -164,8 +164,8 @@
         Command="{Binding ViewHistoryCommand}"
         Style="{StaticResource SecondaryButtonStyle}"
         Margin="0,20,0,0"
-        AutomationProperties.Name="Visualizza storico"
-        AutomationProperties.HelpText="Visualizza lo storico completo degli allenamenti" />
+       
+        />
                 
             </StackLayout>
         </ScrollView>

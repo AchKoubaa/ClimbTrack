@@ -31,7 +31,7 @@
                     </HorizontalStackLayout>
                     <Button Command="{Binding GoogleSignInCommand}"
                             BackgroundColor="Transparent"
-                            AutomationProperties.Name="Sign in with Google"/>
+                           />
                 </Grid>
             </Frame>
 
@@ -55,8 +55,8 @@
                        TextColor="#333333"
                        Keyboard="Email"
                        VerticalOptions="Center"
-                       AutomationProperties.Name="Email"
-                       AutomationProperties.HelpText="Enter your email address"/>
+                      
+                      />
             </Frame>
 
             <!-- Password Entry -->
@@ -73,8 +73,8 @@
                            IsPassword="True"
                            TextColor="#333333"
                            VerticalOptions="Center"
-                           AutomationProperties.Name="Password"
-                           AutomationProperties.HelpText="Enter your password"/>
+                          
+                          />
                     <Image Source="eye_icon.png" 
                            HeightRequest="24" 
                            WidthRequest="24"
@@ -94,7 +94,7 @@
                     HeightRequest="50"
                     FontSize="16"
                     Margin="0,15,0,15"
-                    AutomationProperties.Name="Login"/>
+                   />
 
             <!-- Register Link -->
             <Label Text="Register" 

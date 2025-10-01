@@ -110,48 +110,58 @@ namespace ClimbTrack.ViewModels
             {
                 try
                 {
-                    // Clear any previous error
-                    ErrorMessage = string.Empty;
-
+                    // Validate inputs with DisplayAlert instead of ErrorMessage
                     if (string.IsNullOrWhiteSpace(Email))
                     {
-                        ErrorMessage = "Please enter your email";
+                        await Shell.Current.DisplayAlert("Login Error", "Please enter your email", "OK");
                         return;
                     }
 
                     if (!IsValidEmail(Email))
                     {
-                        ErrorMessage = "Please enter a valid email address";
+                        await Shell.Current.DisplayAlert("Login Error", "Please enter a valid email address", "OK");
                         return;
                     }
 
                     if (string.IsNullOrWhiteSpace(Password))
                     {
-                        ErrorMessage = "Please enter your password";
+                        await Shell.Current.DisplayAlert("Login Error", "Please enter your password", "OK");
                         return;
                     }
 
                     // Update busy text
                     BusyText = "Signing in...";
 
-                    var userCredential = await _firebaseService.SignInWithEmailAndPassword(Email, Password);
-                    //await _authService.SaveAuthData(userCredential);
+                    // Call the authentication service
+                    var response = await _firebaseService.SignInWithEmailAndPassword(Email, Password);
 
-
-                   
+                    // Handle the response
+                    if (response.Flag)
+                    {
+                        // Success case
                         await Shell.Current.GoToAsync("///home");
-                    
+                    }
+                    else
+                    {
+                        // Error case - display the error message in an alert
+                        string title = "Login Failed";
+                        string message = response.Message;
 
-                    // Navigate to main page
-                    //await Shell.Current.GoToAsync("//home");
-                  
+                        // Show alert with the error message from the service
+                        await Shell.Current.DisplayAlert(title, message, "OK");
+                    }
                 }
-
                 catch (Exception ex)
                 {
-                    // Handle other general exceptions
-                    Debug.WriteLine($"Login error: {ex}");
-                    ErrorMessage = "Login failed. Please try again later.";
+                    // This should rarely happen now since most errors are handled in the service
+                    Debug.WriteLine($"Unhandled login error: {ex}");
+
+                    // Show a generic error alert for unexpected exceptions
+                    await Shell.Current.DisplayAlert(
+                        "Unexpected Error",
+                        "An unexpected error occurred. Please try again later.",
+                        "OK");
+                    
                 }
             });
         }

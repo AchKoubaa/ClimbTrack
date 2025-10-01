@@ -13,66 +13,67 @@
                 FontSize="24"
                 FontAttributes="Bold"
                 TextColor="{StaticResource TextPrimaryColor}"
-                HorizontalOptions="Center"
-                AutomationProperties.Name="Titolo Strumenti di Amministrazione" />
-
-            <Frame BorderColor="{StaticResource BorderColor}" 
-                   Padding="20" 
-                   CornerRadius="10"
-                   BackgroundColor="{StaticResource BackgroundColor}">
+                HorizontalOptions="Center" />
+            <Border Stroke="{StaticResource BorderColor}"
+        StrokeThickness="1"
+        Padding="20"
+        BackgroundColor="{StaticResource BackgroundColor}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <VerticalStackLayout Spacing="15">
                     <Label 
-                        Text="Popolamento Database"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="{StaticResource TextPrimaryColor}"
-                        AutomationProperties.Name="Sezione Popolamento Database" />
+            Text="Popolamento Database"
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="{StaticResource TextPrimaryColor}"
+            />
 
                     <Label 
-                        Text="Questa operazione popolerà il database con dati iniziali. Utilizzare solo se il database è vuoto."
-                        FontSize="14"
-                        TextColor="{StaticResource TextSecondaryColor}"
-                        AutomationProperties.Name="Descrizione popolamento database" />
+            Text="Questa operazione popolerà il database con dati iniziali. Utilizzare solo se il database è vuoto."
+            FontSize="14"
+            TextColor="{StaticResource TextSecondaryColor}"
+            />
 
                     <Button 
-                        Text="Popola Database"
-                        Command="{Binding InitializeDatabaseCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
-                        AutomationProperties.Name="Popola Database"
-                        AutomationProperties.HelpText="Premi per popolare il database con dati iniziali" />
+            Text="Popola Database"
+            Command="{Binding InitializeDatabaseCommand}"
+            Style="{StaticResource PrimaryButtonStyle}"
+            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+            />
 
                     <ActivityIndicator 
-                        IsRunning="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}"
-                        Color="{StaticResource PrimaryColor}"
-                        HorizontalOptions="Center"
-                        AutomationProperties.Name="Indicatore di caricamento"
-                        AutomationProperties.IsInAccessibleTree="{Binding IsBusy}" />
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            Color="{StaticResource PrimaryColor}"
+            HorizontalOptions="Center"
+            />
 
                     <Label 
-                        Text="{Binding StatusMessage}"
-                        FontSize="14"
-                        TextColor="{Binding IsSuccess, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green|Red'}"
-                        IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"
-                        HorizontalOptions="Center"
-                        AutomationProperties.Name="Messaggio di stato"
-                        AutomationProperties.IsInAccessibleTree="{Binding StatusMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}" />
+            Text="{Binding StatusMessage}"
+            FontSize="14"
+            TextColor="{Binding IsSuccess, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green|Red'}"
+            IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotNullOrEmptyBoolConverter}}"
+            HorizontalOptions="Center"
+            />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Sezione Database Info -->
-            <Frame BorderColor="{StaticResource BorderColor}" 
-                   Padding="20" 
-                   CornerRadius="10"
-                   BackgroundColor="{StaticResource BackgroundColor}">
+            <Border Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="1"
+                    Padding="20"
+                    BackgroundColor="{StaticResource BackgroundColor}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <VerticalStackLayout Spacing="15">
                     <Label 
-                        Text="Informazioni Database"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="{StaticResource TextPrimaryColor}"
-                        AutomationProperties.Name="Sezione Informazioni Database" />
+            Text="Informazioni Database"
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="{StaticResource TextPrimaryColor}"
+            />
 
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="15">
                         <Label Grid.Row="0" Grid.Column="0" Text="URL:" FontAttributes="Bold" TextColor="{StaticResource TextPrimaryColor}" />
@@ -88,51 +89,51 @@
                         <Label Grid.Row="3" Grid.Column="1" Text="{Binding LastUpdateTime}" TextColor="{StaticResource TextSecondaryColor}" />
                     </Grid>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Sezione Gestione Dati -->
-            <Frame BorderColor="{StaticResource BorderColor}" 
-                   Padding="20" 
-                   CornerRadius="10"
-                   BackgroundColor="{StaticResource BackgroundColor}">
+            <Border Stroke="{StaticResource BorderColor}"
+        StrokeThickness="1"
+        Padding="20"
+        BackgroundColor="{StaticResource BackgroundColor}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <VerticalStackLayout Spacing="15">
                     <Label 
-                        Text="Gestione Dati"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="{StaticResource TextPrimaryColor}"
-                        AutomationProperties.Name="Sezione Gestione Dati" />
+            Text="Gestione Dati"
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="{StaticResource TextPrimaryColor}"
+            />
 
                     <Button 
-                        Text="Backup Database"
-                        Command="{Binding BackupDatabaseCommand}"
-                        BackgroundColor="{StaticResource AccentColor}"
-                        TextColor="White"
-                        CornerRadius="10"
-                        Margin="0,0,0,10"
-                        AutomationProperties.Name="Backup Database"
-                        AutomationProperties.HelpText="Premi per eseguire il backup del database" />
+            Text="Backup Database"
+            Command="{Binding BackupDatabaseCommand}"
+            BackgroundColor="{StaticResource AccentColor}"
+            TextColor="White"
+            CornerRadius="10"
+            Margin="0,0,0,10"
+            />
 
                     <Button 
-                        Text="Ripristina Database"
-                        Command="{Binding RestoreDatabaseCommand}"
-                        BackgroundColor="{StaticResource SecondaryColor}"
-                        TextColor="White"
-                        CornerRadius="10"
-                        Margin="0,0,0,10"
-                        AutomationProperties.Name="Ripristina Database"
-                        AutomationProperties.HelpText="Premi per ripristinare il database da un backup" />
+            Text="Ripristina Database"
+            Command="{Binding RestoreDatabaseCommand}"
+            BackgroundColor="{StaticResource SecondaryColor}"
+            TextColor="White"
+            CornerRadius="10"
+            Margin="0,0,0,10"
+            />
 
                     <Button 
-                        Text="Cancella Dati di Test"
-                        Command="{Binding ClearTestDataCommand}"
-                        BackgroundColor="{StaticResource DangerColor}"
-                        TextColor="White"
-                        CornerRadius="10"
-                        AutomationProperties.Name="Cancella Dati di Test"
-                        AutomationProperties.HelpText="Premi per cancellare tutti i dati di test dal database" />
+            Text="Cancella Dati di Test"
+            Command="{Binding ClearTestDataCommand}"
+            BackgroundColor="{StaticResource DangerColor}"
+            TextColor="White"
+            CornerRadius="10"
+            />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

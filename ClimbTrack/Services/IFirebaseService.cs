@@ -10,7 +10,7 @@ namespace ClimbTrack.Services
         // Auth Methods
         User GetCurrentUser();
         Task<UserCredential> SignUpWithEmailAndPassword(string email, string password);
-        Task<UserCredential> SignInWithEmailAndPassword(string email, string password);
+        Task<GeneralResponse<UserCredential>> SignInWithEmailAndPassword(string email, string password);
         Task ResetPassword(string email);
         //Task<string> RefreshTokenAsync(string refreshToken);
         Task<UserCredential> SignInWithGoogleAccessTokenAsync(string accessToken);
