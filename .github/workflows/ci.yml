@@ -57,9 +57,9 @@ jobs:
     #   run: dotnet test ClimbTrack.sln --configuration Release --no-build
     
     - name: Publish build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-packages
-        path: |
-          bin/Release/net9.0-android/**/*.apk
-          bin/Release/net9.0-windows10.0.19041.0/**/*.msix
+      path: |
+        bin/Release/net9.0-android/**/*.apk
+        bin/Release/net9.0-windows10.0.19041.0/**/*.msix
