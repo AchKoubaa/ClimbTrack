@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Install MAUI workload
+      run: dotnet workload install maui
+      
+    - name: Restore dependencies
+      run: dotnet restore ClimbTrack.sln
+      
+    - name: Build
+      run: dotnet build ClimbTrack.sln --configuration Release --no-restore
+      
+    # Se hai test unitari, aggiungi questo step
+    # - name: Test
+    #   run: dotnet test ClimbTrack.sln --configuration Release --no-build
