@@ -22,9 +22,19 @@ jobs:
     - name: Install MAUI workload
       run: dotnet workload install maui
       
-    # Configurazione Firebase per Android
-    - name: Setup Firebase configuration for Android
+    # Configurazione Firebase
+    - name: Setup Firebase configuration
       run: |
+        echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+        
+        # Verifica che il file sia stato creato correttamente
+        if (Test-Path -Path "firebase-config.json") {
+          Write-Host "Firebase configuration file created successfully"
+        } else {
+          Write-Error "Failed to create Firebase configuration file"
+          exit 1
+        }
+        
         mkdir -p Platforms/Android
         echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > Platforms/Android/google-services.json
         
@@ -33,19 +43,6 @@ jobs:
           Write-Host "Firebase Android configuration file created successfully"
         } else {
           Write-Error "Failed to create Firebase Android configuration file"
-          exit 1
-        }
-    
-    # Configurazione Firebase generale
-    - name: Create Firebase config file
-      run: |
-        echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
-        
-        # Verifica che il file sia stato creato correttamente
-        if (Test-Path -Path "firebase-config.json") {
-          Write-Host "Firebase general configuration file created successfully"
-        } else {
-          Write-Error "Failed to create Firebase general configuration file"
           exit 1
         }
       
