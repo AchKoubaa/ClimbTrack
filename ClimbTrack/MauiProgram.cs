@@ -38,7 +38,7 @@ namespace ClimbTrack
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
             // Carica la configurazione Firebase di prova
-            FirebaseConfig.TryLoadConfigurationAsync().Wait();
+            FirebaseConfig.TryLoadConfigurationAsync().Wait(TimeSpan.FromSeconds(5));
             // Email services
             builder.Services.AddSingleton<IEmailService>(serviceProvider =>
                 new SmtpEmailService(
