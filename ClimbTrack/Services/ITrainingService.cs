@@ -10,7 +10,7 @@ namespace ClimbTrack.Services
 {
     public interface ITrainingService
     {
-        Task SaveTrainingSessionAsync(TrainingSession session);
+        Task<string> SaveTrainingSessionAsync(TrainingSession session);
         Task<ObservableCollection<TrainingSession>> GetUserTrainingSessionsAsync(string userId);
         Task<TrainingSession> GetTrainingSessionAsync(string userId, string sessionId);
         Task<bool> DeleteTrainingSessionAsync(string userId, string sessionId);

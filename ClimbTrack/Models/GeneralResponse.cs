@@ -8,7 +8,7 @@ namespace ClimbTrack.Models
 {
     public class GeneralResponse<T>
     {
-        public T? Data { get; set; }
+        public T Data { get; set; }
         public bool Flag { get; set; } = true;
         public string Message { get; set; } = string.Empty;
 
@@ -22,7 +22,7 @@ namespace ClimbTrack.Models
             };
         }
 
-        public static GeneralResponse<T> Failure(string message, T? data = default)
+        public static GeneralResponse<T> Failure(string message, T data = default)
         {
             return new GeneralResponse<T>
             {

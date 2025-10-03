@@ -21,33 +21,53 @@ namespace ClimbTrack.Services
             _authService = authService;
         }
 
-        public async Task SaveTrainingSessionAsync(TrainingSession session)
+        public async Task<string> SaveTrainingSessionAsync(TrainingSession session)
         {
+            if (session == null)
+            {
+                throw new ArgumentNullException(nameof(session), "Training session cannot be null");
+            }
+
             try
             {
-                // Verifica se l'utente è autenticato
-                var userId = await _authService.GetUserId();
-                if (string.IsNullOrEmpty(userId))
+                // Get user ID if not already set
+                if (string.IsNullOrEmpty(session.UserId))
                 {
-                    throw new UnauthorizedAccessException("User must be authenticated to save training sessions");
+                    var userId = await _authService.GetUserId();
+                    if (string.IsNullOrEmpty(userId))
+                    {
+                        throw new UnauthorizedAccessException("User must be authenticated to save training sessions");
+                    }
+                    session.UserId = userId;
                 }
 
-                // Imposta l'ID utente
-                session.UserId = userId;
+                // Validate session data
+                if (session.CompletedRoutes == null || !session.CompletedRoutes.Any())
+                {
+                    throw new ArgumentException("Training session must contain at least one completed route");
+                }
 
-                // Salva la sessione nel database
-                string nodePath = $"trainingSessions/{userId}";
+                // Save the session to the database
+                string nodePath = $"trainingSessions/{session.UserId}";
 
                 if (string.IsNullOrEmpty(session.Id))
                 {
                     // Nuova sessione
-                    session.Id = await _databaseService.AddItem(nodePath, session);
+                    string newId = await _databaseService.AddItem(nodePath, session);
+
+                    if (string.IsNullOrEmpty(newId))
+                    {
+                        throw new InvalidOperationException("Failed to generate ID for new training session");
+                    }
+
+                    session.Id = newId;
                 }
                 else
                 {
                     // Aggiornamento sessione esistente
                     await _databaseService.UpdateItem(nodePath, session.Id, session);
                 }
+                return session.Id;
             }
             catch (Exception ex)
             {
@@ -165,7 +185,7 @@ namespace ClimbTrack.Services
                 var panelSessions = sessions.Where(s => s.PanelType == panelId).ToList();
 
                 // Dictionary to store route attempts
-                Dictionary<string, int> routeAttempts = new Dictionary<string, int>();
+                Dictionary<string, int> routeAttempts = new();
 
                 // Process all sessions to sum attempts for each route
                 foreach (var session in panelSessions)

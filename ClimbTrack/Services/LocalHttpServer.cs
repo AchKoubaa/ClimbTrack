@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microcharts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,6 +15,30 @@ namespace ClimbTrack.Services
         private readonly CancellationTokenSource _cts;
         private bool _isRunning;
         private bool _disposed;
+        public bool IsRunning => _isRunning && _listener.IsListening;
+
+       
+
+        public async Task<bool> TestServerConnectionAsync()
+        {
+            if (!IsRunning)
+                return false;
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    var response = await client.GetAsync($"{BaseUrl}test");
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Server connection test failed: {ex.Message}");
+                return false;
+            }
+        }
 
         // Event to notify when a request is received
         public event EventHandler<HttpListenerContext> RequestReceived;
@@ -42,9 +67,10 @@ namespace ClimbTrack.Services
 
             try
             {
+                await Task.Yield(); // This makes the method truly async with minimal impact
                 _listener.Start();
                 _isRunning = true;
-
+                
                 Console.WriteLine($"HTTP server started on {BaseUrl}");
 
                 // Start listening for requests

@@ -291,5 +291,7 @@ namespace ClimbTrack.ViewModels
                 return false;
             }
         }
+
+        
     }
 }

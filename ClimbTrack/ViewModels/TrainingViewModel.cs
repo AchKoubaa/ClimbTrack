@@ -265,24 +265,7 @@ namespace ClimbTrack.ViewModels
         {
             try
             {
-                // Verifica se l'utente è autenticato o se è stato passato un ID utente
-                string userId = UserId;
-
-                // Se non è stato passato un ID utente, ottienilo dal servizio di autenticazione
-                if (string.IsNullOrEmpty(userId))
-                {
-                    userId = await _authService.GetUserId();
-
-                    if (string.IsNullOrEmpty(userId))
-                    {
-                        await Shell.Current.DisplayAlert(
-                            "Errore",
-                            "Devi essere autenticato per salvare la sessione di allenamento.",
-                            "OK");
-                        return;
-                    }
-                }
-
+               
                 // Find the selected route item
                 var selectedRoute = TrainingRoutes.FirstOrDefault(r => r.IsSelected);
 
@@ -298,13 +281,13 @@ namespace ClimbTrack.ViewModels
 
                 var session = new TrainingSession
                 {
-                    UserId = userId,
+                    
                     PanelType = Panel,
                     Duration = ElapsedTime,
                     Timestamp = DateTime.Now,
-                    CompletedRoutes = new List<CompletedRoute>
+                    CompletedRoutes = new()
             {
-                new CompletedRoute
+                new()
                 {
                     RouteId = selectedRoute.Route.Id,
                     Completed = selectedRoute.IsCompleted,
@@ -313,9 +296,20 @@ namespace ClimbTrack.ViewModels
             }
                 };
 
-                // Usa il servizio specializzato per salvare la sessione
-                await _trainingService.SaveTrainingSessionAsync(session);
-                await Shell.Current.DisplayAlert("Successo", "Sessione di allenamento salvata con successo!", "OK");
+                // If we have a UserId from the ViewModel, use it (optional optimization)
+                if (!string.IsNullOrEmpty(UserId))
+                {
+                    session.UserId = UserId;
+                }
+
+
+                // Save the session and get the ID
+                string sessionId = await _trainingService.SaveTrainingSessionAsync(session);
+
+                // Store or use the session ID as needed
+                string LastSavedSessionId = sessionId;
+
+                await Shell.Current.DisplayAlert("Successo", $"Sessione di allenamento salvata con ID: {sessionId}", "OK");
             }
             catch (Exception ex)
             {

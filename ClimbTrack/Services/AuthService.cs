@@ -175,7 +175,7 @@ namespace ClimbTrack.Services
             }
         }
 
-        public async void Logout()
+        public void Logout()
         {
             try
             {
@@ -222,38 +222,41 @@ namespace ClimbTrack.Services
 
         public async Task<FirebaseClient> GetAuthenticatedClientAsync()
         {
-            // First check if token is valid
-            if (!await IsTokenValid())
-            {
-                Debug.WriteLine("Invalid or expired token detected");
-                await HandleAuthenticationFailure();
-                return null;
-            }
-
             try
             {
-               
+                // Check if token is valid before creating client
+                if (!await IsTokenValid())
+                {
+                    Debug.WriteLine("Invalid or expired token detected");
+                    await HandleAuthenticationFailure();
+                    return null;
+                }
+
                 // Create and return an authenticated client with auto-refresh capability
                 var firebaseClient = new FirebaseClient(
                     FirebaseConfig.DatabaseUrl,
                     new FirebaseOptions
                     {
                         AuthTokenAsyncFactory = async () => {
-                            // This will be called whenever the client needs a token
-                            if (!await IsTokenValid())
+                            // Get token without rechecking validity since we'll refresh as needed
+                            string token = await GetToken();
+                            if (string.IsNullOrEmpty(token))
                             {
-                                Debug.WriteLine("Token invalid during request");
+                                Debug.WriteLine("Token missing during request");
                                 await HandleAuthenticationFailure();
                                 return null;
                             }
-                            return await GetToken();
+                            return token;
                         }
                     });
+
+                // Instead of testing the connection, just return the client
                 return firebaseClient;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error creating authenticated database client: {ex.Message}");
+                await HandleAuthenticationFailure();
                 return null;
             }
         }

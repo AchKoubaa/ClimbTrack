@@ -190,11 +190,11 @@ namespace ClimbTrack.Services
                     $"&state={state}";
 
                 // Open browser with authentication URL
-                OpenBrowser(authUrl);
+                await OpenBrowser(authUrl);
                 Console.WriteLine($"Opened browser with auth URL");
 
                 // Wait for the authentication to complete with a timeout
-                var timeoutTask = Task.Delay(TimeSpan.FromMinutes(5));
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(20));
                 var completedTask = await Task.WhenAny(_authCompletionSource.Task, timeoutTask);
 
                 if (completedTask == timeoutTask)
@@ -285,36 +285,23 @@ namespace ClimbTrack.Services
             }
         }
 
-        private void OpenBrowser(string url)
+        private async Task OpenBrowser(string url)
         {
             try
             {
-                var psi = new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                };
-                Process.Start(psi);
+                // Use MAUI's cross-platform browser launcher
+                await Browser.OpenAsync(url, BrowserLaunchMode.SystemPreferred);
             }
-            catch
+            catch (Exception ex)
             {
-                // Fall back to platform-specific commands
-                if (OperatingSystem.IsWindows())
-                {
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                }
-                else if (OperatingSystem.IsLinux())
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (OperatingSystem.IsMacOS())
-                {
-                    Process.Start("open", url);
-                }
-                else
-                {
-                    Console.WriteLine($"Please open this URL manually: {url}");
-                }
+                // Handle any exceptions
+                Console.WriteLine($"Failed to open browser: {ex.Message}");
+
+                // Provide fallback information to the user
+                Console.WriteLine($"Please open this URL manually: {url}");
+
+                // You might want to display this message to the user in your UI as well
+                // await DisplayAlert("Browser Error", $"Please open this URL manually: {url}", "OK");
             }
         }
 
